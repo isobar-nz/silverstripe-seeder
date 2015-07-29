@@ -1,5 +1,8 @@
 <?php
 
+/**
+ * Class Seeder
+ */
 class Seeder extends Object
 {
     /**
@@ -58,6 +61,7 @@ class Seeder extends Object
     /**
      * @param $className
      * @param $data
+     * @return array
      */
     private function fakeClass($className, $data)
     {
@@ -65,7 +69,7 @@ class Seeder extends Object
 
         if (!Object::has_extension($className, 'SeederExtension')) {
             error_log("'{$className}' does not have the 'SeederExtension'");
-            return;
+            return array();
         }
 
         $count = 10;
@@ -74,6 +78,8 @@ class Seeder extends Object
         }
 
         echo "Faking {$count} '{$className}'", PHP_EOL;
+
+        $seededObjects = array();
 
         for ($i = 0; $i < $count; $i++) {
             $obj = new $className();
@@ -85,7 +91,6 @@ class Seeder extends Object
                     continue;
                 }
 
-
                 if ($type === 'foreignkey') {
                     $hasOneField = substr($field, 0, strlen($field) - 2);
                     $type = $obj->has_one($hasOneField);
@@ -96,6 +101,17 @@ class Seeder extends Object
                     } else if ($type === 'Image') {
                         echo "Faking image for '{$className}'", PHP_EOL;
                         $obj->$field = $this->createImage($options);
+                    } else if (isset($options['use']) && $options['use'] === 'new') {
+                        $options['count'] = 1;
+                        $objects = $this->fakeClass($type, $options);
+                        if ($objects) {
+                            $obj->$field = $objects[0]->ID;
+                        }
+                    } else if (isset($options['use']) && $options['use'] === 'existing') {
+                        $existingObject = DataObject::get_one($type, null, false, 'RAND()');
+                        if ($existingObject) {
+                            $obj->$field = $existingObject->ID;
+                        }
                     }
                 } else {
                     $options = isset($data['properties'][$field]) ? $data['properties'][$field] : array();
@@ -104,7 +120,10 @@ class Seeder extends Object
             }
 
             $obj->write();
+            $seededObjects[] = $obj;
         }
+
+        return $seededObjects;
     }
 
     /**
@@ -267,17 +286,18 @@ class Seeder extends Object
         return rand(0, 100) < $pc;
     }
 
+    /**
+     *
+     */
     public function unseed()
     {
-        $dataObjects = $this->config()->DataObjects;
+        $classNames = ClassInfo::subclassesFor('DataObject');
 
-        if (is_array($dataObjects)) {
-            foreach ($dataObjects as $className => $data) {
+        foreach ($classNames as $className) {
+            if (is_subclass_of($className, 'DataObject') && DataObject::has_extension($className, 'SeederExtension')) {
                 $this->deleteClassSeeds($className);
             }
         }
-
-        $this->deleteClassSeeds('Image');
     }
 
     /**
@@ -289,14 +309,10 @@ class Seeder extends Object
             $seedObjects = $className::get()->filter('IsSeed', true);
             echo "Cleaning up seeds for '{$className}'", PHP_EOL;
             foreach ($seedObjects as $obj) {
-                if ($className === 'Image') {
-                    try {
-                        // will throw exception if file doesn't exist
-                        $obj->delete();
-                    } catch (Exception $e) {
-                    }
-                } else {
+                try {
+                    // will throw exception if file doesn't exist
                     $obj->delete();
+                } catch (Exception $e) {
                 }
             }
         }

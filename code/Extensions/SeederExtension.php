@@ -11,4 +11,12 @@ class SeederExtension extends DataExtension
     private static $db = array(
         'IsSeed' => 'Boolean',
     );
+
+    /**
+     * @param FieldList $fields
+     */
+    public function updateCMSFields(FieldList $fields)
+    {
+        $fields->removeByName('IsSeed');
+    }
 }

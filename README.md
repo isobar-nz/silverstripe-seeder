@@ -18,12 +18,18 @@ Configured through normal silverstripe config files. Sensible defaults, will fil
                         type: [Field Type see below] (optional)
                         faker_type: string # property for https://github.com/fzaninotto/Faker e.g randomDigit, word
                         nullable: true|false # random chance of setting as null
-                        width: int (image)
-                        hieght: int (image)
-                        max_width: int (image)
-                        min_width: int (image) # set in range of min_width < width < max_width
-                        max_height: int (image)
-                        min_height: int (image) # set in range of min_height < height < max_height
+                        
+                        // image
+                        width: int 
+                        hieght: int
+                        max_width: int
+                        min_width: int # set in range of min_width < width < max_width
+                        max_height: int
+                        min_height: int # set in range of min_height < height < max_height
+                        
+                        // has_one relationship
+                        use: new|existing // will either select a random instance or create a new one
+                        properties: // same as above (recursive)
                         
     YourDataObjectName: # this is required
         extensions:
