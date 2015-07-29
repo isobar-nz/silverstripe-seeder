@@ -2,6 +2,8 @@
 Name: silverstripe-seeder-config
 ---
 
+suppress_warning: true
+
 ---
 Only:
   environment: 'dev'
