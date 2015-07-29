@@ -52,3 +52,29 @@ for example
                         nullable: true
 
 would create 20 team members, some would have Mobile = null, some would have Image = null
+
+#Field Types
+
+possible field types are
+
+    - firstName
+    - lastName
+    - email
+    - phone
+    - company
+    - address
+    - address1
+    - address2
+    - city
+    - postcode
+    - state
+    - country
+    - countryCode
+    - lat
+    - lng
+    - link
+    - facebookLink
+    - googleplusLink
+    - twitterLink
+    - linkedinLink
+    - sort (always set to 0)
