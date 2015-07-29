@@ -1,6 +1,6 @@
 # silverstripe-seeder
 
-configured through normal silverstripe config files
+Configured through normal silverstripe config files. Sensible defaults, will fill in most fields with relevant data
 
     ---
     Only:
