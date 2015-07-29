@@ -78,3 +78,13 @@ possible field types are
     - twitterLink
     - linkedinLink
     - sort (always set to 0)
+
+#Usage
+
+To seed database run
+
+    framework/sake DatabaseSeed
+    
+To unseed database run
+
+    framework/sake DatabaseUnseed
