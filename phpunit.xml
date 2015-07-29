@@ -1,0 +1,7 @@
+<phpunit bootstrap="../framework/tests/bootstrap.php" colours="true">
+    <testsuites>
+        <testsuite name="MODULE_NAME">
+            <directory>tests</directory>
+        </testsuite>
+    </testsuites>
+</phpunit>

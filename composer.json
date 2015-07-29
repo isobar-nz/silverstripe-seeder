@@ -1,0 +1,22 @@
+{
+  "name": "LittleGiant/silverstripe-seeder",
+  "description": "Seed data objects for dev",
+  "type": "silverstripe-module",
+  "homepage": "http://bitbucket.org/littlegiant/silverstripe-seeder",
+  "keywords": ["silverstripe", "developer tool", "seed"],
+  "license": "BSD-3-Clause",
+  "authors": [
+    {"name": "Little Giant","email": "webmaster@littlegiant.co.nz"}
+  ],
+  "support": {
+    "issues": "http://bitbucket.org/littlegiant/silverstripe-seeder/issues"
+  },
+  "require": {
+    "silverstripe/cms": "~3.1",
+    "silverstripe/framework": "~3.1",
+    "fzaninotto/faker": "^1.5"
+  },
+  "extra": {
+    "installer-name": "silverstripe-seeder"
+  }
+}

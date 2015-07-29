@@ -1,0 +1,11 @@
+---
+Name: silverstripe-seeder-config
+---
+
+---
+Only:
+  environment: 'dev'
+---
+Image:
+  extensions:
+    - SeederExtension
