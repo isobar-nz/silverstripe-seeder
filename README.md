@@ -19,6 +19,11 @@ Configured through normal silverstripe config files. Sensible defaults, will fil
                         faker_type: string # property for https://github.com/fzaninotto/Faker e.g randomDigit, word
                         nullable: true|false # random chance of setting as null
                         
+                        // text
+                        min_length: int # min length of string/number of paragraphs
+                        max_length: int # max length of string/number of paragraphs
+                        length: int  # length of string/number of paragraphs
+                        
                         // image
                         width: int 
                         hieght: int

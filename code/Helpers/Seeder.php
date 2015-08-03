@@ -1,8 +1,5 @@
 <?php
 
-/**
- * Class Seeder
- */
 class Seeder extends Object
 {
     /**
@@ -61,7 +58,6 @@ class Seeder extends Object
     /**
      * @param $className
      * @param $data
-     * @return array
      */
     private function fakeClass($className, $data)
     {
@@ -69,7 +65,7 @@ class Seeder extends Object
 
         if (!Object::has_extension($className, 'SeederExtension')) {
             error_log("'{$className}' does not have the 'SeederExtension'");
-            return array();
+            return;
         }
 
         $count = 10;
@@ -78,8 +74,6 @@ class Seeder extends Object
         }
 
         echo "Faking {$count} '{$className}'", PHP_EOL;
-
-        $seededObjects = array();
 
         for ($i = 0; $i < $count; $i++) {
             $obj = new $className();
@@ -91,6 +85,7 @@ class Seeder extends Object
                     continue;
                 }
 
+
                 if ($type === 'foreignkey') {
                     $hasOneField = substr($field, 0, strlen($field) - 2);
                     $type = $obj->has_one($hasOneField);
@@ -101,17 +96,6 @@ class Seeder extends Object
                     } else if ($type === 'Image') {
                         echo "Faking image for '{$className}'", PHP_EOL;
                         $obj->$field = $this->createImage($options);
-                    } else if (isset($options['use']) && $options['use'] === 'new') {
-                        $options['count'] = 1;
-                        $objects = $this->fakeClass($type, $options);
-                        if ($objects) {
-                            $obj->$field = $objects[0]->ID;
-                        }
-                    } else if (isset($options['use']) && $options['use'] === 'existing') {
-                        $existingObject = DataObject::get_one($type, null, false, 'RAND()');
-                        if ($existingObject) {
-                            $obj->$field = $existingObject->ID;
-                        }
                     }
                 } else {
                     $options = isset($data['properties'][$field]) ? $data['properties'][$field] : array();
@@ -120,10 +104,7 @@ class Seeder extends Object
             }
 
             $obj->write();
-            $seededObjects[] = $obj;
         }
-
-        return $seededObjects;
     }
 
     /**
@@ -138,59 +119,77 @@ class Seeder extends Object
         $fieldLower = strtolower($field);
         $type = strtolower($type);
 
-        if (!empty($options['type'])) {
+
+        foreach ($this->fieldTypes as $fieldType => $fieldNames) {
+            if (in_array($fieldLower, $fieldNames)) {
+                $type = strtolower($fieldType);
+            }
+        }
+
+        if (!empty($options['type']) && isset($this->fieldTypes[$options['type']])) {
             $type = strtolower($options['type']);
+        }
+
+        $length = false;
+        if (isset($options['min_length']) && is_numeric($options['min_length'])
+            && isset($options['max_length']) && is_numeric($options['max_length'])) {
+            $minLength = max(0, intval($options['min_length']));
+            $maxLength = max(0, intval($options['max_length']));
+            $length = $this->faker->numberBetween($minLength, $maxLength);
+        }
+        if (isset($options['length']) && is_numeric($options['length'])) {
+            $length = intval($options['length']);
         }
 
         if ($fieldLower === 'isseed') {
             return true;
+        } else if (!empty($options['nullable']) && $this->randomNull()) {
+            return null;
         } else if (!empty($options['faker_type'])) {
             // TODO add support for faker methods
             $fakerType = $options['faker_type'];
             return $this->faker->$fakerType;
-        } else if (!empty($options['nullable']) && $this->randomNull()) {
-            return null;
-        } else if (in_array($fieldLower, $this->fieldTypes['firstName'])) {
+        } else if ($type === 'firstname') {
             return $this->faker->firstName();
-        } else if (in_array($fieldLower, $this->fieldTypes['lastName'])) {
+        } else if ($type === 'lastname') {
             return $this->faker->lastName;
-        } else if (in_array($fieldLower, $this->fieldTypes['email'])) {
+        } else if ($type === 'email') {
             return $this->faker->safeEmail;
-        } else if (in_array($fieldLower, $this->fieldTypes['phone'])) {
+        } else if ($type === 'phone') {
             return $this->faker->phoneNumber;
-        } else if (in_array($fieldLower, $this->fieldTypes['company'])) {
+        } else if ($type === 'company') {
             return $this->faker->company;
-        } else if (in_array($fieldLower, $this->fieldTypes['address'])) {
+        } else if ($type === 'address') {
             return $this->faker->address;
-        } else if (in_array($fieldLower, $this->fieldTypes['address1'])) {
+        } else if ($type === 'address1') {
             return $this->faker->streetAddress;
-        } else if (in_array($fieldLower, $this->fieldTypes['address2'])) {
+        } else if ($type === 'address2') {
             return $this->faker->secondaryAddress;
-        } else if (in_array($fieldLower, $this->fieldTypes['city'])) {
+        } else if ($type === 'city') {
             return $this->faker->city;
-        } else if (in_array($fieldLower, $this->fieldTypes['postcode'])) {
+        } else if ($type === 'postcode') {
             return $this->faker->postcode;
-        } else if (in_array($fieldLower, $this->fieldTypes['state'])) {
+        } else if ($type === 'state') {
             return $this->faker->state;
-        } else if (in_array($fieldLower, $this->fieldTypes['country'])) {
+        } else if ($type === 'country') {
             return $this->faker->country;
-        } else if (in_array($fieldLower, $this->fieldTypes['countryCode'])) {
+        } else if ($type === 'countrycode') {
             return $this->faker->countryCode;
-        } else if (in_array($fieldLower, $this->fieldTypes['lat'])) {
+        } else if ($type === 'lat') {
             return $this->faker->latitude;
-        } else if (in_array($fieldLower, $this->fieldTypes['lng'])) {
+        } else if ($type === 'lng') {
             return $this->faker->longitude;
-        } else if (in_array($fieldLower, $this->fieldTypes['link'])) {
+        } else if ($type === 'link') {
             return $this->faker->url;
-        } else if (in_array($fieldLower, $this->fieldTypes['facebookLink'])) {
+        } else if ($type === 'facebooklink') {
             return 'http://facebook.com/';
-        } else if (in_array($fieldLower, $this->fieldTypes['googleplusLink'])) {
+        } else if ($type === 'googlepluslink') {
             return 'http://plus.google.com/';
-        } else if (in_array($fieldLower, $this->fieldTypes['twitterLink'])) {
+        } else if ($type === 'twitterlink') {
             return 'http://twitter.com/';
-        } else if (in_array($fieldLower, $this->fieldTypes['linkedinLink'])) {
+        } else if ($type === 'linkedinlink') {
             return 'http://linkedin.com/';
-        } else if (in_array($fieldLower, $this->fieldTypes['sort'])) {
+        } else if ($type === 'sort') {
             return 0;
         } else if ($type === 'boolean') {
             return array_rand(array(true, false));
@@ -204,7 +203,8 @@ class Seeder extends Object
             $values = singleton($className)->dbObject($field)->enumValues();
             return array_rand($values);
         } else if ($type === 'htmltext') {
-            return '<p>' . $this->faker->paragraph() . '</p>';
+            $length = $length === false ? 3 : $length;
+            return '<p>' . $this->faker->paragraph($length) . '</p>';
         } else if ($type === 'htmlvarchar') {
             $maxLength = 60;
             preg_match('/\(([0-9]*)\)/', $type, $matches);
@@ -213,6 +213,9 @@ class Seeder extends Object
             }
             // subtract tag chars from length
             $maxLength = max(0, $maxLength - 7);
+            if ($length !== false) {
+                $maxLength = $length;
+            }
             return '<p>' . $this->faker->text($maxLength) . '</p>';
         } else if ($type === 'int') {
             return $this->faker->randomNumber();
@@ -221,7 +224,8 @@ class Seeder extends Object
         } else if ($type === 'ss_datetime') {
             return $this->faker->dateTime();
         } else if ($type === 'text') {
-            return $this->faker->paragraphs();
+            $length = $length === false ? 3 : $length;
+            return $this->faker->paragraphs($length);
         } else if ($type === 'time') {
             return $this->faker->time();
         } else if (strpos($type, 'varchar') !== false) {
@@ -229,6 +233,9 @@ class Seeder extends Object
             preg_match('/\(([0-9]*)\)/', $type, $matches);
             if ($matches) {
                 $maxLength = $matches[1];
+            }
+            if ($length !== false) {
+                $maxLength = $length;
             }
             return $this->faker->text($maxLength);
         }
@@ -286,18 +293,17 @@ class Seeder extends Object
         return rand(0, 100) < $pc;
     }
 
-    /**
-     *
-     */
     public function unseed()
     {
-        $classNames = ClassInfo::subclassesFor('DataObject');
+        $dataObjects = $this->config()->DataObjects;
 
-        foreach ($classNames as $className) {
-            if (is_subclass_of($className, 'DataObject') && DataObject::has_extension($className, 'SeederExtension')) {
+        if (is_array($dataObjects)) {
+            foreach ($dataObjects as $className => $data) {
                 $this->deleteClassSeeds($className);
             }
         }
+
+        $this->deleteClassSeeds('Image');
     }
 
     /**
@@ -309,10 +315,14 @@ class Seeder extends Object
             $seedObjects = $className::get()->filter('IsSeed', true);
             echo "Cleaning up seeds for '{$className}'", PHP_EOL;
             foreach ($seedObjects as $obj) {
-                try {
-                    // will throw exception if file doesn't exist
+                if ($className === 'Image') {
+                    try {
+                        // will throw exception if file doesn't exist
+                        $obj->delete();
+                    } catch (Exception $e) {
+                    }
+                } else {
                     $obj->delete();
-                } catch (Exception $e) {
                 }
             }
         }
