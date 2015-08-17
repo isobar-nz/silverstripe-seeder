@@ -119,7 +119,6 @@ class Seeder extends Object
         $fieldLower = strtolower($field);
         $type = strtolower($type);
 
-
         foreach ($this->fieldTypes as $fieldType => $fieldNames) {
             if (in_array($fieldLower, $fieldNames)) {
                 $type = strtolower($fieldType);
@@ -199,7 +198,7 @@ class Seeder extends Object
             return $this->faker->date();
         } else if ($type === 'decimal') {
             return $this->faker->randomFloat();
-        } else if ($type === 'enum') {
+        } else if (strpos($type, 'enum') === 0) {
             $values = singleton($className)->dbObject($field)->enumValues();
             return array_rand($values);
         } else if ($type === 'htmltext') {
