@@ -32,9 +32,14 @@ Configured through normal silverstripe config files. Sensible defaults, will fil
                         max_height: int
                         min_height: int # set in range of min_height < height < max_height
                         
-                        // has_one relationship
+                        // has_one, many_many relationship
                         use: new|existing // will either select a random instance or create a new one
                         properties: // same as above (recursive)
+                        
+                        // many_many relationship
+                        count: int (optional)
+                        min_count: int (optional)
+                        max_count: int (optional)
                         
     YourDataObjectName: # this is required
         extensions:
@@ -64,7 +69,7 @@ for example
 
 would create 20 team members, some would have Mobile = null, some would have Image = null
 
-#Field Types
+# Field Types
 
 possible field types are
 
@@ -90,7 +95,7 @@ possible field types are
     - linkedinLink
     - sort (always set to 0)
 
-#Usage
+# Usage
 
 To seed database run
 
@@ -99,3 +104,48 @@ To seed database run
 To unseed database run
 
     framework/sake DatabaseUnseed
+
+# Relationships
+
+## has_one
+
+Explicit support for has_one relationships, can specify properties for a has_one relationship like any other Object
+
+    Seeder:
+        HasOneParentObject:
+            properties:
+                HasOneName:
+                    use: existing|new (required)
+                    count: int (optional)
+                    properties:
+                        (as with any other data object)
+                        
+If "use: new" make sure you add the SeederExtension to has_one Object
+
+
+## has_many
+
+Implicit support for has_many relationships by setting the has_one of the HasManyObject to use: existing
+
+
+## many_many
+
+Explicit support for many_many relationships, can specify properties for a many_many relationship like any other Object
+
+    Seeder:
+        ManyManyParentObject:
+            properties:
+                ManyManyName:
+                    use: existing|new (required)
+                    count: int (optional) default = 2
+                    min_count: int (optional, required if max is specified)
+                    max_count: int (optional, required if min is specified)
+                    properties:
+                        (as with any other data object)
+
+If "use: new" make sure you add the SeederExtension to has_one Object
+
+
+## many_many_extraFields
+
+Not supported

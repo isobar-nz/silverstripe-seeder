@@ -1,5 +1,8 @@
 <?php
 
+/**
+ * Class Seeder
+ */
 class Seeder extends Object
 {
     /**
@@ -33,6 +36,11 @@ class Seeder extends Object
         'linkedinLink' => array('linkedin', 'linkedinlink'),
         'sort' => array('sort', 'sortorder'),
     );
+
+    /**
+     * @var array
+     */
+    private $useOptions = array('existing', 'new');
 
     /**
      *
@@ -75,6 +83,8 @@ class Seeder extends Object
 
         echo "Faking {$count} '{$className}'", PHP_EOL;
 
+        $createdObjects = array();
+
         for ($i = 0; $i < $count; $i++) {
             $obj = new $className();
             foreach ($fields as $field => $type) {
@@ -96,6 +106,16 @@ class Seeder extends Object
                     } else if ($type === 'Image') {
                         echo "Faking image for '{$className}'", PHP_EOL;
                         $obj->$field = $this->createImage($options);
+                    } else if (isset($options['use']) && in_array($options['use'], $this->useOptions)) {
+                        if ($options['use'] === 'existing') {
+                            $hasOneObject = $type::get()->sort('RAND()')->first();
+                            $obj->$field = $hasOneObject->ID;
+                        } else if ($options['use'] === 'new') {
+                            $hasOneObjects = $this->fakeClass($type, $options);
+                            if ($hasOneObjects) {
+                                $obj->$field = $hasOneObjects[0]->ID;
+                            }
+                        }
                     }
                 } else {
                     $options = isset($data['properties'][$field]) ? $data['properties'][$field] : array();
@@ -104,7 +124,28 @@ class Seeder extends Object
             }
 
             $obj->write();
+            $createdObjects[] = $obj;
+
+            foreach ($obj->many_many() as $manyManyField => $type) {
+                $options = isset($data['properties'][$manyManyField]) ? $data['properties'][$manyManyField] : array();
+                if (isset($options['use']) && in_array($options['use'], $this->useOptions)) {
+                    $manyManyCount = $this->calculateCount($options, 'count', 2);
+
+                    $manyManyList = ArrayList::create();
+                    if ($options['use'] === 'existing') {
+                        $manyManyList = $type::get()->sort('RAND()')->limit($manyManyCount);
+                    } else if ($options['use'] === 'new') {
+                        for ($i = 0; $i < $manyManyCount; $i++) {
+                            $manyManyList->addMany($this->fakeClass($type, $options));
+                        }
+                    }
+
+                    $obj->$manyManyField()->addMany($manyManyList);
+                }
+            }
         }
+
+        return $createdObjects;
     }
 
     /**
@@ -129,16 +170,7 @@ class Seeder extends Object
             $type = strtolower($options['type']);
         }
 
-        $length = false;
-        if (isset($options['min_length']) && is_numeric($options['min_length'])
-            && isset($options['max_length']) && is_numeric($options['max_length'])) {
-            $minLength = max(0, intval($options['min_length']));
-            $maxLength = max(0, intval($options['max_length']));
-            $length = $this->faker->numberBetween($minLength, $maxLength);
-        }
-        if (isset($options['length']) && is_numeric($options['length'])) {
-            $length = intval($options['length']);
-        }
+        $length = $this->calculateCount($options, 'length', false);
 
         if ($fieldLower === 'isseed') {
             return true;
@@ -221,7 +253,7 @@ class Seeder extends Object
         } else if ($type == 'percentage') {
             return $this->faker->randomFloat(4, 0, 1);
         } else if ($type === 'ss_datetime') {
-            return $this->faker->dateTime();
+            return $this->faker->dateTime()->format('Y-m-d H:i:s');
         } else if ($type === 'text') {
             $length = $length === false ? 3 : $length;
             return $this->faker->paragraphs($length);
@@ -253,23 +285,8 @@ class Seeder extends Object
     {
         $path = BASE_PATH . '/assets/';
 
-        $width = 640;
-        $height = 480;
-
-        if (isset($options['min_width']) && is_numeric($options['min_width']) && isset($options['max_width']) && is_numeric($options['max_width'])) {
-            $minWidth = min($options['min_width'], $options['max_width']);
-            $maxWidth = max($options['min_width'], $options['max_width']);
-            $width = $this->faker->numberBetween($minWidth, $maxWidth);
-        }
-
-        if (isset($options['min_height']) && is_numeric($options['min_height']) && isset($options['max_height']) && is_numeric($options['max_height'])) {
-            $minHeight = min($options['min_height'], $options['max_height']);
-            $maxHeight = max($options['min_height'], $options['max_height']);
-            $height = $this->faker->numberBetween($minHeight, $maxHeight);
-        }
-
-        $width = !empty($options['width']) && is_numeric($options['width']) ? $options['width'] : $width;
-        $height = !empty($options['height']) && is_numeric($options['height']) ? $options['height'] : $height;
+        $width = $this->calculateCount($options, 'width', 640);
+        $height = $this->calculateCount($options, 'height', 480);
 
         $fileName = $this->faker->image($path, $width, $height);
         $fileName = str_replace(BASE_PATH . '/', '', $fileName);
@@ -292,6 +309,9 @@ class Seeder extends Object
         return rand(0, 100) < $pc;
     }
 
+    /**
+     *
+     */
     public function unseed()
     {
         $dataObjects = $this->config()->DataObjects;
@@ -321,9 +341,33 @@ class Seeder extends Object
                     } catch (Exception $e) {
                     }
                 } else {
+                    foreach ($obj->many_many() as $manyManyField => $type) {
+                        $obj->$manyManyField()->removeAll();
+                    }
+
                     $obj->delete();
                 }
             }
         }
+    }
+
+    /**
+     * Returns a number within the range $options[max_$type, min_$type] or $options[$type] otherwise $default
+     * @param $options
+     * @param $type
+     * @param int $default
+     * @return int
+     */
+    public function calculateCount($options, $type, $default = 10)
+    {
+        $count = $default;
+        if (isset($options['max_' . $type]) && is_numeric($options['max_' . $type])
+            && isset($options['min_' . $type]) && is_numeric($options['min_' . $type])) {
+            $count = $this->faker->numberBetween($options['min_' . $type], $options['max_' . $type]);
+        }
+        if (isset($options[$type])) {
+            $count = $options[$type];
+        }
+        return $count;
     }
 }
