@@ -143,7 +143,7 @@ Explicit support for many_many relationships, can specify properties for a many_
                     properties:
                         (as with any other data object)
 
-If "use: new" make sure you add the SeederExtension to has_one Object
+If "use: new" make sure you add the SeederExtension to belongs_many_many Object
 
 
 ## many_many_extraFields
