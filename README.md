@@ -10,10 +10,14 @@ Configured through normal silverstripe config files. Sensible defaults, will fil
     Seeder:
         DataObjects:
             YourDataObjectName:
-                count: int (optional) # number of records to generate
+                count: int (optional, default=10) # number of records to generate
+                publish: true|false (optional, default = true) # page only
+                parent: string (optional, className of parent) # page only
                 ignore: (optional)
                     - Some Field # ignores this feeder when populating object
                 properties: (optional)
+                    FieldName: value (predefined value)
+                    or
                     FieldName:
                         type: [Field Type see below] (optional)
                         faker_type: string # property for https://github.com/fzaninotto/Faker e.g randomDigit, word
@@ -26,15 +30,15 @@ Configured through normal silverstripe config files. Sensible defaults, will fil
                         
                         // image
                         width: int 
-                        hieght: int
+                        height: int
                         max_width: int
                         min_width: int # set in range of min_width < width < max_width
                         max_height: int
                         min_height: int # set in range of min_height < height < max_height
                         
                         // has_one, many_many relationship
-                        use: new|existing // will either select a random instance or create a new one
-                        properties: // same as above (recursive)
+                        use: new|existing # will either select a random instance or create a new one
+                        properties: # same as above (recursive)
                         
                         // many_many relationship
                         count: int (optional)
@@ -143,7 +147,7 @@ Explicit support for many_many relationships, can specify properties for a many_
                     properties:
                         (as with any other data object)
 
-If "use: new" make sure you add the SeederExtension to belongs_many_many Object
+If "use: new" make sure you add the SeederExtension to has_one Object
 
 
 ## many_many_extraFields

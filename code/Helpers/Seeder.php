@@ -66,10 +66,11 @@ class Seeder extends Object
     /**
      * @param $className
      * @param $data
+     * @return array|void
      */
     private function fakeClass($className, $data)
     {
-        $fields = DataObject::custom_database_fields($className);
+        $fields = $this->getDBFields($className);
 
         if (!Object::has_extension($className, 'SeederExtension')) {
             error_log("'{$className}' does not have the 'SeederExtension'");
@@ -87,6 +88,7 @@ class Seeder extends Object
 
         for ($i = 0; $i < $count; $i++) {
             $obj = new $className();
+
             foreach ($fields as $field => $type) {
                 $type = strtolower($type);
 
@@ -95,36 +97,52 @@ class Seeder extends Object
                     continue;
                 }
 
-
                 if ($type === 'foreignkey') {
                     $hasOneField = substr($field, 0, strlen($field) - 2);
                     $type = $obj->has_one($hasOneField);
                     $options = isset($data['properties'][$hasOneField]) ? $data['properties'][$hasOneField] : array();
 
-                    if (!empty($options['nullable']) && $this->randomNull()) {
-                        $obj->$field = null;
-                    } else if ($type === 'Image') {
-                        echo "Faking image for '{$className}'", PHP_EOL;
-                        $obj->$field = $this->createImage($options);
-                    } else if (isset($options['use']) && in_array($options['use'], $this->useOptions)) {
-                        if ($options['use'] === 'existing') {
-                            $hasOneObject = $type::get()->sort('RAND()')->first();
-                            $obj->$field = $hasOneObject->ID;
-                        } else if ($options['use'] === 'new') {
-                            $hasOneObjects = $this->fakeClass($type, $options);
-                            if ($hasOneObjects) {
-                                $obj->$field = $hasOneObjects[0]->ID;
+                    if (is_array($options)) {
+                        // value to be generated
+                        if (!empty($options['nullable']) && $this->randomNull()) {
+                            $obj->$field = null;
+                        } else if ($type === 'Image') {
+                            echo "Faking image for '{$className}'", PHP_EOL;
+                            $obj->$field = $this->createImage($options);
+                        } else if ($obj instanceof SiteTree && $hasOneField === 'Parent') {
+                            if (!empty($data['parent']) && class_exists($data['parent'])) {
+                                $parentClass = $data['parent'];
+                                $parentObject = $parentClass::get()->first();
+                                if ($parentObject) {
+                                    $obj->ParentID = $parentObject->ID;
+                                }
+                            }
+                        } else if (isset($options['use']) && in_array($options['use'], $this->useOptions)) {
+                            if ($options['use'] === 'existing') {
+                                $hasOneObject = $type::get()->sort('RAND()')->first();
+                                $obj->$field = $hasOneObject->ID;
+                            } else if ($options['use'] === 'new') {
+                                $hasOneObjects = $this->fakeClass($type, $options);
+                                if ($hasOneObjects) {
+                                    $obj->$field = $hasOneObjects[0]->ID;
+                                }
                             }
                         }
+                    } else {
+                        // value given
+                        $obj->$field = $options;
                     }
                 } else {
                     $options = isset($data['properties'][$field]) ? $data['properties'][$field] : array();
-                    $obj->$field = $this->getSeedValue($className, $field, $type, $options);
+                    if (is_array($options)) {
+                        // value to be generated
+                        $obj->$field = $this->getSeedValue($className, $field, $type, $options);
+                    } else {
+                        // value given
+                        $obj->$field = $options;
+                    }
                 }
             }
-
-            $obj->write();
-            $createdObjects[] = $obj;
 
             foreach ($obj->many_many() as $manyManyField => $type) {
                 $options = isset($data['properties'][$manyManyField]) ? $data['properties'][$manyManyField] : array();
@@ -143,9 +161,36 @@ class Seeder extends Object
                     $obj->$manyManyField()->addMany($manyManyList);
                 }
             }
+
+            if ($obj instanceof SiteTree) {
+                $obj->writeToStage('Stage');
+
+                $publish = isset($data['publish']) ? $data['publish'] : true;
+                if ($publish !== false) {
+                    $obj->publish('Stage', 'Live');
+                }
+            } else {
+                $obj->write();
+            }
+
+            $createdObjects[] = $obj;
         }
 
         return $createdObjects;
+    }
+
+    /**
+     * @param $className
+     * @return array
+     */
+    public function getDBFields($className)
+    {
+        $fields = array();
+        $classes = singleton($className)->getClassAncestry();
+        foreach ($classes as $class) {
+            $fields = array_merge($fields, DataObject::custom_database_fields($class));
+        }
+        return $fields;
     }
 
     /**
@@ -233,7 +278,7 @@ class Seeder extends Object
         } else if (strpos($type, 'enum') === 0) {
             $values = singleton($className)->dbObject($field)->enumValues();
             return array_rand($values);
-        } else if ($type === 'htmltext') {
+        } else if (strpos($type, 'htmltext') === 0) {
             $length = $length === false ? 3 : $length;
             return '<p>' . $this->faker->paragraph($length) . '</p>';
         } else if ($type === 'htmlvarchar') {
@@ -256,7 +301,7 @@ class Seeder extends Object
             return $this->faker->dateTime()->format('Y-m-d H:i:s');
         } else if ($type === 'text') {
             $length = $length === false ? 3 : $length;
-            return $this->faker->paragraphs($length);
+            return join(PHP_EOL, $this->faker->paragraphs($length));
         } else if ($type === 'time') {
             return $this->faker->time();
         } else if (strpos($type, 'varchar') !== false) {
@@ -345,7 +390,12 @@ class Seeder extends Object
                         $obj->$manyManyField()->removeAll();
                     }
 
-                    $obj->delete();
+                    if ($obj instanceof SiteTree) {
+                        $obj->deleteFromStage('Live');
+                        $obj->deleteFromStage('Stage');
+                    } else {
+                        $obj->delete();
+                    }
                 }
             }
         }
