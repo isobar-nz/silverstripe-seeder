@@ -103,6 +103,7 @@ class Seeder extends Object
                     $options = isset($data['properties'][$hasOneField]) ? $data['properties'][$hasOneField] : array();
 
                     if (is_array($options)) {
+
                         // value to be generated
                         if (!empty($options['nullable']) && $this->randomNull()) {
                             $obj->$field = null;
@@ -115,12 +116,18 @@ class Seeder extends Object
                                 $parentObject = $parentClass::get()->first();
                                 if ($parentObject) {
                                     $obj->ParentID = $parentObject->ID;
+                                } else {
+                                    error_log("Cannot set parent for {$className}, no {$parentClass} exist");
                                 }
                             }
                         } else if (isset($options['use']) && in_array($options['use'], $this->useOptions)) {
                             if ($options['use'] === 'existing') {
                                 $hasOneObject = $type::get()->sort('RAND()')->first();
-                                $obj->$field = $hasOneObject->ID;
+                                if ($hasOneObject) {
+                                    $obj->$field = $hasOneObject->ID;
+                                } else {
+                                    error_log("Cannot create {$className} has_one {$hasOneField}, no {$type} exist");
+                                }
                             } else if ($options['use'] === 'new') {
                                 $hasOneObjects = $this->fakeClass($type, $options);
                                 if ($hasOneObjects) {
