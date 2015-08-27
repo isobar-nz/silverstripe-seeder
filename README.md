@@ -6,7 +6,7 @@ Configured through normal silverstripe config files. Sensible defaults, will fil
     Only:
       environment: 'dev'
     ---
-    
+
     Seeder:
         DataObjects:
             YourDataObjectName:
@@ -22,41 +22,41 @@ Configured through normal silverstripe config files. Sensible defaults, will fil
                         type: [Field Type see below] (optional)
                         faker_type: string # property for https://github.com/fzaninotto/Faker e.g randomDigit, word
                         nullable: true|false # random chance of setting as null
-                        
+
                         // text
                         min_length: int # min length of string/number of paragraphs
                         max_length: int # max length of string/number of paragraphs
                         length: int  # length of string/number of paragraphs
-                        
+
                         // image
-                        width: int 
+                        width: int
                         height: int
                         max_width: int
                         min_width: int # set in range of min_width < width < max_width
                         max_height: int
                         min_height: int # set in range of min_height < height < max_height
-                        
+
                         // has_one, many_many relationship
                         use: new|existing # will either select a random instance or create a new one
                         properties: # same as above (recursive)
-                        
+
                         // many_many relationship
                         count: int (optional)
                         min_count: int (optional)
                         max_count: int (optional)
-                        
+
     YourDataObjectName: # this is required
         extensions:
             SeederExtension
-            
-            
+
+
 for example
 
     ---
     Only:
       environment: 'dev'
     ---
-    
+
     Seeder:
         DataObjects:
             TeamMember:
@@ -65,7 +65,7 @@ for example
                     Mobile:
                         nullable: true
                     Image:
-                        max_width: 300 
+                        max_width: 300
                         min_width: 250
                         max_height: 160
                         min_height: 140
@@ -104,7 +104,7 @@ possible field types are
 To seed database run
 
     framework/sake DatabaseSeed
-    
+
 To unseed database run
 
     framework/sake DatabaseUnseed
@@ -123,7 +123,7 @@ Explicit support for has_one relationships, can specify properties for a has_one
                     count: int (optional)
                     properties:
                         (as with any other data object)
-                        
+
 If "use: new" make sure you add the SeederExtension to has_one Object
 
 
@@ -153,3 +153,14 @@ If "use: new" make sure you add the SeederExtension to has_one Object
 ## many_many_extraFields
 
 Not supported
+
+
+## cli args
+
+### ignore current records
+
+    -i, --ignore = ignores pre-existing records and will add another set
+
+e.g if 40 records have already been seeded another 40 will be added for a total of 80 records
+
+

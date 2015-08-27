@@ -6,6 +6,11 @@
 class Seeder extends Object
 {
     /**
+     * @var bool
+     */
+    private $ignoreCurrentRecords = false;
+
+    /**
      * @var
      */
     private $faker;
@@ -57,7 +62,7 @@ class Seeder extends Object
         if (is_array($dataObjects)) {
             foreach ($dataObjects as $className => $data) {
                 if (class_exists($className)) {
-                    $this->fakeClass($className, $data);
+                    $this->fakeClass($className, $data, $this->ignoreCurrentRecords);
                 }
             }
         }
@@ -66,9 +71,12 @@ class Seeder extends Object
     /**
      * @param $className
      * @param $data
+     * @param bool $ignoreCurrentRecords
      * @return array|void
+     * @throws ValidationException
+     * @throws null
      */
-    private function fakeClass($className, $data)
+    private function fakeClass($className, $data, $ignoreCurrentRecords = false)
     {
         $fields = $this->getDBFields($className);
 
@@ -82,7 +90,15 @@ class Seeder extends Object
             $count = $data['count'];
         }
 
-        echo "Faking {$count} '{$className}'", PHP_EOL;
+        $currentRecordCount = $className::get()->filter('IsSeed', true)->Count();
+
+        if (!$ignoreCurrentRecords && $currentRecordCount) {
+            $count -= $currentRecordCount;
+            $count = max($count, 0);
+            echo "Faking {$count} '{$className}' ({$currentRecordCount} already exist)", PHP_EOL;
+        } else {
+            echo "Faking {$count} '{$className}'", PHP_EOL;
+        }
 
         $createdObjects = array();
 
@@ -129,7 +145,7 @@ class Seeder extends Object
                                     error_log("Cannot create {$className} has_one {$hasOneField}, no {$type} exist");
                                 }
                             } else if ($options['use'] === 'new') {
-                                $hasOneObjects = $this->fakeClass($type, $options);
+                                $hasOneObjects = $this->fakeClass($type, $options, true);
                                 if ($hasOneObjects) {
                                     $obj->$field = $hasOneObjects[0]->ID;
                                 }
@@ -161,7 +177,7 @@ class Seeder extends Object
                         $manyManyList = $type::get()->sort('RAND()')->limit($manyManyCount);
                     } else if ($options['use'] === 'new') {
                         for ($i = 0; $i < $manyManyCount; $i++) {
-                            $manyManyList->addMany($this->fakeClass($type, $options));
+                            $manyManyList->addMany($this->fakeClass($type, $options, true));
                         }
                     }
 
@@ -426,5 +442,13 @@ class Seeder extends Object
             $count = $options[$type];
         }
         return $count;
+    }
+
+    /**
+     * @param bool $bool
+     */
+    public function ignoreCurrentRecords($bool = true)
+    {
+        $this->ignoreCurrentRecords = $bool;
     }
 }
