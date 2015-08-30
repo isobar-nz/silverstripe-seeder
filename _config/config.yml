@@ -1,5 +1,5 @@
 ---
-Name: silverstripe-seeder-config
+Name: silverstripe-seeder
 ---
 
 suppress_warning: true
@@ -11,3 +11,10 @@ Only:
 Image:
   extensions:
     - SeederExtension
+
+DevelopmentAdmin:
+  registered_controllers:
+    seed:
+      controller: DevSeedController
+    unseed:
+      controller: DevUnseedController

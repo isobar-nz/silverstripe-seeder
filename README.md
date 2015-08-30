@@ -1,5 +1,28 @@
 # silverstripe-seeder
 
+# Usage
+
+To seed database run
+
+    framework/sake DatabaseSeed
+    
+in the cli or go to
+
+    <domain>/dev/seed
+    
+
+Likewise to unseed database run
+
+    framework/sake DatabaseUnseed
+    
+    
+in the cli or go to
+
+    <domain>/dev/unseed
+    
+    
+# configuration
+
 Configured through normal silverstripe config files. Sensible defaults, will fill in most fields with relevant data
 
     ---
@@ -99,15 +122,6 @@ possible field types are
     - linkedinLink
     - sort (always set to 0)
 
-# Usage
-
-To seed database run
-
-    framework/sake DatabaseSeed
-
-To unseed database run
-
-    framework/sake DatabaseUnseed
 
 # Relationships
 
