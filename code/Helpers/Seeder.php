@@ -1,5 +1,8 @@
 <?php
 
+use \LittleGiant\SilverStripeSeeder\OutputFormatter;
+use \LittleGiant\SilverStripeSeeder\CliOutputFormatter;
+
 /**
  * Class Seeder
  */
@@ -9,6 +12,11 @@ class Seeder extends Object
      * @var bool
      */
     private $ignoreCurrentRecords = false;
+
+    /**
+     * @var
+     */
+    private $outputFormatter;
 
     /**
      * @var
@@ -48,6 +56,17 @@ class Seeder extends Object
     private $useOptions = array('existing', 'new');
 
     /**
+     * @param OutputFormatter $outputFormatter
+     */
+    public function __construct(OutputFormatter $outputFormatter = null)
+    {
+        if (!$outputFormatter) {
+            $outputFormatter = new CliOutputFormatter();
+        }
+        $this->outputFormatter = $outputFormatter;
+    }
+
+    /**
      *
      */
     public function seed()
@@ -66,6 +85,8 @@ class Seeder extends Object
                 }
             }
         }
+
+        $this->outputFormatter->flush();
     }
 
     /**
@@ -81,7 +102,7 @@ class Seeder extends Object
         $fields = $this->getDBFields($className);
 
         if (!Object::has_extension($className, 'SeederExtension')) {
-            error_log("'{$className}' does not have the 'SeederExtension'");
+            $this->outputFormatter->classDoesNotHaveExtension($className);
             return;
         }
 
@@ -95,9 +116,9 @@ class Seeder extends Object
         if (!$ignoreCurrentRecords && $currentRecordCount) {
             $count -= $currentRecordCount;
             $count = max($count, 0);
-            echo "Faking {$count} '{$className}' ({$currentRecordCount} already exist)", PHP_EOL;
+            $this->outputFormatter->fakingClassRecords($className, $count, $currentRecordCount);
         } else {
-            echo "Faking {$count} '{$className}'", PHP_EOL;
+            $this->outputFormatter->fakingClassRecords($className, $count);
         }
 
         $createdObjects = array();
@@ -124,7 +145,7 @@ class Seeder extends Object
                         if (!empty($options['nullable']) && $this->randomNull()) {
                             $obj->$field = null;
                         } else if ($type === 'Image') {
-                            echo "Faking image for '{$className}'", PHP_EOL;
+                            $this->outputFormatter->fakingClassRecords('Image', 1);
                             $obj->$field = $this->createImage($options);
                         } else if ($obj instanceof SiteTree && $hasOneField === 'Parent') {
                             if (!empty($data['parent']) && class_exists($data['parent'])) {
@@ -133,7 +154,7 @@ class Seeder extends Object
                                 if ($parentObject) {
                                     $obj->ParentID = $parentObject->ID;
                                 } else {
-                                    error_log("Cannot set parent for {$className}, no {$parentClass} exist");
+                                    $this->outputFormatter->parentClassDoesNotExist($className, $parentClass);
                                 }
                             }
                         } else if (isset($options['use']) && in_array($options['use'], $this->useOptions)) {
@@ -142,7 +163,7 @@ class Seeder extends Object
                                 if ($hasOneObject) {
                                     $obj->$field = $hasOneObject->ID;
                                 } else {
-                                    error_log("Cannot create {$className} has_one {$hasOneField}, no {$type} exist");
+                                    $this->outputFormatter->noInstancesOfHasOneClass($className, $hasOneField, $type);
                                 }
                             } else if ($options['use'] === 'new') {
                                 $hasOneObjects = $this->fakeClass($type, $options, true);
@@ -339,7 +360,7 @@ class Seeder extends Object
             return $this->faker->text($maxLength);
         }
 
-        error_log('unknown data type "' . $type . '"');
+        $this->outputFormatter->unknownDataType($type);
         return '';
     }
 
@@ -391,6 +412,8 @@ class Seeder extends Object
         }
 
         $this->deleteClassSeeds('Image');
+
+        $this->outputFormatter->flush();
     }
 
     /**
@@ -400,7 +423,7 @@ class Seeder extends Object
     {
         if (class_exists($className) && Object::has_extension($className, 'SeederExtension')) {
             $seedObjects = $className::get()->filter('IsSeed', true);
-            echo "Cleaning up seeds for '{$className}'", PHP_EOL;
+            $this->outputFormatter->deletingClassRecords($className, $seedObjects->Count());
             foreach ($seedObjects as $obj) {
                 if ($className === 'Image') {
                     try {

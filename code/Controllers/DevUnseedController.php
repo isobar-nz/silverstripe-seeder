@@ -1,5 +1,7 @@
 <?php
 
+use LittleGiant\SilverStripeSeeder\HtmlOutputFormatter;
+
 /**
  * Class DevUnseedController
  */
@@ -17,7 +19,7 @@ class DevUnseedController extends Controller
      */
     public function index()
     {
-        $seeder = Unseeder::create();
+        $seeder = Seeder::create(new HtmlOutputFormatter());
 
         $seeder->unseed();
     }

@@ -1,5 +1,7 @@
 <?php
 
+use LittleGiant\SilverStripeSeeder\CliOutputFormatter;
+
 /**
  * Class DatabaseSeed
  */
@@ -10,7 +12,7 @@ class DatabaseSeed extends CliController
      */
     function process()
     {
-        $seeder = Seeder::create();
+        $seeder = Seeder::create(new CliOutputFormatter());
 
         global $argv;
 
