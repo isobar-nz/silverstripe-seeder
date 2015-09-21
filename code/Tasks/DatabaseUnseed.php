@@ -7,6 +7,10 @@ use LittleGiant\SilverStripeSeeder\CliOutputFormatter;
  */
 class DatabaseUnseed extends CliController
 {
+    protected $title = "Unseed the database";
+
+    protected $description = "Remove seeded database rows.";
+
     /**
      *
      */
