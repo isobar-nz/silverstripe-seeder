@@ -27,8 +27,8 @@ class Seeder extends Object
      * @var array
      */
     private $fieldTypes = array(
-        'firstName' => array('firstname'),
-        'lastName' => array('lastname', 'surname'),
+        'firstname' => array('firstname'),
+        'lastname' => array('lastname', 'surname'),
         'email' => array('email', 'emailaddress'),
         'phone' => array('phone', 'mobile', 'phonenumber'),
         'company' => array('company'),
@@ -39,15 +39,33 @@ class Seeder extends Object
         'postcode' => array('postcode', 'zipcode', 'postalcode'),
         'state' => array('state'),
         'country' => array('country'),
-        'countryCode' => array('countrycode'),
+        'countrycode' => array('countrycode'),
         'lat' => array('lat', 'latitude'),
         'lng' => array('lng', 'longitude'),
         'link' => array('link', 'url'),
-        'facebookLink' => array('facebook', 'facebooklink'),
-        'googleplusLink' => array('googleplus', 'googlepluslink'),
-        'twitterLink' => array('twitter', 'twitterlink'),
-        'linkedinLink' => array('linkedin', 'linkedinlink'),
+        'facebooklink' => array('facebook', 'facebooklink'),
+        'googlepluslink' => array('googleplus', 'googlepluslink'),
+        'twitterlink' => array('twitter', 'twitterlink'),
+        'linkedinlink' => array('linkedin', 'linkedinlink'),
         'sort' => array('sort', 'sortorder'),
+    );
+
+    /**
+     * @var array
+     */
+    private $dataTypes = array(
+        'varchar',
+        'text',
+        'htmlvar',
+        'htmltext',
+        'int',
+        'percentage',
+        'ss_datetime',
+        'time',
+        'date',
+        'decimal',
+        'currency',
+        'boolean',
     );
 
     /**
@@ -263,8 +281,11 @@ class Seeder extends Object
             }
         }
 
-        if (!empty($options['type']) && isset($this->fieldTypes[$options['type']])) {
-            $type = strtolower($options['type']);
+        if (!empty($options['type'])) {
+            $overrideType = strtolower($options['type']);
+            if (isset($this->fieldTypes[$overrideType]) || in_array($overrideType, $this->dataTypes)) {
+                $type = $overrideType;
+            }
         }
 
         $length = $this->calculateCount($options, 'length', false);
