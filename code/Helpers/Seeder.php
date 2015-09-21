@@ -144,9 +144,12 @@ class Seeder extends Object
                         // value to be generated
                         if (!empty($options['nullable']) && $this->randomNull()) {
                             $obj->$field = null;
-                        } else if ($type === 'Image') {
+                        } else if ($type === 'Image' || is_subclass_of($type, 'Image')) {
                             $this->outputFormatter->fakingClassRecords('Image', 1);
-                            $obj->$field = $this->createImage($options);
+                            $image = $this->createImage($options);
+                            if ($image && $image->exists()) {
+                                $obj->$field = $image->ID;
+                            }
                         } else if ($obj instanceof SiteTree && $hasOneField === 'Parent') {
                             if (!empty($data['parent']) && class_exists($data['parent'])) {
                                 $parentClass = $data['parent'];
@@ -190,19 +193,24 @@ class Seeder extends Object
 
             foreach ($obj->many_many() as $manyManyField => $type) {
                 $options = isset($data['properties'][$manyManyField]) ? $data['properties'][$manyManyField] : array();
+
                 if (isset($options['use']) && in_array($options['use'], $this->useOptions)) {
                     $manyManyCount = $this->calculateCount($options, 'count', 2);
+                    $options['count'] = $manyManyCount;
 
-                    $manyManyList = ArrayList::create();
+                    $items = ArrayList::create();
                     if ($options['use'] === 'existing') {
-                        $manyManyList = $type::get()->sort('RAND()')->limit($manyManyCount);
+                        $items = $type::get()->sort('RAND()')->limit($manyManyCount);
                     } else if ($options['use'] === 'new') {
-                        for ($i = 0; $i < $manyManyCount; $i++) {
-                            $manyManyList->addMany($this->fakeClass($type, $options, true));
+                        if ($type === 'Image' || is_subclass_of($type, 'Image')) {
+                            $this->outputFormatter->fakingClassRecords('Image', $manyManyCount);
+                            $items = $this->createImages($options, $manyManyCount);
+                        } else {
+                            $items = $this->fakeClass($type, $options, true);
                         }
                     }
 
-                    $obj->$manyManyField()->addMany($manyManyList);
+                    $obj->$manyManyField()->addMany($items);
                 }
             }
 
@@ -366,13 +374,32 @@ class Seeder extends Object
 
     /**
      * @param $options
-     * @return int
+     * @param int $count
+     * @return array
+     */
+    public function createImages($options, $count = 1)
+    {
+        $images = array();
+        for ($i = 0; $i < $count; $i++) {
+            $images[] = $this->createImage($options);
+        }
+        return $images;
+    }
+
+    /**
+     * @param $options
+     * @return Image
      * @throws ValidationException
      * @throws null
      */
     public function createImage($options)
     {
-        $path = BASE_PATH . '/assets/';
+        $path = BASE_PATH . '/assets/Seed';
+
+        if (!file_exists($path)) {
+            mkdir($path);
+            chmod($path, 0777);
+        }
 
         $width = $this->calculateCount($options, 'width', 640);
         $height = $this->calculateCount($options, 'height', 480);
@@ -386,7 +413,7 @@ class Seeder extends Object
         $image->IsSeed = true;
         $image->write();
 
-        return $image->ID;
+        return $image;
     }
 
     /**
@@ -425,7 +452,7 @@ class Seeder extends Object
             $seedObjects = $className::get()->filter('IsSeed', true);
             $this->outputFormatter->deletingClassRecords($className, $seedObjects->Count());
             foreach ($seedObjects as $obj) {
-                if ($className === 'Image') {
+                if ($obj instanceof Image || is_subclass_of($obj, 'Image')) {
                     try {
                         // will throw exception if file doesn't exist
                         $obj->delete();
@@ -433,7 +460,10 @@ class Seeder extends Object
                     }
                 } else {
                     foreach ($obj->many_many() as $manyManyField => $type) {
-                        $obj->$manyManyField()->removeAll();
+                        try {
+                            $obj->$manyManyField()->removeAll();
+                        } catch (Exception $e) {
+                        }
                     }
 
                     if ($obj instanceof SiteTree) {
