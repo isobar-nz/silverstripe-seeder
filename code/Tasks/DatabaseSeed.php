@@ -7,6 +7,10 @@ use LittleGiant\SilverStripeSeeder\CliOutputFormatter;
  */
 class DatabaseSeed extends CliController
 {
+    protected $title = "Seed the database";
+
+    protected $description = "Populate the database with placeholder content.";
+
     /**
      *
      */
