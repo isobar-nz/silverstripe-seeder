@@ -142,108 +142,142 @@ class Seeder extends Object
         $createdObjects = array();
 
         for ($i = 0; $i < $count; $i++) {
-            $obj = new $className();
+            try {
+                $obj = new $className();
 
-            foreach ($fields as $field => $type) {
-                $type = strtolower($type);
+                foreach ($fields as $field => $type) {
+                    $type = strtolower($type);
 
-                // ignore has one relationships for the moment
-                if (isset($data['ignore']) && in_array($field, $data['ignore'])) {
-                    continue;
-                }
-
-                if ($type === 'foreignkey') {
-                    $hasOneField = substr($field, 0, strlen($field) - 2);
-                    $type = $obj->has_one($hasOneField);
-                    $options = isset($data['properties'][$hasOneField]) ? $data['properties'][$hasOneField] : array();
-
-                    if (is_array($options)) {
-
-                        // value to be generated
-                        if (!empty($options['nullable']) && $this->randomNull()) {
-                            $obj->$field = null;
-                        } else if ($type === 'Image' || is_subclass_of($type, 'Image')) {
-                            $this->outputFormatter->fakingClassRecords('Image', 1);
-                            $image = $this->createImage($options);
-                            if ($image && $image->exists()) {
-                                $obj->$field = $image->ID;
-                            }
-                        } else if ($obj instanceof SiteTree && $hasOneField === 'Parent') {
-                            if (!empty($data['parent']) && class_exists($data['parent'])) {
-                                $parentClass = $data['parent'];
-                                $parentObject = $parentClass::get()->first();
-                                if ($parentObject) {
-                                    $obj->ParentID = $parentObject->ID;
-                                } else {
-                                    $this->outputFormatter->parentClassDoesNotExist($className, $parentClass);
-                                }
-                            }
-                        } else if (isset($options['use']) && in_array($options['use'], $this->useOptions)) {
-                            if ($options['use'] === 'existing') {
-                                $hasOneObject = $type::get()->sort('RAND()')->first();
-                                if ($hasOneObject) {
-                                    $obj->$field = $hasOneObject->ID;
-                                } else {
-                                    $this->outputFormatter->noInstancesOfHasOneClass($className, $hasOneField, $type);
-                                }
-                            } else if ($options['use'] === 'new') {
-                                $hasOneObjects = $this->fakeClass($type, $options, true);
-                                if ($hasOneObjects) {
-                                    $obj->$field = $hasOneObjects[0]->ID;
-                                }
-                            }
-                        }
-                    } else {
-                        // value given
-                        $obj->$field = $options;
+                    // ignore has one relationships for the moment
+                    if (isset($data['ignore']) && in_array($field, $data['ignore'])) {
+                        continue;
                     }
-                } else {
-                    $options = isset($data['properties'][$field]) ? $data['properties'][$field] : array();
-                    if (is_array($options)) {
-                        // value to be generated
-                        $obj->$field = $this->getSeedValue($className, $field, $type, $options);
-                    } else {
-                        // value given
-                        $obj->$field = $options;
-                    }
-                }
-            }
 
-            foreach ($obj->many_many() as $manyManyField => $type) {
-                $options = isset($data['properties'][$manyManyField]) ? $data['properties'][$manyManyField] : array();
+                    if ($type === 'foreignkey') {
+                        $hasOneField = substr($field, 0, strlen($field) - 2);
+                        $type = $obj->has_one($hasOneField);
+                        $options = isset($data['properties'][$hasOneField]) ? $data['properties'][$hasOneField] : array();
 
-                if (isset($options['use']) && in_array($options['use'], $this->useOptions)) {
-                    $manyManyCount = $this->calculateCount($options, 'count', 2);
-                    $options['count'] = $manyManyCount;
+                        if (is_array($options)) {
 
-                    $items = ArrayList::create();
-                    if ($options['use'] === 'existing') {
-                        $items = $type::get()->sort('RAND()')->limit($manyManyCount);
-                    } else if ($options['use'] === 'new') {
-                        if ($type === 'Image' || is_subclass_of($type, 'Image')) {
-                            $this->outputFormatter->fakingClassRecords('Image', $manyManyCount);
-                            $items = $this->createImages($options, $manyManyCount);
+                            // value to be generated
+                            if (!empty($options['nullable']) && $this->randomNull()) {
+                                $obj->$field = null;
+                            } else if ($type === 'Image' || is_subclass_of($type, 'Image')) {
+                                $this->outputFormatter->fakingClassRecords('Image', 1);
+                                $image = $this->createImage($options);
+                                if ($image && $image->exists()) {
+                                    $obj->$field = $image->ID;
+                                }
+                            } else if ($obj instanceof SiteTree && $hasOneField === 'Parent') {
+                                if (!empty($data['parent']) && class_exists($data['parent'])) {
+                                    $parentClass = $data['parent'];
+                                    $parentObject = $parentClass::get()->first();
+                                    if ($parentObject) {
+                                        $obj->ParentID = $parentObject->ID;
+                                    } else {
+                                        $this->outputFormatter->parentClassDoesNotExist($className, $parentClass);
+                                    }
+                                }
+                            } else if (isset($options['use']) && in_array($options['use'], $this->useOptions)) {
+                                if ($options['use'] === 'existing') {
+                                    $hasOneObject = $type::get()->sort('RAND()')->first();
+                                    if ($hasOneObject) {
+                                        $obj->$field = $hasOneObject->ID;
+                                    } else {
+                                        $this->outputFormatter->noInstancesOfHasOneClass($className, $hasOneField, $type);
+                                    }
+                                } else if ($options['use'] === 'new') {
+                                    $hasOneObjects = $this->fakeClass($type, $options, true);
+                                    if ($hasOneObjects) {
+                                        $obj->$field = $hasOneObjects[0]->ID;
+                                    }
+                                }
+                            }
                         } else {
-                            $items = $this->fakeClass($type, $options, true);
+                            // value given
+                            $obj->$field = $options;
+                        }
+                    } else {
+                        $options = isset($data['properties'][$field]) ? $data['properties'][$field] : array();
+                        if (is_array($options)) {
+                            // value to be generated
+                            $obj->$field = $this->getSeedValue($className, $field, $type, $options);
+                        } else {
+                            // value given
+                            $obj->$field = $options;
                         }
                     }
-
-                    $obj->$manyManyField()->addMany($items);
                 }
-            }
 
-            if ($obj instanceof SiteTree) {
-                $obj->writeToStage('Stage');
+                foreach ($obj->many_many() as $manyManyField => $type) {
+                    $options = isset($data['properties'][$manyManyField]) ? $data['properties'][$manyManyField] : array();
 
-                $publish = isset($data['publish']) ? $data['publish'] : true;
-                if ($publish !== false) {
-                    $obj->publish('Stage', 'Live');
+                    if (isset($options['use']) && in_array($options['use'], $this->useOptions)) {
+                        $manyManyCount = $this->calculateCount($options, 'count', 2);
+                        $options['count'] = $manyManyCount;
+
+                        $items = ArrayList::create();
+                        if ($options['use'] === 'existing') {
+                            $items = $type::get()->sort('RAND()')->limit($manyManyCount);
+                        } else if ($options['use'] === 'new') {
+                            if ($type === 'Image' || is_subclass_of($type, 'Image')) {
+                                $this->outputFormatter->fakingClassRecords('Image', $manyManyCount);
+                                $items = $this->createImages($options, $manyManyCount);
+                            } else {
+                                $items = $this->fakeClass($type, $options, true);
+                            }
+                        }
+
+                        $obj->$manyManyField()->addMany($items);
+                    }
                 }
-            } else {
-                $obj->write();
-            }
 
-            $createdObjects[] = $obj;
+
+                $this->writeObject($obj);
+
+                foreach ($obj->has_many() as $hasManyField => $type) {
+                    $options = isset($data['properties'][$hasManyField]) ? $data['properties'][$hasManyField] : array();
+
+                    if (isset($options['use']) && in_array($options['use'], $this->useOptions)) {
+                        $hasManyCount = $this->calculateCount($options, 'count', 2);
+                        $options['count'] = $hasManyCount;
+
+                        $items = ArrayList::create();
+                        if ($options['use'] === 'existing') {
+                            $items = $type::get()->sort('RAND()')->limit($hasManyCount);
+                        } else if ($options['use'] === 'new') {
+                            if ($type === 'Image' || is_subclass_of($type, 'Image')) {
+                                $this->outputFormatter->fakingClassRecords('Image', $hasManyCount);
+                                $items = $this->createImages($options, $hasManyCount);
+                            } else {
+                                $items = $this->fakeClass($type, $options, true);
+                            }
+                        }
+
+                        if (count($items)) {
+                            $itemField = '';
+                            foreach ($items[0]->has_one() as $hasOneField => $hasOneType) {
+                                if ($type === $hasOneType) {
+                                    $itemField = $hasOneField;
+                                }
+                            }
+
+                            if ($itemField) {
+                                foreach ($items as $item) {
+                                    $item->$itemField = $obj->ID;
+                                    $this->writeObject($obj);
+                                }
+                            }
+                        }
+                    }
+                }
+
+                $createdObjects[] = $obj;
+            } catch (Exception $e) {
+                // issue with ClassName being inserted into versions table
+                error_log('Error saving data object');
+            }
         }
 
         return $createdObjects;
@@ -370,6 +404,8 @@ class Seeder extends Object
             return $this->faker->randomNumber();
         } else if ($type == 'percentage') {
             return $this->faker->randomFloat(4, 0, 1);
+        } else if (strpos($type, 'decimal') !== false) {
+            return $this->faker->randomFloat(4, 0);
         } else if ($type === 'ss_datetime') {
             return $this->faker->dateTime()->format('Y-m-d H:i:s');
         } else if ($type === 'text') {
@@ -453,6 +489,7 @@ class Seeder extends Object
     {
         $dataObjects = $this->config()->DataObjects;
 
+        // will miss seeds nested 2 recursions or deeper
         if (is_array($dataObjects)) {
             foreach ($dataObjects as $className => $data) {
                 $this->deleteClassSeeds($className);
@@ -487,6 +524,13 @@ class Seeder extends Object
                         }
                     }
 
+                    foreach ($obj->has_many() as $hasManyField => $type) {
+                        try {
+                            $obj->$hasManyField()->removeAll();
+                        } catch (Exception $e) {
+                        }
+                    }
+
                     if ($obj instanceof SiteTree) {
                         $obj->deleteFromStage('Live');
                         $obj->deleteFromStage('Stage');
@@ -509,7 +553,8 @@ class Seeder extends Object
     {
         $count = $default;
         if (isset($options['max_' . $type]) && is_numeric($options['max_' . $type])
-            && isset($options['min_' . $type]) && is_numeric($options['min_' . $type])) {
+            && isset($options['min_' . $type]) && is_numeric($options['min_' . $type])
+        ) {
             $count = $this->faker->numberBetween($options['min_' . $type], $options['max_' . $type]);
         }
         if (isset($options[$type])) {
@@ -524,5 +569,22 @@ class Seeder extends Object
     public function ignoreCurrentRecords($bool = true)
     {
         $this->ignoreCurrentRecords = $bool;
+    }
+
+    /**
+     * @param $obj
+     */
+    private function writeObject($obj)
+    {
+        if ($obj instanceof SiteTree) {
+            $obj->writeToStage('Stage');
+
+            $publish = isset($data['publish']) ? $data['publish'] : true;
+            if ($publish !== false) {
+                $obj->publish('Stage', 'Live');
+            }
+        } else {
+            $obj->write();
+        }
     }
 }
