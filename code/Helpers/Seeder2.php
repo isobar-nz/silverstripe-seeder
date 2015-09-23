@@ -19,7 +19,7 @@ class Seeder2 extends Object
     {
         srand();
 
-        $dataObjects = $this->config()->generate;
+        $dataObjects = $this->config()->create;
 
         if (is_array($dataObjects)) {
             foreach ($dataObjects as $index => $option) {
@@ -27,7 +27,8 @@ class Seeder2 extends Object
                     // add support for count, currently makes 1
                     $field = $this->createObjectField($option['ClassName'], $option);
                     $field->name = $option['ClassName'];
-                    $field->fieldType = Field::FT_HAS_ONE; // change to has_many?
+                    // has many generates count
+                    $field->fieldType = Field::FT_HAS_MANY;
                     $field->fieldName = '';
                     $field->methodName = '';
 
@@ -152,5 +153,13 @@ class Seeder2 extends Object
         $provider = new DataTypeProvider();
         $provider->setWriter($this->writer);
         return $provider;
+    }
+
+    public function unseed()
+    {
+        foreach (Seed::get() as $seed) {
+            DataObject::delete_by_id($seed->SeedClassName, $seed->SeedID);
+            $seed->delete();
+        }
     }
 }

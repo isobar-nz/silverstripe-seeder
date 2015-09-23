@@ -2,7 +2,7 @@
 
 namespace LittleGiant\SilverStripeSeeder\Providers;
 
-abstract class Provider extends Object
+abstract class Provider extends \Object
 {
     private static $shorthand = 'default';
 

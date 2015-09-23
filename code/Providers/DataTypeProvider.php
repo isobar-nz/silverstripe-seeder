@@ -32,12 +32,12 @@ class DataTypeProvider extends Provider
 
     private function generateField($field, $state)
     {
-        $fieldType = strtolower($field->fieldType);
+        $dataType = strtolower($field->dataType);
         $args = $field->arguments;
 
-        if ($fieldType === 'boolean') {
+        if ($dataType === 'boolean') {
             return array_rand(array(true, false));
-        } else if ($fieldType === 'currency') {
+        } else if ($dataType === 'currency') {
             $min = 0;
             $max = 1000;
             if (!empty($args['range'])) {
@@ -48,16 +48,16 @@ class DataTypeProvider extends Provider
                 $max = min($limits);
             }
             return $this->faker->randomFloat(2, $min, $max);
-        } else if ($fieldType === 'date') {
+        } else if ($dataType === 'date') {
             // todo
             return date('Y-m-d');
-        } else if ($fieldType === 'time') {
+        } else if ($dataType === 'time') {
             // todo
             return date('H:i:s');
-        } else if ($fieldType === 'ss_datetime') {
+        } else if ($dataType === 'ss_datetime') {
             // todo
             return date('Y-m-d H:i:s');
-        } else if (strpos($fieldType, 'decimal') === 0) {
+        } else if (strpos($dataType, 'decimal') === 0) {
             $min = 0;
             $max = 1000;
             $decimals = 4;
@@ -72,7 +72,7 @@ class DataTypeProvider extends Provider
                 $decimals = intval($args['decimals']);
             }
             return $this->faker->randomFloat($decimals, $min, $max);
-        } else if ($fieldType === 'int') {
+        } else if ($dataType === 'int') {
             $min = 0;
             $max = PHP_INT_MAX;
             if (!empty($args['range'])) {
@@ -83,18 +83,18 @@ class DataTypeProvider extends Provider
                 $max = min($limits);
             }
             return $this->faker->numberBetween($min, $max);
-        } else if (strpos($fieldType, 'enum') === 0) {
+        } else if (strpos($dataType, 'enum') === 0) {
             $values = singleton($state->up()->field()->dataType)
                 ->dbObject($field)
                 ->enumValues();
             return array_rand($values);
-        } else if (strpos($fieldType, 'htmltext') === 0) {
+        } else if (strpos($dataType, 'htmltext') === 0) {
             // todo
             return '<p>TODO</p>';
-        } else if (strpos($fieldType, 'htmlvarchar') === 0) {
+        } else if (strpos($dataType, 'htmlvarchar') === 0) {
             // todo
             return '<p>TODO</p>';
-        } else if ($fieldType === 'text') {
+        } else if ($dataType === 'text') {
             $count = 3;
             if (!empty($args['count'])) {
                 if (strpos($args['count'], ',') !== false) {
@@ -110,9 +110,9 @@ class DataTypeProvider extends Provider
                 }
             }
             return $this->faker->paragraphs($count);
-        } else if (strpos($fieldType, 'varchar') !== false) {
+        } else if (strpos($dataType, 'varchar') !== false) {
             $length = 60;
-            preg_match('/\(([0-9]*)\)/', $fieldType, $matches);
+            preg_match('/\(([0-9]*)\)/', $dataType, $matches);
             if ($matches) {
                 $length = intval($matches[1]);
             }
@@ -168,14 +168,14 @@ class DataTypeProvider extends Provider
 
     private function generateObject($field, $state, $index = 0)
     {
-        $className = $field->dataType();
+        $className = $field->dataType;
         $object = new $className();
         // write here to get ID?
         // need ID for nested objects to reference Up
 
         $newState = $state->down($field, $object, $index);
 
-        foreach ($object->fields as $objectField) {
+        foreach ($field->fields as $objectField) {
             $values = $objectField->provider->generate($objectField, $newState);
             if (!empty($values)) {
                 $fieldName = $objectField->fieldName;
@@ -183,7 +183,7 @@ class DataTypeProvider extends Provider
             }
         }
 
-        foreach ($object->hasOneFields as $hasOneField) {
+        foreach ($field->hasOne as $hasOneField) {
             $hasOneField->arguments['count'] = 1;
             $values = $hasOneField->provider->generate($hasOneField, $newState);
             if (!empty($values)) {
@@ -192,7 +192,7 @@ class DataTypeProvider extends Provider
             }
         }
 
-        foreach ($object->manyManyFields as $manyManyField) {
+        foreach ($field->manyMany as $manyManyField) {
             $values = $manyManyField->provider->generate($manyManyField, $newState);
             if (!empty($values)) {
                 $methodName = $manyManyField->methodName;
@@ -202,7 +202,7 @@ class DataTypeProvider extends Provider
 
         $this->writer->write($object);
 
-        foreach ($object->hasManyFields as $hasManyField) {
+        foreach ($field->hasMany as $hasManyField) {
             $values = $hasManyField->provider->generate($hasManyField);
             if (!empty($values)) {
                 $linkField = '';
