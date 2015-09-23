@@ -78,22 +78,22 @@ class Seeder2 extends Object
 
             // limit to Image fields + fields that specify use
             foreach ($classObject->has_one() as $fieldName => $className) {
-                if (!isset($ignoreLookup[$fieldName])) {
+                if (!isset($ignoreLookup[$fieldName]) && isset($options['properties'][$fieldName])) {
                     $hasOneFields[$fieldName] = $className;
                 }
             }
 
             // limit to fields that specify use
             foreach ($classObject->has_many() as $fieldName => $className) {
-                if (!isset($ignoreLookup[$fieldName])) {
-                    $hasManyFields[$fieldName] = $classObject;
+                if (!isset($ignoreLookup[$fieldName]) && isset($options['properties'][$fieldName])) {
+                    $hasManyFields[$fieldName] = $className;
                 }
             }
 
             // limit to fields that specify use
             foreach ($classObject->many_many() as $fieldName => $className) {
-                if (!isset($ignoreLookup[$fieldName])) {
-                    $manyManyFields[$fieldName] = $classObject;
+                if (!isset($ignoreLookup[$fieldName]) && isset($options['properties'][$fieldName])) {
+                    $manyManyFields[$fieldName] = $className;
                 }
             }
         }
@@ -158,7 +158,27 @@ class Seeder2 extends Object
     public function unseed()
     {
         foreach (Seed::get() as $seed) {
-            DataObject::delete_by_id($seed->SeedClassName, $seed->SeedID);
+            $className = $seed->SeedClassName;
+            $object = $className::get()->byID($seed->SeedID);
+
+            if ($object) {
+//                // is this necessary??
+//                foreach ($object->many_many() as $method => $type) {
+//                    $object->$method()->removeAll();
+//                }
+//                // is this necessary??
+//                foreach ($object->has_many() as $method => $type) {
+//                    $object->$method()->removeAll();
+//                }
+
+                if ($object->has_extension('Versioned')) {
+                    $object->deleteFromStage('Live');
+                    $object->deleteFromStage('Stage');
+                } else {
+                    $object->delete();
+                }
+            }
+
             $seed->delete();
         }
     }

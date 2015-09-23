@@ -9,14 +9,57 @@ class DataTypeProvider extends Provider
 {
     private $faker;
 
+    private $fieldTypes = array(
+        'firstname' => array('firstname'),
+        'lastname' => array('lastname', 'surname'),
+        'email' => array('email', 'emailaddress'),
+        'phone' => array('phone', 'mobile', 'phonenumber'),
+        'company' => array('company'),
+        'address' => array('address'),
+        'address1' => array('address1', 'street'),
+        'address2' => array('address2', 'addressline2', 'suburb'),
+        'city' => array('city'),
+        'postcode' => array('postcode', 'zipcode', 'postalcode'),
+        'state' => array('state'),
+        'country' => array('country'),
+        'countrycode' => array('countrycode'),
+        'lat' => array('lat', 'latitude'),
+        'lng' => array('lng', 'longitude'),
+        'link' => array('link', 'url'),
+        'sort' => array('sort', 'sortorder'),
+    );
+
+    private $dataType = array(
+        'boolean',
+        'currency',
+        'decimal',
+        'percentage',
+        'int',
+        'date',
+        'time',
+        'ss_datetime',
+        'htmlvar',
+        'htmltext',
+        'varchar',
+        'text',
+    );
+
     public function __construct()
     {
+        parent::__construct();
         $this->faker = Factory::create();
     }
 
     public function generate($field, $state)
     {
         $values = array();
+
+        if (isset($field->arguments['nullable']) && $field->arguments['nullable']) {
+            if (rand(0, 100) < 20) {
+                return $values;
+            }
+        }
+
         if ($field->fieldType === Field::FT_FIELD) {
             $values[] = $this->generateField($field, $state);
         } else if ($field->fieldType === Field::FT_HAS_ONE) {
@@ -33,9 +76,60 @@ class DataTypeProvider extends Provider
     private function generateField($field, $state)
     {
         $dataType = strtolower($field->dataType);
+        $name = strtolower($field->name);
         $args = $field->arguments;
 
-        if ($dataType === 'boolean') {
+        foreach ($this->fieldTypes as $fieldType => $names) {
+            if (in_array($name, $names)) {
+                $dataType = $fieldType;
+            }
+        }
+
+        if (!empty($field->arguments['type'])) {
+            $type = strtolower($field->arguments['type']);
+            if (isset($this->fieldTypes[$type]) || in_array($type, $this->dataType)) {
+                $dataType = $type;
+            }
+        }
+
+        // named fields
+        if ($dataType === 'firstname') {
+            return $this->faker->firstName();
+        } else if ($dataType === 'lastname') {
+            return $this->faker->lastName;
+        } else if ($dataType === 'email') {
+            return $this->faker->safeEmail;
+        } else if ($dataType === 'phone') {
+            return $this->faker->phoneNumber;
+        } else if ($dataType === 'company') {
+            return $this->faker->company;
+        } else if ($dataType === 'address') {
+            return $this->faker->address;
+        } else if ($dataType === 'address1') {
+            return $this->faker->streetAddress;
+        } else if ($dataType === 'address2') {
+            return $this->faker->secondaryAddress;
+        } else if ($dataType === 'city') {
+            return $this->faker->city;
+        } else if ($dataType === 'postcode') {
+            return $this->faker->postcode;
+        } else if ($dataType === 'state') {
+            return $this->faker->state;
+        } else if ($dataType === 'country') {
+            return $this->faker->country;
+        } else if ($dataType === 'countrycode') {
+            return $this->faker->countryCode;
+        } else if ($dataType === 'lat') {
+            return $this->faker->latitude;
+        } else if ($dataType === 'lng') {
+            return $this->faker->longitude;
+        } else if ($dataType === 'link') {
+            return $this->faker->url;
+        } else if ($dataType === 'sort') {
+            return 0;
+
+        // data type fields
+        } else if ($dataType === 'boolean') {
             return array_rand(array(true, false));
         } else if ($dataType === 'currency') {
             $min = 0;
@@ -84,8 +178,10 @@ class DataTypeProvider extends Provider
             }
             return $this->faker->numberBetween($min, $max);
         } else if (strpos($dataType, 'enum') === 0) {
-            $values = singleton($state->up()->field()->dataType)
-                ->dbObject($field)
+            // todo check how state is created
+//            $values = singleton($state->up()->field()->dataType)
+            $values = singleton($state->field()->dataType)
+                ->dbObject($field->name)
                 ->enumValues();
             return array_rand($values);
         } else if (strpos($dataType, 'htmltext') === 0) {
@@ -98,7 +194,7 @@ class DataTypeProvider extends Provider
             $count = 3;
             if (!empty($args['count'])) {
                 if (strpos($args['count'], ',') !== false) {
-                    $limits = array_map(function($limit) {
+                    $limits = array_map(function ($limit) {
                         return intval($limit);
                     }, explode(',', $args['count']));
                     $min = min($limits);
@@ -133,7 +229,7 @@ class DataTypeProvider extends Provider
 
         // add use support
         $object = $this->generateObject($field, $state);
-        return array($object);
+        return $object;
     }
 
     private function generateHasManyField($field, $state)
@@ -200,10 +296,10 @@ class DataTypeProvider extends Provider
             }
         }
 
-        $this->writer->write($object);
+        $this->writer->write($object, $field);
 
         foreach ($field->hasMany as $hasManyField) {
-            $values = $hasManyField->provider->generate($hasManyField);
+            $values = $hasManyField->provider->generate($hasManyField, $newState);
             if (!empty($values)) {
                 $linkField = '';
                 foreach ($values[0]->has_one() as $fieldName => $className) {
@@ -214,7 +310,7 @@ class DataTypeProvider extends Provider
                 if ($linkField) {
                     foreach ($values as $value) {
                         $value->$linkField = $object->ID;
-                        $this->writer->write($value);
+                        $this->writer->write($value, $hasManyField);
                     }
                 }
             }
