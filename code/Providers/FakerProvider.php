@@ -4,8 +4,8 @@ namespace LittleGiant\SilverStripeSeeder\Providers;
 
 class FakerProvider extends Provider
 {
-    public function generate($field, $state)
+    protected function generateField($field, $state)
     {
-        // TODO: Implement setValue() method.
+        // TODO: Implement generateField() method.
     }
 }

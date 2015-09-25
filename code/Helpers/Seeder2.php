@@ -2,7 +2,6 @@
 
 use \LittleGiant\SilverStripeSeeder\Util\Field;
 use \LittleGiant\SilverStripeSeeder\Util\SeederState;
-use \LittleGiant\SilverStripeSeeder\Providers\DataTypeProvider;
 use \LittleGiant\SilverStripeSeeder\Util\RecordWriter;
 
 class Seeder2 extends Object
@@ -151,6 +150,12 @@ class Seeder2 extends Object
     public function createProvider($options)
     {
         $provider = new DataTypeProvider();
+
+        if (!empty($options['provider']) && class_exists($options['provider'])) {
+            $providerClassName = $options['provider'];
+            $provider = new $providerClassName();
+        }
+
         $provider->setWriter($this->writer);
         return $provider;
     }

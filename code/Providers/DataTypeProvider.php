@@ -1,9 +1,7 @@
 <?php
 
-namespace LittleGiant\SilverStripeSeeder\Providers;
-
 use Faker\Factory;
-use LittleGiant\SilverStripeSeeder\Util\Field;
+use LittleGiant\SilverStripeSeeder\Providers\Provider;
 
 class DataTypeProvider extends Provider
 {
@@ -50,30 +48,7 @@ class DataTypeProvider extends Provider
         $this->faker = Factory::create();
     }
 
-    public function generate($field, $state)
-    {
-        $values = array();
-
-        if (isset($field->arguments['nullable']) && $field->arguments['nullable']) {
-            if (rand(0, 100) < 20) {
-                return $values;
-            }
-        }
-
-        if ($field->fieldType === Field::FT_FIELD) {
-            $values[] = $this->generateField($field, $state);
-        } else if ($field->fieldType === Field::FT_HAS_ONE) {
-            $values[] = $this->generateHasOneField($field, $state);
-        } else if ($field->fieldType === Field::FT_HAS_MANY) {
-            $values = $this->generateHasManyField($field, $state);
-        } else if ($field->fieldType === Field::FT_MANY_MANY) {
-            $values = $this->generateManyManyField($field, $state);
-        }
-
-        return $values;
-    }
-
-    private function generateField($field, $state)
+    protected function generateField($field, $state)
     {
         $dataType = strtolower($field->dataType);
         $name = strtolower($field->name);
@@ -178,8 +153,6 @@ class DataTypeProvider extends Provider
             }
             return $this->faker->numberBetween($min, $max);
         } else if (strpos($dataType, 'enum') === 0) {
-            // todo check how state is created
-//            $values = singleton($state->up()->field()->dataType)
             $values = singleton($state->field()->dataType)
                 ->dbObject($field->name)
                 ->enumValues();
@@ -221,101 +194,5 @@ class DataTypeProvider extends Provider
         // error message, unknown data type
         return null;
     }
-
-    private function generateHasOneField($field, $state)
-    {
-        // can we get rid of use,
-        // and replace with a existingObjectProvider, randomObjectProvider
-
-        // add use support
-        $object = $this->generateObject($field, $state);
-        return $object;
-    }
-
-    private function generateHasManyField($field, $state)
-    {
-        // add use support
-        $count = 1;
-        if (isset($field->arguments['count'])) {
-            $count = intval($field->arguments['count']);
-        }
-
-        $objects = array();
-        for ($i = 0; $i < $count; $i++) {
-            $objects[] = $this->generateObject($field, $state, $i);
-        }
-        return $objects;
-    }
-
-    private function generateManyManyField($field, $state)
-    {
-        // add use support
-        $count = 1;
-        if (isset($field->arguments['count'])) {
-            $count = intval($field->arguments['count']);
-        }
-
-        $objects = array();
-        for ($i = 0; $i < $count; $i++) {
-            $objects[] = $this->generateObject($field, $state, $i);
-        }
-        return $objects;
-    }
-
-    private function generateObject($field, $state, $index = 0)
-    {
-        $className = $field->dataType;
-        $object = new $className();
-        // write here to get ID?
-        // need ID for nested objects to reference Up
-
-        $newState = $state->down($field, $object, $index);
-
-        foreach ($field->fields as $objectField) {
-            $values = $objectField->provider->generate($objectField, $newState);
-            if (!empty($values)) {
-                $fieldName = $objectField->fieldName;
-                $object->$fieldName = $values[0];
-            }
-        }
-
-        foreach ($field->hasOne as $hasOneField) {
-            $hasOneField->arguments['count'] = 1;
-            $values = $hasOneField->provider->generate($hasOneField, $newState);
-            if (!empty($values)) {
-                $fieldName = $hasOneField->fieldName;
-                $object->$fieldName = $values[0]->ID;
-            }
-        }
-
-        foreach ($field->manyMany as $manyManyField) {
-            $values = $manyManyField->provider->generate($manyManyField, $newState);
-            if (!empty($values)) {
-                $methodName = $manyManyField->methodName;
-                $object->$methodName()->addMany($values);
-            }
-        }
-
-        $this->writer->write($object, $field);
-
-        foreach ($field->hasMany as $hasManyField) {
-            $values = $hasManyField->provider->generate($hasManyField, $newState);
-            if (!empty($values)) {
-                $linkField = '';
-                foreach ($values[0]->has_one() as $fieldName => $className) {
-                    if ($className === $object->ClassName) {
-                        $linkField = $fieldName . 'ID';
-                    }
-                }
-                if ($linkField) {
-                    foreach ($values as $value) {
-                        $value->$linkField = $object->ID;
-                        $this->writer->write($value, $hasManyField);
-                    }
-                }
-            }
-        }
-
-        return $object;
-    }
 }
+
