@@ -178,7 +178,7 @@ class DataTypeProvider extends Provider
                     $count = intval($args['count']);
                 }
             }
-            return $this->faker->paragraphs($count);
+            return implode(PHP_EOL, $this->faker->paragraphs($count));
         } else if (strpos($dataType, 'varchar') !== false) {
             $length = 60;
             preg_match('/\(([0-9]*)\)/', $dataType, $matches);

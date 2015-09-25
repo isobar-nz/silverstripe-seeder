@@ -102,6 +102,7 @@ class Seeder2 extends Object
         foreach ($fields as $fieldName => $dataType) {
             $fieldOptions = isset($properties[$fieldName]) ? $properties[$fieldName] : array();
             $fieldObject = $this->createField($dataType, $fieldOptions);
+            $fieldObject->fieldName = $fieldName;
             $fieldObject->name = $fieldName;
             $field->fields[] = $fieldObject;
         }
@@ -151,7 +152,7 @@ class Seeder2 extends Object
     {
         $provider = new DataTypeProvider();
 
-        if (!empty($options['provider']) && class_exists($options['provider'])) {
+        if (!empty($options['provider'])) {
             $providerClassName = $options['provider'];
             $provider = new $providerClassName();
         }
