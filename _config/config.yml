@@ -4,14 +4,45 @@ Name: silverstripe-seeder
 
 Seeder2:
   providers:
-    - 'DataTypeProvider'
-    - 'FakerProvider'
-    - 'ImageProvider'
-    - 'ValueProvider'
-  empty_shorthand_provider: 'ValueProvider'
-  default_provider: 'DataTypeProvider'
+    - DataTypeProvider
+    - FakerProvider
+    - ImageProvider
+    - ValueProvider
+    - ObjectProvider
+  empty_shorthand_provider: ValueProvider
+  default_provider: DataTypeProvider
   default_providers:
-    Image: 'ImageProvider'
+    Image: ImageProvider
+  default_ignores:
+    SiteTree:
+      - Sort
+      - HasBrokenFile
+      - HasBrokenLink
+      - ReportClass
+      - Priority
+      - Version
+    Member:
+      - TempIDHash
+      - TempIDExpired
+      - RememberLoginToken
+      - NumVisit
+      - LastVisited
+      - AutoLoginHash
+      - AutoLoginExpired
+      - PasswordEncryption
+      - Salt
+      - PasswordExpiry
+      - LockedOutUntil
+      - Locale
+      - FailedLoginCount
+      - DateFormat
+      - TimeFormat
+  default_values:
+    SiteTree:
+      ShowInMenus: 0
+      ShowInSearch: 1
+      CanViewType: Anyone
+      CanEditType: LoggedInUsers
 
 ---
 Only:

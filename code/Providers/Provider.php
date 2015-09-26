@@ -62,7 +62,7 @@ abstract class Provider extends \Object
         foreach ($field->hasOne as $hasOneField) {
             $hasOneField->arguments['count'] = 1;
             $values = $hasOneField->provider->generate($hasOneField, $state);
-            if (!empty($values)) {
+            if (!empty($values[0])) {
                 $fieldName = $hasOneField->fieldName;
                 $object->$fieldName = $values[0]->ID;
             }

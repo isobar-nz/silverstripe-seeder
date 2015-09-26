@@ -22,6 +22,10 @@ class Seeder2 extends Object
 
         if (is_array($dataObjects)) {
             foreach ($dataObjects as $index => $option) {
+                if (is_string($index) && class_exists($index)) {
+                    $option['classname'] = $index;
+                }
+
                 if (isset($option['classname']) && class_exists($option['classname'])) {
                     // add support for count, currently makes 1
                     $field = $this->createObjectField($option['classname'], $option);
@@ -61,12 +65,14 @@ class Seeder2 extends Object
 
         $field->ancestry = $ancestry;
 
+        $ignoreFields = $this->getIgnoreFields($field, $options);
+
         $ignoreLookup = array();
-        if (!empty($options['ignore']) && is_array($options['ignore'])) {
-            foreach ($options['ignore'] as $field) {
-                $ignoreLookup[$field] = $field;
-            }
+        foreach ($ignoreFields as $ignoreField) {
+            $ignoreLookup[$ignoreField] = $ignoreField;
         }
+
+        $properties = isset($options['properties']) ? $options['properties'] : array();
 
         $fields = array();
         $hasOneFields = array();
@@ -74,14 +80,15 @@ class Seeder2 extends Object
         $manyManyFields = array();
         foreach ($field->ancestry as $classObject) {
             foreach (\DataObject::custom_database_fields($classObject->ClassName) as $fieldName => $fieldType) {
-                if ($fieldType !== 'ForeignKey' && !isset($ignoreLookup[$fieldName])) {
+                $ignored = isset($ignoreLookup[$fieldName]) && !isset($properties[$fieldName]);
+                if ($fieldType !== 'ForeignKey' && !$ignored) {
                     $fields[$fieldName] = $fieldType;
                 }
             }
 
-            // limit to Image fields + fields that specify use
             foreach ($classObject->has_one() as $fieldName => $className) {
-                if (!isset($ignoreLookup[$fieldName])
+                $ignored = isset($ignoreLookup[$fieldName]) && !isset($properties[$fieldName]);
+                if (!$ignored
                     && isset($options['properties'])
                     && array_key_exists($fieldName, $options['properties'])
                 ) {
@@ -91,7 +98,8 @@ class Seeder2 extends Object
 
             // limit to fields that specify use
             foreach ($classObject->has_many() as $fieldName => $className) {
-                if (!isset($ignoreLookup[$fieldName])
+                $ignored = isset($ignoreLookup[$fieldName]) && !isset($properties[$fieldName]);
+                if (!$ignored
                     && isset($options['properties'])
                     && array_key_exists($fieldName, $options['properties'])
                 ) {
@@ -101,7 +109,8 @@ class Seeder2 extends Object
 
             // limit to fields that specify use
             foreach ($classObject->many_many() as $fieldName => $className) {
-                if (!isset($ignoreLookup[$fieldName])
+                $ignored = isset($ignoreLookup[$fieldName]) && !isset($properties[$fieldName]);
+                if (!$ignored
                     && isset($options['properties'])
                     && array_key_exists($fieldName, $options['properties'])
                 ) {
@@ -110,7 +119,7 @@ class Seeder2 extends Object
             }
         }
 
-        $properties = isset($options['properties']) ? $options['properties'] : array();
+        $properties = array_merge($this->getDefaultProperties($field), $properties);
 
         foreach ($fields as $fieldName => $dataType) {
             $fieldOptions = isset($properties[$fieldName]) ? $properties[$fieldName] : array();
@@ -175,6 +184,38 @@ class Seeder2 extends Object
         $options = $provider::parseOptions($optionString);
         $options['provider'] = $provider;
         return $options;
+    }
+
+    public function getIgnoreFields($field, $options)
+    {
+        $defaultIgnores = $this->config()->default_ignores;
+
+        $ignoreFields = array();
+        foreach ($field->ancestry as $object) {
+            if (isset($defaultIgnores[$object->ClassName])) {
+                $ignoreFields = array_merge($ignoreFields, $defaultIgnores[$object->ClassName]);
+            }
+        }
+
+        if (isset($options['ignore']) && is_array($options['ignore'])) {
+            $ignoreFields = array_merge($ignoreFields, $options['ignore']);
+        }
+
+        return array_unique($ignoreFields);
+    }
+
+    public function getDefaultProperties($field)
+    {
+        $properties = array();
+
+        $defaultValues = $this->config()->default_values;
+        foreach ($field->ancestry as $object) {
+            if (isset($defaultValues[$object->ClassName])) {
+                $properties = array_merge($properties, $defaultValues[$object->ClassName]);
+            }
+        }
+
+        return $properties;
     }
 
     public function createField($dataType, $options)

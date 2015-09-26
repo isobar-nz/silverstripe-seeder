@@ -6,6 +6,8 @@ class RecordWriter
 {
     public function write(\DataObject $object, Field $field)
     {
+        $exists = $object->exists();
+
         if ($object->has_extension('Versioned')) {
             $object->writeToStage('Stage');
 
@@ -19,10 +21,12 @@ class RecordWriter
             $object->write();
         }
 
-        $seed = new \Seed();
-        $seed->SeedClassName = $object->ClassName;
-        $seed->SeedID = $object->ID;
-        $seed->write();
+        if (!$exists) {
+            $seed = new \Seed();
+            $seed->SeedClassName = $object->ClassName;
+            $seed->SeedID = $object->ID;
+            $seed->write();
+        }
     }
 
     public function finish()
