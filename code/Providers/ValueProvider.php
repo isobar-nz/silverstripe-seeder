@@ -4,6 +4,15 @@ use LittleGiant\SilverStripeSeeder\Providers\Provider;
 
 class ValueProvider extends Provider
 {
+    public static $shorthand = 'Value';
+
+    public static function parseOptions($argumentString)
+    {
+        return array(
+            'value' => $argumentString,
+        );
+    }
+
     protected function generateField($field, $state)
     {
         $value = $this->resolveValue($field, $state);

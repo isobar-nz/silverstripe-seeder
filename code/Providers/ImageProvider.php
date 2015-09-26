@@ -7,11 +7,30 @@ class ImageProvider extends Provider
 {
     private $faker;
 
+    public static $shorthand = 'Image';
+
     public function __construct()
     {
         parent::__construct();
-
         $this->faker = Factory::create();
+    }
+
+    public static function parseOptions($argumentString)
+    {
+        $arguments = array_map(function ($arg) {
+            return intval(trim($arg));
+        }, explode(',', $argumentString));
+
+        $options = array();
+        if (count($arguments) >= 2) {
+            $options['width'] = $arguments[0];
+            $options['height'] = $arguments[1];
+        } else if (count($arguments) && $arguments[0]) {
+            $options['width'] = $arguments[0];
+            $options['height'] = $arguments[0];
+        }
+
+        return $options;
     }
 
     protected function generateField($field, $state)

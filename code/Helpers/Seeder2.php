@@ -22,10 +22,10 @@ class Seeder2 extends Object
 
         if (is_array($dataObjects)) {
             foreach ($dataObjects as $index => $option) {
-                if (isset($option['ClassName']) && class_exists($option['ClassName'])) {
+                if (isset($option['classname']) && class_exists($option['classname'])) {
                     // add support for count, currently makes 1
-                    $field = $this->createObjectField($option['ClassName'], $option);
-                    $field->name = $option['ClassName'];
+                    $field = $this->createObjectField($option['classname'], $option);
+                    $field->name = $option['classname'];
                     // has many generates count
                     $field->fieldType = Field::FT_HAS_MANY;
                     $field->fieldName = '';
@@ -44,8 +44,12 @@ class Seeder2 extends Object
     {
         $field = new Field();
         $field->dataType = $className;
+
+        if (!is_array($options)) {
+            $options = $this->parseProviderOptions($options);
+        }
+
         $field->arguments = $options;
-        $field->provider = $this->createProvider($options);
 
         $object = singleton($className);
 
@@ -70,28 +74,37 @@ class Seeder2 extends Object
         $manyManyFields = array();
         foreach ($field->ancestry as $classObject) {
             foreach (\DataObject::custom_database_fields($classObject->ClassName) as $fieldName => $fieldType) {
-                if ($fieldType !== 'foreignkey' && !isset($ignoreLookup[$fieldName])) {
+                if ($fieldType !== 'ForeignKey' && !isset($ignoreLookup[$fieldName])) {
                     $fields[$fieldName] = $fieldType;
                 }
             }
 
             // limit to Image fields + fields that specify use
             foreach ($classObject->has_one() as $fieldName => $className) {
-                if (!isset($ignoreLookup[$fieldName]) && isset($options['properties'][$fieldName])) {
+                if (!isset($ignoreLookup[$fieldName])
+                    && isset($options['properties'])
+                    && array_key_exists($fieldName, $options['properties'])
+                ) {
                     $hasOneFields[$fieldName] = $className;
                 }
             }
 
             // limit to fields that specify use
             foreach ($classObject->has_many() as $fieldName => $className) {
-                if (!isset($ignoreLookup[$fieldName]) && isset($options['properties'][$fieldName])) {
+                if (!isset($ignoreLookup[$fieldName])
+                    && isset($options['properties'])
+                    && array_key_exists($fieldName, $options['properties'])
+                ) {
                     $hasManyFields[$fieldName] = $className;
                 }
             }
 
             // limit to fields that specify use
             foreach ($classObject->many_many() as $fieldName => $className) {
-                if (!isset($ignoreLookup[$fieldName]) && isset($options['properties'][$fieldName])) {
+                if (!isset($ignoreLookup[$fieldName])
+                    && isset($options['properties'])
+                    && array_key_exists($fieldName, $options['properties'])
+                ) {
                     $manyManyFields[$fieldName] = $className;
                 }
             }
@@ -135,7 +148,33 @@ class Seeder2 extends Object
             $field->manyMany[] = $fieldObject;
         }
 
+        $field->provider = $this->createProvider($field, $options);
+
         return $field;
+    }
+
+    public function parseProviderOptions($optionString)
+    {
+        if (preg_match('/([^(]+)\(([^)]+)?\)/', $optionString, $matches)) {
+            $shorthand = strtolower($matches[1]);
+            $arguments = isset($matches[2]) ? $matches[2] : '';
+
+            foreach ($this->config()->providers as $provider) {
+                if (isset($provider::$shorthand)) {
+                    if (strtolower($provider::$shorthand) === $shorthand) {
+                        $options = $provider::parseOptions($arguments);
+                        $options['provider'] = $provider;
+                        return $options;
+                    }
+                }
+            }
+            // maybe throw error?
+        }
+
+        $provider = $this->config()->empty_shorthand_provider;
+        $options = $provider::parseOptions($optionString);
+        $options['provider'] = $provider;
+        return $options;
     }
 
     public function createField($dataType, $options)
@@ -143,21 +182,46 @@ class Seeder2 extends Object
         $field = new Field();
         $field->fieldType = Field::FT_FIELD;
         $field->dataType = $dataType;
+
+        if (!is_array($options)) {
+            $options = $this->parseProviderOptions($options);
+        }
+
         $field->arguments = $options;
-        $field->provider = $this->createProvider($options);
+        $field->provider = $this->createProvider($field, $options);
         return $field;
     }
 
-    public function createProvider($options)
+    public function createProvider($field, $options)
     {
-        $provider = new DataTypeProvider();
-
         if (!empty($options['provider'])) {
             $providerClassName = $options['provider'];
             $provider = new $providerClassName();
+        } else {
+            $provider = $this->getDefaultProvider($field);
         }
 
         $provider->setWriter($this->writer);
+        return $provider;
+    }
+
+    public function getDefaultProvider($field)
+    {
+        $providerClassName = $this->config()->default_provider;
+
+        $defaultProviders = $this->config()->default_providers;
+        foreach ($field->ancestry as $object) {
+            if (isset($defaultProviders[$object->ClassName])) {
+                $providerClassName = $defaultProviders[$object->ClassName];
+            }
+        }
+
+        // check data type since this will let db fields be overwritten
+        if (isset($defaultProviders[$field->dataType])) {
+            $providerClassName = $defaultProviders[$field->dataType];
+        }
+
+        $provider = new $providerClassName();
         return $provider;
     }
 

@@ -2,19 +2,25 @@
 Name: silverstripe-seeder
 ---
 
-suppress_warning: true
+Seeder2:
+  providers:
+    - 'DataTypeProvider'
+    - 'FakerProvider'
+    - 'ImageProvider'
+    - 'ValueProvider'
+  empty_shorthand_provider: 'ValueProvider'
+  default_provider: 'DataTypeProvider'
+  default_providers:
+    Image: 'ImageProvider'
 
 ---
 Only:
   environment: 'dev'
 ---
-Image:
-  extensions:
-    - SeederExtension
-
 DevelopmentAdmin:
   registered_controllers:
     seed:
       controller: DevSeedController
     unseed:
       controller: DevUnseedController
+

@@ -10,6 +10,15 @@ abstract class Provider extends \Object
 
     abstract protected function generateField($field, $state);
 
+    public static function parseOptions($argumentString)
+    {
+        $options = array();
+        $options['arguments'] = array_map(function ($arg) {
+            return trim($arg);
+        }, explode(',', $argumentString));
+        return $options;
+    }
+
     public function generate($field, $state)
     {
         $values = array();
