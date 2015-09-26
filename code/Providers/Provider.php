@@ -90,17 +90,17 @@ abstract class Provider extends \Object
         return $object;
     }
 
-    protected function generateHasOneField($field, $upState)
+    protected function generateHasOneField($field, $state)
     {
         // can we get rid of use,
         // and replace with a existingObjectProvider, randomObjectProvider
 
         // add use support
-        $object = $this->generateObject($field, $upState);
+        $object = $this->generateObject($field, $state);
         return $object;
     }
 
-    protected function generateHasManyField($field, $upState)
+    protected function generateHasManyField($field, $state)
     {
         // add use support
         $count = 1;
@@ -110,12 +110,12 @@ abstract class Provider extends \Object
 
         $objects = array();
         for ($i = 0; $i < $count; $i++) {
-            $objects[] = $this->generateObject($field, $upState, $i);
+            $objects[] = $this->generateObject($field, $state, $i);
         }
         return $objects;
     }
 
-    protected function generateManyManyField($field, $upState)
+    protected function generateManyManyField($field, $state)
     {
         // add use support
         $count = 1;
@@ -125,7 +125,7 @@ abstract class Provider extends \Object
 
         $objects = array();
         for ($i = 0; $i < $count; $i++) {
-            $objects[] = $this->generateObject($field, $upState, $i);
+            $objects[] = $this->generateObject($field, $state, $i);
         }
         return $objects;
     }

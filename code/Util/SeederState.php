@@ -37,7 +37,7 @@ class SeederState
         return $this->object;
     }
 
-    public function down(Field $field, \DataObject $dataObject, $index = 0)
+    public function down(Field $field, \DataObject $dataObject = null, $index = 0)
     {
         return new SeederState($field, $dataObject, $index, $this);
     }
