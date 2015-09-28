@@ -48,7 +48,7 @@ Would create 2 teams with 10 team members each
 
 ## Providers
 
-Providers add extra configuration to fields to control how to values are generated
+Providers add extra configuration to fields to control how values are generated
 
 ### Basic provider configuration example
     Seeder:
