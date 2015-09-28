@@ -195,8 +195,8 @@ class DataTypeProvider extends Provider
             if ($matches) {
                 $length = intval($matches[1]);
             }
-            if (isset($args['count'])) {
-                $length = intval($args['count']);
+            if (isset($args['length'])) {
+                $length = intval($args['length']);
             }
             return $this->faker->text($length);
         }
