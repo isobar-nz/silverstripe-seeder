@@ -5,6 +5,8 @@ use LittleGiant\SilverStripeSeeder\Providers\Provider;
 
 class DataTypeProvider extends Provider
 {
+    public static $shorthand = 'Type';
+
     private $faker;
 
     private $fieldTypes = array(
@@ -47,6 +49,14 @@ class DataTypeProvider extends Provider
         parent::__construct();
         $this->faker = Factory::create();
     }
+
+    public static function parseOptions($argumentString)
+    {
+        return array(
+            'type' => strtolower(trim($argumentString)),
+        );
+    }
+
 
     protected function generateField($field, $state)
     {

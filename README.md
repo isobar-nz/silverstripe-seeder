@@ -1,180 +1,108 @@
 # silverstripe-seeder
 
-# Usage
+## Basic Usage
 
-To seed database run
+    framework/sake seed [-f|--force] [-c|--class ClassName]
+    framework/sake unseed
 
-    framework/sake DatabaseSeed
-    
-in the cli or go to
-
-    <domain>/dev/seed
-    
-
-Likewise to unseed database run
-
-    framework/sake DatabaseUnseed
-    
-    
-in the cli or go to
-
-    <domain>/dev/unseed
-    
-    
-# configuration
-
-Configured through normal silverstripe config files. Sensible defaults, will fill in most fields with relevant data
-
-    ---
-    Only:
-      environment: 'dev'
-    ---
+## Basic Configuration
 
     Seeder:
-        DataObjects:
-            YourDataObjectName:
-                count: int (optional, default=10) # number of records to generate
-                publish: true|false (optional, default = true) # page only
-                parent: string (optional, className of parent) # page only
-                ignore: (optional)
-                    - Some Field # ignores this feeder when populating object
-                properties: (optional)
-                    FieldName: value (predefined value)
-                    or
-                    FieldName:
-                        type: [Field Type see below] (optional)
-                        faker_type: string # property for https://github.com/fzaninotto/Faker e.g randomDigit, word
-                        nullable: true|false # random chance of setting as null
-
-                        // text
-                        min_length: int # min length of string/number of paragraphs
-                        max_length: int # max length of string/number of paragraphs
-                        length: int  # length of string/number of paragraphs
-
-                        // image
-                        width: int
-                        height: int
-                        max_width: int
-                        min_width: int # set in range of min_width < width < max_width
-                        max_height: int
-                        min_height: int # set in range of min_height < height < max_height
-
-                        // has_one, many_many relationship
-                        use: new|existing # will either select a random instance or create a new one
-                        properties: # same as above (recursive)
-
-                        // many_many relationship
-                        count: int (optional)
-                        min_count: int (optional)
-                        max_count: int (optional)
-
-    YourDataObjectName: # this is required
-        extensions:
-            SeederExtension
-
-
-for example
-
-    ---
-    Only:
-      environment: 'dev'
-    ---
-
-    Seeder:
-        DataObjects:
-            TeamMember:
-                count: 20
+        create:
+            [dataobject]:
+                ignore:
+                    - [field]
+                nullable: true|false
                 properties:
-                    Mobile:
-                        nullable: true
-                    Image:
-                        max_width: 300
-                        min_width: 250
-                        max_height: 160
-                        min_height: 140
-                        nullable: true
+                    [field]: [string|int]
+                    [has_one field]:
+                        ... recurse
+                    [has_many|many_many field]:
+                        count: [int]
+                        ... recurse
+            [dataobject]:
+                ...
 
-would create 20 team members, some would have Mobile = null, some would have Image = null
-
-# Field Types
-
-possible field types are
-
-    - firstName
-    - lastName
-    - email
-    - phone
-    - company
-    - address
-    - address1
-    - address2
-    - city
-    - postcode
-    - state
-    - country
-    - countryCode
-    - lat
-    - lng
-    - link
-    - facebookLink
-    - googleplusLink
-    - twitterLink
-    - linkedinLink
-    - sort (always set to 0)
-
-
-# Relationships
-
-## has_one
-
-Explicit support for has_one relationships, can specify properties for a has_one relationship like any other Object
+For example:
 
     Seeder:
-        HasOneParentObject:
-            properties:
-                HasOneName:
-                    use: existing|new (required)
-                    count: int (optional)
-                    properties:
-                        (as with any other data object)
+        create:
+            Team:
+                count: 2
+                properties:
+                    TeamMembers:
+                        count: 10
+                        properties:
+                            Image:
 
-If "use: new" make sure you add the SeederExtension to has_one Object
+Would create 2 teams with 10 team members each
+
+## Providers
+
+Providers add extra configuration to fields to control how to values are generated
+
+### Basic provider configuration example
+    Seeder:
+        create:
+            [dataobject]:
+                properties:
+                    [field]:
+                        provider: [providername]
+                        [argument]: [value]
 
 
-## has_many
-
-Implicit support for has_many relationships by setting the has_one of the HasManyObject to use: existing
-
-
-## many_many
-
-Explicit support for many_many relationships, can specify properties for a many_many relationship like any other Object
+For example:
 
     Seeder:
-        ManyManyParentObject:
-            properties:
-                ManyManyName:
-                    use: existing|new (required)
-                    count: int (optional) default = 2
-                    min_count: int (optional, required if max is specified)
-                    max_count: int (optional, required if min is specified)
-                    properties:
-                        (as with any other data object)
+        create:
+            Team:
+                count: 2
+                properties:
+                    Title:
+                        provider: 'ValueProvider'
+                        value: 'Team Title'
+                    TeamMembers:
+                        count: 10
+                        FirstName:
+                            provider: 'DataTypeProvider'
+                            type: 'firstname'
+                        Image:
+                            provider: 'ImageProvider'
+                            width: 160
+                            height: 100
 
-If "use: new" make sure you add the SeederExtension to has_one Object
+### Provider shorthands
 
+Providers have shorthands to ease configuration. If no provider shorthand is included the default provider is used, which is the ValueProvider. To shorten the above example:
 
-## many_many_extraFields
+    Seeder:
+        create:
+            Team:
+                count: 2
+                properties:
+                    Title: 'value(Team Title)' or 'Team Title'
+                    TeamMembers:
+                        count: 10
+                        FirstName: 'type(firstname)'
+                        Image: 'image(160,100)'
 
-Not supported
+# Advanced Configuration
 
+## Provider types
 
-## cli args
+### ValueProvider
+The value given to the value provider can include variables.
 
-### ignore current records
+    [field]:
+        provider: 'ValueProvider'
+        value: 'This is a {$variable}'
 
-    -i, --ignore = ignores pre-existing records and will add another set
+    [field]: 'This is a {$variable}'
 
-e.g if 40 records have already been seeded another 40 will be added for a total of 80 records
+Variables are taken from the current object, however no order is guarenteed and they may not be initialized yet. However there are special variables {$i} (the current index, in has many and many many relationships) and {$Up} (the parent object).
+
+    [field]: '{$i} is the current index of the object'
+    [field]: '{$Up.Title} is the parent object's title'
+    [field]: '{$Up.Up.Title} is the parent's parent object's title'
 
 
