@@ -1,47 +1,82 @@
 <?php
 
+use LittleGiant\SilverStripeSeeder\OutputFormatter;
 use \LittleGiant\SilverStripeSeeder\Util\Field;
 use \LittleGiant\SilverStripeSeeder\Util\SeederState;
 use \LittleGiant\SilverStripeSeeder\Util\RecordWriter;
 
-class Seeder2 extends Object
+class Seeder extends Object
 {
     private $writer;
 
-    public function __construct()
+    private $ignoreSeeds = false;
+
+    private $outputFormatter;
+
+    public function __construct(RecordWriter $writer, OutputFormatter $outputFormatter)
     {
         parent::__construct();
-        $this->writer = new RecordWriter();
+        $this->writer = $writer;
+        $this->outputFormatter = $outputFormatter;
     }
 
-    public function seed()
+    public function seed($className = null)
     {
+        // seed random to get different results each run
         srand();
+
+        $this->outputFormatter->beginSeed();
 
         $dataObjects = $this->config()->create;
 
         if (is_array($dataObjects)) {
             foreach ($dataObjects as $index => $option) {
                 if (is_string($index) && class_exists($index)) {
-                    $option['classname'] = $index;
+                    $option['class'] = $index;
                 }
 
-                if (isset($option['classname']) && class_exists($option['classname'])) {
-                    // add support for count, currently makes 1
-                    $field = $this->createObjectField($option['classname'], $option);
-                    $field->name = $option['classname'];
-                    // has many generates count
+                if (isset($option['class'])
+                    && class_exists($option['class'])
+                    && (!$className || $className === $option['class'])
+                ) {
+                    $this->outputFormatter->creatingDataObject($option['class']);
+                    $field = $this->createObjectField($option['class'], $option);
+                    $field->name = $option['class'];
+                    // has_many will generate the number passed in count
                     $field->fieldType = Field::FT_HAS_MANY;
                     $field->fieldName = '';
                     $field->methodName = '';
+                    $field->arguments['count'] = $this->getCount($field);
 
                     $state = new SeederState();
-                    $field->provider->generate($field, $state);
+                    $objects = $field->provider->generate($field, $state);
+                    $this->outputFormatter->dataObjectsCreated($option['class'], count($objects));
                 }
             }
+        } else {
+            throw new Exception('\'create\' must be an array');
         }
 
         $this->writer->finish();
+
+        $this->outputFormatter->reportDataObjectsCreated($this->writer->getTree());
+    }
+
+    private function getCount($field)
+    {
+        $count = isset($field->arguments['count']) ? $field->arguments['count'] : 1;
+
+        if ($this->ignoreSeeds) {
+            return $count;
+        }
+
+        $currentCount = SeedRecord::get()->filter(array(
+            'Root' => true,
+            'SeedClassName' => $field->dataType,
+        ))->Count();
+        $count -= $currentCount;
+
+        return $count;
     }
 
     public function createObjectField($className, $options)
@@ -177,7 +212,7 @@ class Seeder2 extends Object
                     }
                 }
             }
-            // maybe throw error?
+            throw new Exception("shorthand '$shorthand' does not match any registered providers");
         }
 
         $provider = $this->config()->empty_shorthand_provider;
@@ -268,11 +303,21 @@ class Seeder2 extends Object
 
     public function unseed()
     {
-        foreach (Seed::get() as $seed) {
+        $deleted = array();
+
+        $this->outputFormatter->beginUnseed();
+
+        // sort by id desc to delete in reverse
+        foreach (SeedRecord::get()->sort('ID DESC') as $seed) {
             $className = $seed->SeedClassName;
             $object = $className::get()->byID($seed->SeedID);
 
             if ($object) {
+                if (!isset($deleted[$className])) {
+                    $deleted[$className] = 0;
+                }
+                $deleted[$className] += 1;
+
 //                // is this necessary??
 //                foreach ($object->many_many() as $method => $type) {
 //                    $object->$method()->removeAll();
@@ -288,9 +333,18 @@ class Seeder2 extends Object
                 } else {
                     $object->delete();
                 }
+            } else {
+                SS_Log::log("record for seed of '{$className}' with id = '{$seed->ID}' does not exist in database", SS_Log::WARN);
             }
 
             $seed->delete();
         }
+
+        $this->outputFormatter->reportDataObjectsDeleted($deleted);
+    }
+
+    public function setIgnoreSeeds($ignoreSeeds = false)
+    {
+        $this->ignoreSeeds = $ignoreSeeds;
     }
 }

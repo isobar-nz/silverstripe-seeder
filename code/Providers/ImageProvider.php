@@ -35,12 +35,12 @@ class ImageProvider extends Provider
 
     protected function generateField($field, $state)
     {
-        // error
+        throw new Exception('image provider does not support generating db fields');
     }
 
     protected function generateHasOneField($field, $state)
     {
-        return $this->createImage($field);
+        return $this->createImage($field, $state);
     }
 
     protected function generateHasManyField($field, $state)
@@ -52,7 +52,7 @@ class ImageProvider extends Provider
         }
 
         for ($i = 0; $i < $count; $i++) {
-            $images[] = $this->createImage($field);
+            $images[] = $this->createImage($field, $state);
         }
 
         return $images;
@@ -63,7 +63,7 @@ class ImageProvider extends Provider
         return $this->generateHasManyField($field, $state);
     }
 
-    private function createImage($field)
+    private function createImage($field, $upState)
     {
         $width = 600;
         $height = 400;
@@ -95,7 +95,9 @@ class ImageProvider extends Provider
         $image->Filename = $fileName;
         $image->Title = $this->faker->Sentence;
         $image->setParentID($folder->ID);
-        $this->writer->write($image, $field);
+
+        $state = $upState->down($field, $image);
+        $this->writer->write($image, $field, $state, true);
 
         return $image;
     }

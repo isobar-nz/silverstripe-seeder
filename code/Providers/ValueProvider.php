@@ -30,6 +30,16 @@ class ValueProvider extends Provider
         return $value;
     }
 
+    protected function generateHasManyField($field, $state)
+    {
+        throw new Exception('value provider does not support generating has many fields');
+    }
+
+    protected function generateManyManyField($field, $state)
+    {
+        throw new Exception('value provider does not support generating many many fields');
+    }
+
     private function resolveValue($field, $state)
     {
         if (empty($field->arguments['value'])) {

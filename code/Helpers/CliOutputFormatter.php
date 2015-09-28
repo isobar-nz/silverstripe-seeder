@@ -2,88 +2,60 @@
 
 namespace LittleGiant\SilverStripeSeeder;
 
-/**
- * Class CliOutputFormatter
- * @package LittleGiant\SilverstripeSeeder
- */
+use LittleGiant\SilverStripeSeeder\Util\CounterTree;
+
 class CliOutputFormatter implements OutputFormatter
 {
-
-    /**
-     * @param $className
-     * @return mixed
-     */
-    public function classDoesNotHaveExtension($className)
+    public function beginSeed()
     {
-        error_log("'{$className}' does not have the 'SeederExtension'");
+        echo PHP_EOL;
+        echo 'seeding database...', PHP_EOL;
+        echo PHP_EOL;
     }
 
-    /**
-     * @param $className
-     * @param $count
-     * @param $currentCount
-     * @return mixed
-     */
-    public function fakingClassRecords($className, $count, $currentCount = 0)
+    public function creatingDataObject($className)
     {
-        if ($currentCount) {
-            echo "Faking {$count} '{$className}' ({$currentCount} already exist)", PHP_EOL;
-        } else if ($count) {
-            echo "Faking {$count} '{$className}'", PHP_EOL;
-        } else {
-            echo "No records to fake for {$className}";
+        echo "creating '{$className}'...", PHP_EOL;
+    }
+
+    public function dataObjectsCreated($className, $count)
+    {
+        echo "{$count} '{$className}' created", PHP_EOL;
+    }
+
+    public function reportDataObjectsCreated(CounterTree $tree)
+    {
+        echo PHP_EOL;
+        $nodes = $tree->getTree();
+        foreach ($nodes as $node) {
+            $this->printTree($node);
+        }
+        echo PHP_EOL;
+    }
+
+    private function printTree(&$node, $depth = 0)
+    {
+        $details = "- {$node['class']} ({$node['count']})";
+        echo str_repeat('  ', $depth) . $details, PHP_EOL;;
+
+        foreach ($node['children'] as $child) {
+            $this->printTree($child, $depth + 1);
         }
     }
 
-    /**
-     * @param $className
-     * @param $parentClassName
-     * @return mixed
-     */
-    public function parentClassDoesNotExist($className, $parentClassName)
+    public function beginUnseed()
     {
-        error_log("Cannot set parent for {$className}, no {$parentClassName} exist");
+        echo PHP_EOL;
+        echo 'unseeding database...', PHP_EOL;
+        echo PHP_EOL;
     }
 
-    /**
-     * @param $className
-     * @param $hasOneField
-     * @param $hasOneClassName
-     * @return mixed
-     */
-    public function noInstancesOfHasOneClass($className, $hasOneField, $hasOneClassName)
+    public function reportDataObjectsDeleted($deleted)
     {
-        error_log("Cannot create {$className} has_one {$hasOneField}, no {$hasOneClassName} exist");
-    }
-
-    /**
-     * @param $dataType
-     * @return mixed
-     */
-    public function unknownDataType($dataType)
-    {
-        error_log('Unknown data type "' . $dataType . '"');
-    }
-
-    /**
-     * @param $className
-     * @param $count
-     * @return mixed
-     */
-    public function deletingClassRecords($className, $count)
-    {
-        if ($count) {
-            echo "Cleaning up {$count} seeds for '{$className}'", PHP_EOL;
-        } else {
-            echo "No records to clean up for {$className}'", PHP_EOL;
+        foreach ($deleted as $className => $count) {
+            echo "deleted {$count} '{$className}'", PHP_EOL;
         }
+        echo PHP_EOL;
     }
 
-    /**
-     * @return mixed
-     */
-    public function flush()
-    {
-        // empty
-    }
 }

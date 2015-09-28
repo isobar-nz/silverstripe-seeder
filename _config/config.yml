@@ -2,7 +2,7 @@
 Name: silverstripe-seeder
 ---
 
-Seeder2:
+Seeder:
   providers:
     - DataTypeProvider
     - FakerProvider

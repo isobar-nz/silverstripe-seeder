@@ -1,11 +1,12 @@
 <?php
 
 use LittleGiant\SilverStripeSeeder\CliOutputFormatter;
+use LittleGiant\SilverStripeSeeder\Util\RecordWriter;
 
 /**
- * Class DatabaseUnseed
+ * Class Unseed
  */
-class DatabaseUnseed extends CliController
+class Unseed extends CliController
 {
     protected $title = "Unseed the database";
 
@@ -16,7 +17,7 @@ class DatabaseUnseed extends CliController
      */
     function process()
     {
-        $seeder = Seeder::create(new CliOutputFormatter());
+        $seeder = new Seeder(new RecordWriter(), new CliOutputFormatter());
 
         $seeder->unseed();
     }

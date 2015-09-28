@@ -41,4 +41,21 @@ class SeederState
     {
         return new SeederState($field, $dataObject, $index, $this);
     }
+
+    public function getClassAncestry()
+    {
+        $ancestry = array();
+        if ($this->object) {
+            $ancestry[] = $this->object->ClassName;
+        }
+
+        $state = $this;
+        while ($state = $state->up()) {
+            if ($state->object()) {
+                $ancestry[] = $state->object()->ClassName;
+            }
+        }
+
+        return $ancestry;
+    }
 }

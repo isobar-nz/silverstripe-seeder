@@ -13,8 +13,9 @@ class ObjectProvider extends Provider
         }, explode(',', $argumentString));
 
         $options = array(
-            'classname' => $args[0],
+            'class' => $args[0],
         );
+
         if (count($options) > 1) {
             $options['count'] = $options[1];
         }
@@ -24,23 +25,41 @@ class ObjectProvider extends Provider
 
     protected function generateField($field, $state)
     {
-        // error
+        throw new Exception('object provider does not support generating db fields');
     }
 
     protected function generateHasOneField($field, $state)
     {
-        // error checking
-        $className = $field->arguments['classname'];
+        if (empty($field->arguments['class'])) {
+            throw new Exception('object provider requires a \'class\'');
+        }
+        if (!class_exists($field->arguments['class'])) {
+            throw new Exception("class '{$field->arguments['class']}' does not exist");
+        }
+
+        $className = $field->arguments['class'];
         $object = $className::get()->first();
+
+        if (!$object) {
+            SS_Log::log("object for {$field->arguments['class']} not found", SS_Log::WARN);
+        }
+
         return $object;
     }
 
     protected function generateHasManyField($field, $state)
     {
+        if (empty($field->arguments['class'])) {
+            throw new Exception('object provider requires a \'class\'');
+        }
+        if (!class_exists($field->arguments['class'])) {
+            throw new Exception("class '{$field->arguments['class']}' does not exist");
+        }
+
         $count = $field->arguments['count'] ? $field->arguments['count'] : 1;
 
         // error checking
-        $className = $field->arguments['classname'];
+        $className = $field->arguments['class'];
         $objects = $className::get()->sort('RAND()')->limit($count)->toArray();
         return $objects;
     }

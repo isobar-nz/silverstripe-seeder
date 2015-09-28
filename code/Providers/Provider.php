@@ -57,7 +57,7 @@ abstract class Provider extends \Object
             }
         }
 
-        $this->writer->write($object, $field);
+        $this->writer->write($object, $field, $state);
 
         foreach ($field->hasOne as $hasOneField) {
             $hasOneField->arguments['count'] = 1;
@@ -76,7 +76,7 @@ abstract class Provider extends \Object
             }
         }
 
-        $this->writer->write($object, $field);
+        $this->writer->write($object, $field, $state);
 
         foreach ($field->hasMany as $hasManyField) {
             $values = $hasManyField->provider->generate($hasManyField, $state);
@@ -90,7 +90,7 @@ abstract class Provider extends \Object
                 if ($linkField) {
                     foreach ($values as $value) {
                         $value->$linkField = $object->ID;
-                        $this->writer->write($value, $hasManyField);
+                        $this->writer->write($value, $hasManyField, $state);
                     }
                 }
             }
@@ -101,17 +101,12 @@ abstract class Provider extends \Object
 
     protected function generateHasOneField($field, $state)
     {
-        // can we get rid of use,
-        // and replace with a existingObjectProvider, randomObjectProvider
-
-        // add use support
         $object = $this->generateObject($field, $state);
         return $object;
     }
 
     protected function generateHasManyField($field, $state)
     {
-        // add use support
         $count = 1;
         if (isset($field->arguments['count'])) {
             $count = intval($field->arguments['count']);
@@ -126,7 +121,6 @@ abstract class Provider extends \Object
 
     protected function generateManyManyField($field, $state)
     {
-        // add use support
         $count = 1;
         if (isset($field->arguments['count'])) {
             $count = intval($field->arguments['count']);

@@ -191,8 +191,7 @@ class DataTypeProvider extends Provider
             return $this->faker->text($length);
         }
 
-        // error message, unknown data type
-        return null;
+        throw new Exception("unknown data type '{$field->dataType}'");
     }
 }
 

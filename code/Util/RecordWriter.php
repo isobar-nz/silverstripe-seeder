@@ -4,9 +4,16 @@ namespace LittleGiant\SilverStripeSeeder\Util;
 
 class RecordWriter
 {
-    public function write(\DataObject $object, Field $field)
+    private $tree;
+
+    public function __construct()
     {
-        $exists = $object->exists();
+        $this->tree = new CounterTree();
+    }
+
+    public function write(\DataObject $object, Field $field, SeederState $state, $forceRecord = false)
+    {
+        $record = $forceRecord || !$object->exists();
 
         if ($object->has_extension('Versioned')) {
             $object->writeToStage('Stage');
@@ -21,12 +28,23 @@ class RecordWriter
             $object->write();
         }
 
-        if (!$exists) {
-            $seed = new \Seed();
+        if ($record) {
+            $seed = new \SeedRecord();
             $seed->SeedClassName = $object->ClassName;
             $seed->SeedID = $object->ID;
+
+            $ancestry = $state->getClassAncestry();
+            $seed->Root = count($ancestry) === 1;
+
             $seed->write();
+
+            $this->tree->record($ancestry);
         }
+    }
+
+    public function getTree()
+    {
+        return $this->tree;
     }
 
     public function finish()
