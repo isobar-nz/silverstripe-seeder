@@ -7,8 +7,10 @@
 
 
 `--force` do not take into account current seeds when calculating how many records to create
+
 `--class ClassName` only create seeds for the given ClassName
 
+note: Windows users can use `php framework/cli-script.php` instead of `framework/sake`
 
 ## Basic Configuration
 
