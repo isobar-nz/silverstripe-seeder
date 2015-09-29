@@ -17,6 +17,10 @@ class Unseed extends CliController
      */
     function process()
     {
+        if (!Check::fileToUrlMapping()) {
+            die('ERROR: Please set a valid path in $_FILE_TO_URL_MAPPING before running the seeder' . PHP_EOL);
+        }
+
         // Customer overrides delete to check for admin
 
         // major hack to enable ADMIN permissions
