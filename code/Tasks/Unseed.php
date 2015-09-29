@@ -1,6 +1,7 @@
 <?php
 
 use LittleGiant\SilverStripeSeeder\CliOutputFormatter;
+use LittleGiant\SilverStripeSeeder\Util\Check;
 use LittleGiant\SilverStripeSeeder\Util\RecordWriter;
 
 /**
