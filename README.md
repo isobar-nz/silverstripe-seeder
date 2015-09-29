@@ -189,6 +189,25 @@ Populates fields by a given [Faker](https://github.com/fzaninotto/Faker) propert
 Downloads a random image and stores it in the `assets/Uploads/Seeder` directory
 
 
+### MemberProvider
+
+Creates a member or subclass and sets firstname, surname, email, password and an optional group. If the same email is used multiple times a number will be inserted before the @ sign to ensure unique emails
+
+	[field]:
+		provider: 'MemberProvider'
+		email: [string:email]
+		password: [string]
+		group: [string] # optional
+
+	[field]: 'member(email,password[,group])'
+
+#### Example:
+
+	Customer: 'member(test@domain.com,m4g1c,customers)'
+
+Creates a customer with the email `test@domain.com`, password `m4g1c` and adds it to the `customers` group
+
+
 ### ObjectProvider
 
 Select an object for a has one relationship or a list of random objects for a has many or many many.

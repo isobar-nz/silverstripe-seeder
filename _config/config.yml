@@ -9,6 +9,7 @@ Seeder:
     - ImageProvider
     - ValueProvider
     - ObjectProvider
+    - MemberProvider
   empty_shorthand_provider: ValueProvider
   default_provider: DataTypeProvider
   default_providers:
