@@ -17,9 +17,22 @@ class Seed extends CliController
      */
     function process()
     {
-        $seeder = new Seeder(new RecordWriter(), new CliOutputFormatter());
+        // Customer overrides delete to check for admin
+
+        // major hack to enable ADMIN permissions
+        // login throws cookie warning, this will hide the error message
+        error_reporting(0);
+        try {
+            if ($admin = Member::default_admin()) {
+                $admin->logIn();
+            }
+        } catch (Exception $e) {
+        }
+        error_reporting(E_ALL);
 
         global $argv;
+
+        $seeder = new Seeder(new RecordWriter(), new CliOutputFormatter());
 
         $className = null;
 
