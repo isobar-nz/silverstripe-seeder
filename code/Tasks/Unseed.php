@@ -1,6 +1,7 @@
 <?php
 
 use LittleGiant\SilverStripeSeeder\CliOutputFormatter;
+use LittleGiant\SilverStripeSeeder\Util\Check;
 use LittleGiant\SilverStripeSeeder\Util\RecordWriter;
 
 /**
@@ -17,6 +18,10 @@ class Unseed extends CliController
      */
     function process()
     {
+        if (!Check::fileToUrlMapping()) {
+            die('ERROR: Please set a valid path in $_FILE_TO_URL_MAPPING before running the seeder' . PHP_EOL);
+        }
+
         // Customer overrides delete to check for admin
 
         // major hack to enable ADMIN permissions
@@ -30,8 +35,24 @@ class Unseed extends CliController
         }
         error_reporting(E_ALL);
 
+        global $argv;
+
         $seeder = new Seeder(new RecordWriter(), new CliOutputFormatter());
 
-        $seeder->unseed();
+        $key = null;
+
+        $nextKey = false;
+        foreach ($argv as $arg) {
+            if ($nextKey) {
+                $key = $arg;
+                $nextKey = false;
+            }
+
+            if ($arg === '-k' || $arg === '--key') {
+                $nextKey = true;
+            }
+        }
+
+        $seeder->unseed($key);
     }
 }

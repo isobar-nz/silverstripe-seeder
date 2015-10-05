@@ -10,6 +10,7 @@ class Field
     const FT_MANY_MANY = 'many_many';
 
     public $name;
+    public $key;
     public $arguments = array();
     public $fieldType;
     public $dataType;

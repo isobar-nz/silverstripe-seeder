@@ -32,6 +32,7 @@ class RecordWriter
             $seed = new \SeedRecord();
             $seed->SeedClassName = $object->ClassName;
             $seed->SeedID = $object->ID;
+            $seed->Key = $field->key;
 
             $ancestry = $state->getClassAncestry();
             $seed->Root = count($ancestry) === 1;

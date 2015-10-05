@@ -20,7 +20,7 @@ class Seeder extends Object
         $this->outputFormatter = $outputFormatter;
     }
 
-    public function seed($className = null)
+    public function seed($className = null, $key = null)
     {
         // seed random to get different results each run
         srand();
@@ -35,12 +35,16 @@ class Seeder extends Object
                     $option['class'] = $index;
                 }
 
-                if (isset($option['class'])
-                    && class_exists($option['class'])
+                if (empty($option['key'])) {
+                    $option['key'] = $option['class'];
+                };
+
+                if (class_exists($option['class'])
                     && (!$className || $className === $option['class'])
+                    && (!$key || $key === $option['key'])
                 ) {
                     $this->outputFormatter->creatingDataObject($option['class']);
-                    $field = $this->createObjectField($option['class'], $option);
+                    $field = $this->createObjectField($option['class'], $option, $option['key']);
                     $field->name = $option['class'];
                     // has_many will generate the number passed in count
                     $field->fieldType = Field::FT_HAS_MANY;
@@ -73,13 +77,14 @@ class Seeder extends Object
         $currentCount = SeedRecord::get()->filter(array(
             'Root' => true,
             'SeedClassName' => $field->dataType,
+            'Key' => $field->key,
         ))->Count();
         $count -= $currentCount;
 
         return $count;
     }
 
-    public function createObjectField($className, $options)
+    public function createObjectField($className, $options, $key = null)
     {
         $field = new Field();
         $field->dataType = $className;
@@ -88,6 +93,7 @@ class Seeder extends Object
             $options = $this->parseProviderOptions($options);
         }
 
+        $field->key = $key ?: $className;
         $field->arguments = $options;
 
         $object = singleton($className);
@@ -166,7 +172,7 @@ class Seeder extends Object
 
         foreach ($hasOneFields as $fieldName => $className) {
             $fieldOptions = isset($properties[$fieldName]) ? $properties[$fieldName] : array();
-            $fieldObject = $this->createObjectField($className, $fieldOptions);
+            $fieldObject = $this->createObjectField($className, $fieldOptions, $field->key);
             $fieldObject->fieldType = Field::FT_HAS_ONE;
             $fieldObject->name = $fieldName;
             $fieldObject->fieldName = $fieldName . 'ID';
@@ -176,7 +182,7 @@ class Seeder extends Object
 
         foreach ($hasManyFields as $fieldName => $className) {
             $fieldOptions = isset($properties[$fieldName]) ? $properties[$fieldName] : array();
-            $fieldObject = $this->createObjectField($className, $fieldOptions);
+            $fieldObject = $this->createObjectField($className, $fieldOptions, $field->key);
             $fieldObject->fieldType = Field::FT_HAS_MANY;
             $fieldObject->name = $fieldName;
             $fieldObject->methodName = $fieldName;
@@ -185,7 +191,7 @@ class Seeder extends Object
 
         foreach ($manyManyFields as $fieldName => $className) {
             $fieldOptions = isset($properties[$fieldName]) ? $properties[$fieldName] : array();
-            $fieldObject = $this->createObjectField($className, $fieldOptions);
+            $fieldObject = $this->createObjectField($className, $fieldOptions, $field->key);
             $fieldObject->fieldType = Field::FT_MANY_MANY;
             $fieldObject->name = $fieldName;
             $fieldObject->methodName = $fieldName;
@@ -301,14 +307,20 @@ class Seeder extends Object
         return $provider;
     }
 
-    public function unseed()
+    public function unseed($key)
     {
         $deleted = array();
 
         $this->outputFormatter->beginUnseed();
 
+        $seeds = SeedRecord::get();
+        if ($key) {
+            $seeds = $seeds->filter('Key', $key);
+        }
         // sort by id desc to delete in reverse
-        foreach (SeedRecord::get()->sort('ID DESC') as $seed) {
+        $seeds = $seeds->sort('ID DESC');
+
+        foreach ($seeds as $seed) {
             $className = $seed->SeedClassName;
             $object = $className::get()->byID($seed->SeedID);
 
