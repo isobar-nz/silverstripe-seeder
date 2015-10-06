@@ -1,6 +1,6 @@
 <?php
 
-use LittleGiant\SilverStripeSeeder\OutputFormatter;
+use \LittleGiant\SilverStripeSeeder\OutputFormatter;
 use \LittleGiant\SilverStripeSeeder\Util\Field;
 use \LittleGiant\SilverStripeSeeder\Util\SeederState;
 use \LittleGiant\SilverStripeSeeder\Util\RecordWriter;
@@ -205,7 +205,7 @@ class Seeder extends Object
 
     public function parseProviderOptions($optionString)
     {
-        if (preg_match('/([^(]+)\(([^)]+)?\)/', $optionString, $matches)) {
+        if (preg_match('/^([a-zA-Z-_0-9]+)\(([^)]+)?\)$/', $optionString, $matches)) {
             $shorthand = strtolower($matches[1]);
             $arguments = isset($matches[2]) ? $matches[2] : '';
 
