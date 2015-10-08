@@ -3,6 +3,11 @@
 use LittleGiant\SilverStripeSeeder\CliOutputFormatter;
 use LittleGiant\SilverStripeSeeder\Util\Check;
 use LittleGiant\SilverStripeSeeder\Util\RecordWriter;
+use Symfony\Component\Console\Application;
+use Symfony\Component\Console\Command\Command;
+use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Input\InputOption;
+use Symfony\Component\Console\Output\OutputInterface;
 
 /**
  * Class Seed
@@ -17,6 +22,25 @@ class Seed extends CliController
      *
      */
     function process()
+    {
+        $app = new Application();
+        $app->add(new SeedCommand());
+        $app->run();
+    }
+}
+
+class SeedCommand extends Command
+{
+    protected function configure()
+    {
+        $this->setName('seed')
+            ->setDescription('Seed database')
+            ->addOption('class', 'c', InputOption::VALUE_OPTIONAL, 'Choose class to seed')
+            ->addOption('key', 'k', InputOption::VALUE_OPTIONAL, 'Choose key to seed')
+            ->addOption('force', 'f', InputOption::VALUE_NONE, 'Ignore current seeds when calculating how many to create');
+    }
+
+    protected function execute(InputInterface $input, OutputInterface $output)
     {
         if (!Check::fileToUrlMapping()) {
             die('ERROR: Please set a valid path in $_FILE_TO_URL_MAPPING before running the seeder' . PHP_EOL);
@@ -39,34 +63,11 @@ class Seed extends CliController
 
         $seeder = new Seeder(new RecordWriter(), new CliOutputFormatter());
 
-        $className = null;
-        $key = null;
+        $className = $input->getOption('class');
+        $key = $input->getOption('key');
 
-        $nextClass = false;
-        $nextKey = false;
-        foreach ($argv as $arg) {
-            if ($nextClass) {
-                if (class_exists($arg)) {
-                    $className = $arg;
-                } else {
-                    die("class '{$arg}' does not exist" . PHP_EOL);
-                }
-                $nextClass = false;
-            }
-            if ($nextKey) {
-                $key = $arg;
-                $nextKey = false;
-            }
-
-            if ($arg === '-f' || $arg === '--force') {
-                $seeder->setIgnoreSeeds(true);
-            }
-            if ($arg === '-k' || $arg === '--key') {
-                $nextKey = true;
-            }
-            if ($arg === '-c' || $arg === '--class') {
-                $nextClass = true;
-            }
+        if ($input->getOption('force')) {
+            $seeder->setIgnoreSeeds(true);
         }
 
         $seeder->seed($className, $key);

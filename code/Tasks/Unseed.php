@@ -1,6 +1,11 @@
 <?php
 
 use LittleGiant\SilverStripeSeeder\CliOutputFormatter;
+use Symfony\Component\Console\Application;
+use Symfony\Component\Console\Command\Command;
+use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Input\InputOption;
+use Symfony\Component\Console\Output\OutputInterface;
 use LittleGiant\SilverStripeSeeder\Util\Check;
 use LittleGiant\SilverStripeSeeder\Util\RecordWriter;
 
@@ -17,6 +22,24 @@ class Unseed extends CliController
      *
      */
     function process()
+    {
+        $app = new Application();
+        $app->add(new UnseedCommand());
+        $app->run();
+
+    }
+}
+
+class UnseedCommand extends Command
+{
+    protected function configure()
+    {
+        $this->setName('unseed')
+        ->setDescription('Unseed database')
+        ->addOption('key', 'k', InputOption::VALUE_OPTIONAL, 'Choose key to unseed');
+    }
+
+    protected function execute(InputInterface $input, OutputInterface $output)
     {
         if (!Check::fileToUrlMapping()) {
             die('ERROR: Please set a valid path in $_FILE_TO_URL_MAPPING before running the seeder' . PHP_EOL);
