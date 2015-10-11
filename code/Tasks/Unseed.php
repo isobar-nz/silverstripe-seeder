@@ -1,6 +1,7 @@
 <?php
 
 use LittleGiant\SilverStripeSeeder\CliOutputFormatter;
+use LittleGiant\SilverStripeSeeder\Util\BatchedSeedWriter;
 use Symfony\Component\Console\Application;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
@@ -35,8 +36,9 @@ class UnseedCommand extends Command
     protected function configure()
     {
         $this->setName('unseed')
-        ->setDescription('Unseed database')
-        ->addOption('key', 'k', InputOption::VALUE_OPTIONAL, 'Choose key to unseed');
+            ->setDescription('Unseed database')
+            ->addOption('batch', 'b', InputOption::VALUE_OPTIONAL, 'Batch writes for better performance', 100)
+            ->addOption('key', 'k', InputOption::VALUE_REQUIRED, 'Choose key to unseed');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
@@ -60,7 +62,12 @@ class UnseedCommand extends Command
 
         global $argv;
 
-        $seeder = new Seeder(new RecordWriter(), new CliOutputFormatter());
+        $writer = new RecordWriter();
+        if ($batchSize = $input->getOption('batch')) {
+            $writer = new BatchedSeedWriter($batchSize);
+        }
+
+        $seeder = new Seeder($writer, new CliOutputFormatter());
 
         $key = null;
 

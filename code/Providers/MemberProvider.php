@@ -11,6 +11,7 @@ class MemberProvider extends Provider
 
     public function __construct()
     {
+        parent::__construct();
         $this->faker = Factory::create();
     }
 
@@ -71,11 +72,13 @@ class MemberProvider extends Provider
         $member->Password = $field->arguments['password'];
 
 
-        $state = $upState->down($field, $member, 0);
-        $this->writer->write($member, $field, $state);
+        $this->writer->write($member, $field);
 
         if (isset($field->arguments['group'])) {
-            $member->addToGroupByCode('customers');
+            $code = $field->arguments['group'];
+            $member->onAfterExistsCallback(function ($member) use($code) {
+                $member->addToGroupByCode($code);
+            });
         }
 
         return $member;

@@ -1,6 +1,7 @@
 <?php
 
 use LittleGiant\SilverStripeSeeder\CliOutputFormatter;
+use LittleGiant\SilverStripeSeeder\Util\BatchedSeedWriter;
 use LittleGiant\SilverStripeSeeder\Util\Check;
 use LittleGiant\SilverStripeSeeder\Util\RecordWriter;
 use Symfony\Component\Console\Application;
@@ -35,8 +36,10 @@ class SeedCommand extends Command
     {
         $this->setName('seed')
             ->setDescription('Seed database')
-            ->addOption('class', 'c', InputOption::VALUE_OPTIONAL, 'Choose class to seed')
-            ->addOption('key', 'k', InputOption::VALUE_OPTIONAL, 'Choose key to seed')
+            ->addOption('class', 'c', InputOption::VALUE_REQUIRED, 'Choose class to seed')
+            ->addOption('key', 'k', InputOption::VALUE_REQUIRED, 'Choose key to seed')
+            ->addOption('batch', 'b', InputOption::VALUE_NONE, 'Batch writes for better performance')
+            ->addOption('size', 's', InputOption::VALUE_OPTIONAL, 'Specify batch size', 100)
             ->addOption('force', 'f', InputOption::VALUE_NONE, 'Ignore current seeds when calculating how many to create');
     }
 
@@ -44,6 +47,10 @@ class SeedCommand extends Command
     {
         if (!Check::fileToUrlMapping()) {
             die('ERROR: Please set a valid path in $_FILE_TO_URL_MAPPING before running the seeder' . PHP_EOL);
+        }
+
+        if (SiteTree::has_extension('SiteTreeLinkTracking')) {
+            SiteTree::remove_extension('SiteTreeLinkTracking');
         }
 
         // Customer overrides delete to check for admin
@@ -59,9 +66,13 @@ class SeedCommand extends Command
         }
         error_reporting(E_ALL);
 
-        global $argv;
+        $writer = new RecordWriter();
+        if ($input->getOption('batch')) {
+            $batchSize = intval($input->getOption('size'));
+            $writer = new BatchedSeedWriter($batchSize);
+        }
 
-        $seeder = new Seeder(new RecordWriter(), new CliOutputFormatter());
+        $seeder = new Seeder($writer, new CliOutputFormatter());
 
         $className = $input->getOption('class');
         $key = $input->getOption('key');

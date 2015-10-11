@@ -6,6 +6,11 @@ class ValueProvider extends Provider
 {
     public static $shorthand = 'Value';
 
+    public function __construct()
+    {
+        parent::__construct();
+    }
+
     public static function parseOptions($argumentString)
     {
         return array(
@@ -79,7 +84,8 @@ class ValueProvider extends Provider
                 $state = $state->up();
                 $value = $state->object();
             } else {
-                $value = $value->$variable;
+                // does this support has_one
+                $value = $value->getField($variable);
             }
         }
 

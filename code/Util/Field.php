@@ -8,6 +8,7 @@ class Field
     const FT_HAS_ONE = 'has_one';
     const FT_HAS_MANY = 'has_many';
     const FT_MANY_MANY = 'many_many';
+    const FT_ROOT = 'root';
 
     public $name;
     public $key;

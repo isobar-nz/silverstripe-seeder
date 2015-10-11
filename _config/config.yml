@@ -1,5 +1,5 @@
 ---
-Name: silverstripe-seeder
+Name: seeder
 ---
 
 Seeder:
@@ -10,6 +10,7 @@ Seeder:
     - ValueProvider
     - ObjectProvider
     - MemberProvider
+    - UniqueProvider
   empty_shorthand_provider: ValueProvider
   default_provider: DataTypeProvider
   default_providers:

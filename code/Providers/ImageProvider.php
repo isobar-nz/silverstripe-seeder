@@ -73,7 +73,7 @@ class ImageProvider extends Provider
                 $height = explode(',', $field->arguments['height']);
                 $height = intval($this->faker->numberBetween(min($height), max($height)));
             } else {
-                $height = intval($this->arguments['height']);
+                $height = intval($field->arguments['height']);
             }
         }
 
@@ -82,7 +82,7 @@ class ImageProvider extends Provider
                 $width = explode(',', $field->arguments['width']);
                 $width = intval($this->faker->numberBetween(min($width), max($width)));
             } else {
-                $width = intval($this->arguments['width']);
+                $width = intval($field->arguments['width']);
             }
         }
 
