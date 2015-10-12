@@ -32,6 +32,7 @@ class FakerProvider extends Provider
     protected function generateField($field, $state)
     {
         if (empty($field->arguments['type'])) {
+            var_dump($field);
             throw new Exception('faker provider requires a \'type\'');
         }
 

@@ -6,9 +6,9 @@ class SortProvider extends Provider
 {
     public static $shorthand = 'sort';
 
-    private static $class = array();
+    private static $classCache = array();
 
-    private static $cache = array();
+    private static $sortCache = array();
 
     protected function generateField($field, $state)
     {
@@ -18,25 +18,25 @@ class SortProvider extends Provider
 
         $obj = $state->up()->object();
         $className = $obj->class;
-        if (!isset(self::$class[$className])) {
+        if (!isset(self::$classCache[$className])) {
             $ancestry = $className->getClassAncestry();
             foreach ($ancestry as $ancestor) {
                 $fields = Object::custom_database_fields($ancestor);
                 if (isset($fields[$field->name])) {
-                    self::$class[$className] = $ancestor;
+                    self::$classCache[$className] = $ancestor;
                     break;
                 }
             }
         }
 
-        $sortClass = self::$class[$className];
+        $sortClass = self::$classCache[$className];
 
-        if (!isset(self::$cache[$sortClass])) {
-            self::$cache[$sortClass] = $sortClass::get()->max($field);
+        if (!isset(self::$sortCache[$sortClass])) {
+            self::$sortCache[$sortClass] = $sortClass::get()->max($field);
         }
 
-        $sort = self::$cache[$sortClass] + 1;
-        self::$cache[$sortClass] = $sort;
+        $sort = self::$sortCache[$sortClass] + 1;
+        self::$sortCache[$sortClass] = $sort;
         return $sort;
     }
 }

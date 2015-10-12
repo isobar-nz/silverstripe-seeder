@@ -5,6 +5,14 @@ name: seeder-heuristics
 Seeder:
   heuristics:
 
+    # field types
+
+    HTML:
+      conditions:
+        dataType: 'like(html%)'
+        fieldType: 'db'
+      field: 'html()'
+
     # field name heuristics
 
     Role:
@@ -67,7 +75,7 @@ Seeder:
           - 'like(%mobile%)'
         fieldType: 'db'
         dataType: 'like(varchar%)'
-      faker: 'faker(phoneNumber)'
+      field: 'faker(phoneNumber)'
 
     TollFree:
       conditions:
@@ -75,7 +83,7 @@ Seeder:
           - 'like(%tollfree%)'
         fieldType: 'db'
         dataType: 'like(varchar%)'
-      faker: 'faker(tollFreePhoneNumner)'
+      field: 'faker(tollFreePhoneNumner)'
 
     Company:
       conditions:
@@ -195,6 +203,13 @@ Seeder:
         fieldType: 'db'
         dataType: 'like(text)'
       field: 'faker(paragraphs,6)'
+
+    Content:
+      conditions:
+        name: 'like(%content)'
+        fieldType: 'db'
+        dataType: 'like(html*)'
+      field: 'html()'
 
     Description:
       conditions:
@@ -316,6 +331,20 @@ Seeder:
         name: 'MenuTitle'
         parent: 'is_a(SiteTree)'
       field: '{$Title}'
+
+    ShowInMenus:
+      conditions:
+        name: 'ShowInMenus'
+        parent: 'is_a(SiteTree)'
+      field: 0
+
+    ShowInMenus:
+      conditions:
+        name: 'ShowInMenus'
+        parent: 'is_a(SiteTree)'
+        parent.fieldType: 'root'
+        totalCount: 1
+      field: 1
 
     # cache heuristics
 

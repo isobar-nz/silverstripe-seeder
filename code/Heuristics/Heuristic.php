@@ -52,6 +52,7 @@ class Heuristic
                 } else {
                     $field->provider = $provider;
                 }
+                $field->arguments = $this->options;
             } else {
                 $field->arguments = array_merge($field->arguments, $this->options);
             }

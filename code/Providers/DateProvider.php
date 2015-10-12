@@ -19,7 +19,7 @@ class DateProvider extends Provider
         }
 
         if (!empty($field->arguments['arguments'])) {
-            $args = $field->argument['arguments'];
+            $args = $field->arguments['arguments'];
             $time = $args[0];
 
             if (count($args) >= 2) {
