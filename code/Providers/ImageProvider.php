@@ -46,12 +46,8 @@ class ImageProvider extends Provider
     protected function generateHasManyField($field, $state)
     {
         $images = array();
-        $count = 1;
-        if (!empty($field->arguments['count'])) {
-            $count = intval($field->arguments['count']);
-        }
 
-        for ($i = 0; $i < $count; $i++) {
+        for ($i = 0; $i < $field->count; $i++) {
             $images[] = $this->createImage($field, $state);
         }
 

@@ -11,7 +11,7 @@ class ConfigParser
 
     private $writer;
 
-    public function __construct($writer)
+    public function __construct($writer = null)
     {
         $config = \Config::inst();
         $this->config = $config->forClass('Seeder');
@@ -25,10 +25,12 @@ class ConfigParser
         }
 
         $field = $this->createObjectField($config['class'], $config, $config['key']);
-        if (empty($field->arguments['count'])) {
-            $field->arguments['count'] = 1;
+        if (isset($field->arguments['count']) && is_int($field->arguments['count'])) {
+            $field->count = $field->arguments['count'];
         }
         $field->fieldType = Field::FT_ROOT;
+
+        $this->setTotalCounts($field);
 
         return $field;
     }
@@ -126,7 +128,7 @@ class ConfigParser
             $fieldObject->name = $fieldName;
             $fieldObject->fieldName = $fieldName . 'ID';
             $fieldObject->methodName = $fieldName;
-            $fieldObject->arguments['count'] = 1;
+            $fieldObject->count = 1;
             $field->hasOne[] = $fieldObject;
         }
 
@@ -136,6 +138,9 @@ class ConfigParser
             $fieldObject->fieldType = Field::FT_HAS_MANY;
             $fieldObject->name = $fieldName;
             $fieldObject->methodName = $fieldName;
+            if (isset($fieldOptions['count']) && is_int($fieldOptions['count'])) {
+                $fieldObject->count = $fieldOptions['count'];
+            }
             $field->hasMany[] = $fieldObject;
         }
 
@@ -145,15 +150,18 @@ class ConfigParser
             $fieldObject->fieldType = Field::FT_MANY_MANY;
             $fieldObject->name = $fieldName;
             $fieldObject->methodName = $fieldName;
+            if (isset($fieldOptions['count']) && is_int($fieldOptions['count'])) {
+                $fieldObject->count = $fieldOptions['count'];
+            }
             $field->manyMany[] = $fieldObject;
         }
 
-        $field->provider = $this->createProvider($field, $options);
+        $this->setProvider($field, $options);
 
         return $field;
     }
 
-    private function parseProviderOptions($optionString)
+    public function parseProviderOptions($optionString)
     {
         if (preg_match('/^([a-zA-Z-_0-9]+)\(([^)]+)?\)$/', $optionString, $matches)) {
             $shorthand = strtolower($matches[1]);
@@ -220,21 +228,22 @@ class ConfigParser
         }
 
         $field->arguments = $options;
-        $field->provider = $this->createProvider($field, $options);
+        $this->setProvider($field, $options);
         return $field;
     }
 
-    private function createProvider($field, $options)
+    private function setProvider($field, $options)
     {
         if (!empty($options['provider'])) {
             $providerClassName = $options['provider'];
-            $provider = new $providerClassName();
+            $field->provider = new $providerClassName();
+            $field->explicit = true;
         } else {
-            $provider = $this->getDefaultProvider($field);
+            $field->provider = $this->getDefaultProvider($field);
+            $field->explicit = false;
         }
 
-        $provider->setWriter($this->writer);
-        return $provider;
+        $field->provider->setWriter($this->writer);
     }
 
     private function getDefaultProvider($field)
@@ -255,6 +264,27 @@ class ConfigParser
 
         $provider = new $providerClassName();
         return $provider;
+    }
+
+    private function setTotalCounts($field, $mul = 1)
+    {
+        $field->totalCount = $field->count * $mul;
+
+        foreach ($field->fields as $db) {
+            $this->setTotalCounts($db, $field->totalCount);
+        }
+
+        foreach ($field->hasOne as $hasOneField) {
+            $this->setTotalCounts($hasOneField, $field->totalCount);
+        }
+
+        foreach ($field->hasMany as $hasManyField) {
+            $this->setTotalCounts($hasManyField, $field->totalCount);
+        }
+
+        foreach ($field->manyMany as $manyManyField) {
+            $this->setTotalCounts($manyManyField, $field->totalCount);
+        }
     }
 }
 

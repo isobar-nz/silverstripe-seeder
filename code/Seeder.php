@@ -1,6 +1,7 @@
 <?php
 
 use LittleGiant\SilverStripeSeeder\Helpers\ConfigParser;
+use LittleGiant\SilverStripeSeeder\Heuristics\HeuristicParser;
 use \LittleGiant\SilverStripeSeeder\OutputFormatter;
 use \LittleGiant\SilverStripeSeeder\Util\Field;
 use \LittleGiant\SilverStripeSeeder\Util\SeederState;
@@ -32,6 +33,12 @@ class Seeder extends Object
 
         $configParser = new ConfigParser($this->writer);
 
+        $heuristics = array();
+        if ($this->config()->heuristics) {
+            $heuristicParser = new HeuristicParser();
+            $heuristics = $heuristicParser->parse($this->config()->heuristics);
+        }
+
         if (is_array($dataObjects)) {
             foreach ($dataObjects as $index => $option) {
                 if (is_string($index) && class_exists($index)) {
@@ -52,7 +59,9 @@ class Seeder extends Object
                     // has_many will generate the number passed in count
                     $field->fieldName = '';
                     $field->methodName = '';
-                    $field->arguments['count'] = $this->getCount($field);
+                    $field->count = $this->getCount($field);
+
+                    $this->applyHeuristics($field, $heuristics);
 
                     $state = new SeederState();
                     $objects = $field->provider->generate($field, $state);
@@ -83,6 +92,42 @@ class Seeder extends Object
         $count -= $currentCount;
 
         return $count;
+    }
+
+    public function applyHeuristics($field, $heuristics)
+    {
+        if (!$field->explicit) {
+            $matching = array();
+            foreach ($heuristics as $heuristic) {
+                if ($heuristic->match($field)) {
+                    $matching[] = $heuristic;
+                }
+            }
+
+            usort($matching, function ($h1, $h2) {
+                return $h1->getSpecificity() - $h2->getSpecificity();
+            });
+
+            foreach ($matching as $heuristic) {
+                $heuristic->apply($field);
+            }
+        }
+
+        foreach ($field->fields as $db) {
+            $this->applyHeuristics($db, $heuristics);
+        }
+
+        foreach ($field->hasOne as $hasOneField) {
+            $this->applyHeuristics($hasOneField, $heuristics);
+        }
+
+        foreach ($field->hasMany as $hasManyField) {
+            $this->applyHeuristics($hasManyField, $heuristics);
+        }
+
+        foreach ($field->manyMany as $manyManyField) {
+            $this->applyHeuristics($manyManyField, $heuristics);
+        }
     }
 
     public function unseed($key = null)

@@ -9,26 +9,6 @@ class DataTypeProvider extends Provider
 
     private $faker;
 
-    private $fieldTypes = array(
-        'firstname' => array('firstname'),
-        'lastname' => array('lastname', 'surname'),
-        'email' => array('email', 'emailaddress'),
-        'phone' => array('phone', 'mobile', 'phonenumber'),
-        'company' => array('company'),
-        'address' => array('address'),
-        'address1' => array('address1', 'street'),
-        'address2' => array('address2', 'addressline2', 'suburb'),
-        'city' => array('city'),
-        'postcode' => array('postcode', 'zipcode', 'postalcode'),
-        'state' => array('state'),
-        'country' => array('country'),
-        'countrycode' => array('countrycode'),
-        'lat' => array('lat', 'latitude'),
-        'lng' => array('lng', 'longitude'),
-        'link' => array('link', 'url'),
-        'sort' => array('sort', 'sortorder'),
-    );
-
     private $dataType = array(
         'boolean',
         'currency',
@@ -61,60 +41,13 @@ class DataTypeProvider extends Provider
     protected function generateField($field, $state)
     {
         $dataType = strtolower($field->dataType);
-        $name = strtolower($field->name);
         $args = $field->arguments;
 
-        foreach ($this->fieldTypes as $fieldType => $names) {
-            if (in_array($name, $names)) {
-                $dataType = $fieldType;
-            }
+        if (isset($args['type']) && in_array(strtolower($args['type']), $this->dataType)) {
+            $dataType = $args['type'];
         }
 
-        if (!empty($field->arguments['type'])) {
-            $type = strtolower($field->arguments['type']);
-            if (isset($this->fieldTypes[$type]) || in_array($type, $this->dataType)) {
-                $dataType = $type;
-            }
-        }
-
-        // named fields
-        if ($dataType === 'firstname') {
-            return $this->faker->firstName();
-        } else if ($dataType === 'lastname') {
-            return $this->faker->lastName;
-        } else if ($dataType === 'email') {
-            return $this->faker->safeEmail;
-        } else if ($dataType === 'phone') {
-            return $this->faker->phoneNumber;
-        } else if ($dataType === 'company') {
-            return $this->faker->company;
-        } else if ($dataType === 'address') {
-            return $this->faker->address;
-        } else if ($dataType === 'address1') {
-            return $this->faker->streetAddress;
-        } else if ($dataType === 'address2') {
-            return $this->faker->secondaryAddress;
-        } else if ($dataType === 'city') {
-            return $this->faker->city;
-        } else if ($dataType === 'postcode') {
-            return $this->faker->postcode;
-        } else if ($dataType === 'state') {
-            return $this->faker->state;
-        } else if ($dataType === 'country') {
-            return $this->faker->country;
-        } else if ($dataType === 'countrycode') {
-            return $this->faker->countryCode;
-        } else if ($dataType === 'lat') {
-            return $this->faker->latitude;
-        } else if ($dataType === 'lng') {
-            return $this->faker->longitude;
-        } else if ($dataType === 'link') {
-            return $this->faker->url;
-        } else if ($dataType === 'sort') {
-            return 0;
-
-        // data type fields
-        } else if ($dataType === 'boolean') {
+        if ($dataType === 'boolean') {
             return array_rand(array(true, false));
         } else if ($dataType === 'currency') {
             $min = 0;

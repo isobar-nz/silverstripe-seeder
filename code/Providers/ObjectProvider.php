@@ -56,11 +56,9 @@ class ObjectProvider extends Provider
             throw new Exception("class '{$field->arguments['class']}' does not exist");
         }
 
-        $count = $field->arguments['count'] ? $field->arguments['count'] : 1;
-
         // error checking
         $className = $field->arguments['class'];
-        $objects = $className::get()->sort('RAND()')->limit($count)->toArray();
+        $objects = $className::get()->sort('RAND()')->limit($field->count)->toArray();
         return $objects;
     }
 

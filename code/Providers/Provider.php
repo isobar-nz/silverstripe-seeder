@@ -77,7 +77,6 @@ abstract class Provider extends \Object
             $writer->write($object, $field);
         });
         foreach ($field->hasOne as $hasOneField) {
-            $hasOneField->arguments['count'] = 1;
             $values = $hasOneField->provider->generate($hasOneField, $state);
             if (!empty($values[0])) {
                 $value = $values[0];
@@ -151,13 +150,8 @@ abstract class Provider extends \Object
 
     protected function generateHasManyField($field, $state)
     {
-        $count = 1;
-        if (isset($field->arguments['count'])) {
-            $count = intval($field->arguments['count']);
-        }
-
         $objects = array();
-        for ($i = 0; $i < $count; $i++) {
+        for ($i = 0; $i < $field->count; $i++) {
             $objects[] = $this->generateObject($field, $state, $i);
         }
         return $objects;

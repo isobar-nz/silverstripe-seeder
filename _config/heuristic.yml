@@ -1,0 +1,139 @@
+---
+name: seeder-heuristics
+---
+
+Seeder:
+  heuristics:
+    FirstName:
+      conditions:
+        name:
+          - 'like(%firstname%)'
+          - 'like(%givenname%)'
+        fieldType: db
+        dataType: 'like(varchar%)'
+      field: 'faker(firstName)'
+
+    Surname:
+      conditions:
+        name:
+          - 'like(%lastname%)'
+          - 'like(%surname%)'
+        fieldType: db
+        dataType: 'like(%varchar)'
+      field: 'faker(lastName)'
+
+    Email:
+      conditions:
+        name: 'like(%email%)'
+        fieldType: db
+        dataType: 'like(varchar%)'
+      field: 'faker(email)'
+
+    Phone:
+      conditions:
+        name:
+          - 'like(%phone%)'
+          - 'like(%mobile%)'
+        fieldType: 'db'
+        dataType: 'like(varchar%)'
+      faker: 'faker(phoneNumber)'
+
+    Company:
+      conditions:
+        name: 'like(company%)'
+        fieldType: 'db'
+        dataType: 'like(varchar%)'
+      field: 'faker(company)'
+
+    Address:
+      conditions:
+        name: 'like(%address)'
+        fieldType: 'db'
+        dataType: 'like(varchar%)'
+      field: 'faker(address)'
+
+    Address1:
+      conditions:
+        name:
+          - 'like(%address1)'
+          - 'like(%street%)'
+        fieldType: 'db'
+        dataType: 'like(varchar%)'
+      field: 'faker(streetAddress)'
+
+    Address2:
+      conditions:
+        name:
+          - 'like(%address2)'
+          - 'like(%addressline2)'
+          - 'like(%suburb)'
+        fieldType: 'db'
+        dataType: 'like(varchar%)'
+      field: 'faker(secondaryAddress)'
+
+    City:
+      conditions:
+        name: 'like(%city%)'
+        fieldType: 'db'
+        dataType: 'like(varchar%)'
+      field: 'faker(city)'
+
+    Postcode:
+      conditions:
+        name:
+          - 'like(%postcode%)'
+          - 'like(%postalcode%)'
+          - 'like(%zipcode%)'
+        fieldType: 'db'
+        dataType: 'like(varchar%)'
+      field: 'faker(postcode)'
+
+    State:
+      conditions:
+        name: 'like(%state)'
+        fieldType: 'db'
+        dataType: 'like(varchar%)'
+      field: 'faker(state)'
+
+    Country:
+      conditions:
+        name: 'like(%country)'
+        fieldType: 'db'
+        dataType: 'like(varchar%)'
+      field: 'faker(country)'
+
+    CountryCode:
+      conditions:
+        name: 'like(%countrycode)'
+        fieldType: 'db'
+        dataType: 'like(varchar%)'
+      field: 'faker(countryCode)'
+
+    Latitude:
+      conditions:
+        name:
+          - 'like(%latitude)'
+          - 'like(lat)'
+        fieldType: 'db'
+        dataType: 'like(varchar%)'
+      field: 'faker(latitude)'
+
+    Longitude:
+      conditions:
+        name:
+          - 'like(%longitude)'
+          - 'like(lng)'
+        fieldType: 'db'
+        dataType: 'like(varchar%)'
+      field: 'faker(longitude)'
+
+    Link:
+      conditions:
+        name:
+          - 'like(%link)'
+          - 'like(%url)'
+        fieldType: 'db'
+        dataType: 'like(varchar%)'
+      field: 'faker(url)'
+
+

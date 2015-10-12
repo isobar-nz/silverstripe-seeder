@@ -4,7 +4,7 @@ namespace LittleGiant\SilverStripeSeeder\Util;
 
 class Field
 {
-    const FT_FIELD = 'field';
+    const FT_FIELD = 'db';
     const FT_HAS_ONE = 'has_one';
     const FT_HAS_MANY = 'has_many';
     const FT_MANY_MANY = 'many_many';
@@ -18,6 +18,9 @@ class Field
     public $fieldName;
     public $methodName;
     public $provider;
+    public $explicit = false;
+    public $count = 1;
+    public $totalCount = 0;
     public $fields = array();
     public $hasOne = array();
     public $hasMany = array();
