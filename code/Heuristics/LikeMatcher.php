@@ -34,6 +34,6 @@ class LikeMatcher implements Matcher
         } else if ($this->matchEnd) {
             return strpos(strrev($value), strrev($this->like)) === 0;
         }
-        return strpos($value, $this->like);
+        return strpos($value, $this->like) !== false;
     }
 }

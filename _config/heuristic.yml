@@ -135,5 +135,3 @@ Seeder:
         fieldType: 'db'
         dataType: 'like(varchar%)'
       field: 'faker(url)'
-
-

@@ -11,6 +11,7 @@ class Field
     const FT_ROOT = 'root';
 
     public $name;
+    public $parent;
     public $key;
     public $arguments = array();
     public $fieldType;
@@ -21,6 +22,7 @@ class Field
     public $explicit = false;
     public $count = 1;
     public $totalCount = 0;
+    public $ignore = false;
     public $fields = array();
     public $hasOne = array();
     public $hasMany = array();

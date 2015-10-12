@@ -118,6 +118,7 @@ class ConfigParser
             $fieldObject = $this->createField($dataType, $fieldOptions);
             $fieldObject->fieldName = $fieldName;
             $fieldObject->name = $fieldName;
+            $fieldObject->parent = $field;
             $field->fields[] = $fieldObject;
         }
 
@@ -128,6 +129,7 @@ class ConfigParser
             $fieldObject->name = $fieldName;
             $fieldObject->fieldName = $fieldName . 'ID';
             $fieldObject->methodName = $fieldName;
+            $fieldObject->parent = $field;
             $fieldObject->count = 1;
             $field->hasOne[] = $fieldObject;
         }
@@ -138,6 +140,7 @@ class ConfigParser
             $fieldObject->fieldType = Field::FT_HAS_MANY;
             $fieldObject->name = $fieldName;
             $fieldObject->methodName = $fieldName;
+            $fieldObject->parent = $field;
             if (isset($fieldOptions['count']) && is_int($fieldOptions['count'])) {
                 $fieldObject->count = $fieldOptions['count'];
             }
@@ -150,6 +153,7 @@ class ConfigParser
             $fieldObject->fieldType = Field::FT_MANY_MANY;
             $fieldObject->name = $fieldName;
             $fieldObject->methodName = $fieldName;
+            $fieldObject->parent = $field;
             if (isset($fieldOptions['count']) && is_int($fieldOptions['count'])) {
                 $fieldObject->count = $fieldOptions['count'];
             }

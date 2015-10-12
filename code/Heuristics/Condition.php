@@ -20,7 +20,15 @@ class Condition
 
     public function match($field)
     {
-        $value = $field->{$this->property};
+        $properties = explode('.', $this->property);
+
+        $value = $field;
+        foreach ($properties as $property) {
+            if (!is_object($value)) {
+                return false;
+            }
+            $value = $value->$property;
+        }
 
         $isMatch = false;
         foreach ($this->matchers as $matcher) {

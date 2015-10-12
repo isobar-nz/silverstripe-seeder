@@ -25,11 +25,8 @@ class HeuristicParser
             if (empty($heuristicConfig['conditions']) || !is_array($heuristicConfig['conditions'])) {
                 continue;
             }
-            if (empty($heuristicConfig['field'])) {
-                continue;
-            }
 
-            $options = $heuristicConfig['field'];
+            $options = isset($heuristicConfig['field']) ? $heuristicConfig['field'] : array();
             if (is_string($options)) {
                 $options = $this->configParser->parseProviderOptions($options);
             }
@@ -54,6 +51,8 @@ class HeuristicParser
                             $matcher = new GreaterThanMatcher($matches[2]);
                         } else if ($matches[1] === 'lt') {
                             $matcher = new LessThanMatcher($matches[2]);
+                        } else if ($matches[1] === 'is_a') {
+                            $matcher = new IsAMatcher($matches[2]);
                         }
                     }
 
