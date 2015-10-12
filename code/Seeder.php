@@ -96,21 +96,19 @@ class Seeder extends Object
 
     public function applyHeuristics($field, $heuristics)
     {
-        if (!$field->explicit) {
-            $matching = array();
-            foreach ($heuristics as $heuristic) {
-                if ($heuristic->match($field)) {
-                    $matching[] = $heuristic;
-                }
+        $matching = array();
+        foreach ($heuristics as $heuristic) {
+            if ($heuristic->match($field)) {
+                $matching[] = $heuristic;
             }
+        }
 
-            usort($matching, function ($h1, $h2) {
-                return $h1->getSpecificity() - $h2->getSpecificity();
-            });
+        usort($matching, function ($h1, $h2) {
+            return $h1->getSpecificity() - $h2->getSpecificity();
+        });
 
-            foreach ($matching as $heuristic) {
-                $heuristic->apply($field);
-            }
+        foreach ($matching as $heuristic) {
+            $heuristic->apply($field);
         }
 
         foreach ($field->fields as $db) {

@@ -4,6 +4,37 @@ name: seeder-heuristics
 
 Seeder:
   heuristics:
+
+    # field name heuristics
+
+    Role:
+      conditions:
+        name:
+          - 'like(%role%)'
+          - 'like(%position)'
+        parent.dataType:
+          - 'is_a(Member)'
+          - 'like(%people%)'
+          - 'like(%person%)'
+          - 'like(%member%)'
+          - 'like(%partner%)'
+        fieldType: 'db'
+        dataType: 'like(varchar%)'
+      field: 'faker(words,5)'
+
+    Name:
+      conditions:
+        name:
+          - 'like(name)'
+        fieldType: db
+        dataType:
+          - 'is_a(Member)'
+          - 'like(%people%)'
+          - 'like(%person%)'
+          - 'like(%member%)'
+          - 'like(%partner%)'
+      field: 'faker(name)'
+
     FirstName:
       conditions:
         name:
@@ -37,6 +68,14 @@ Seeder:
         fieldType: 'db'
         dataType: 'like(varchar%)'
       faker: 'faker(phoneNumber)'
+
+    TollFree:
+      conditions:
+        name:
+          - 'like(%tollfree%)'
+        fieldType: 'db'
+        dataType: 'like(varchar%)'
+      faker: 'faker(tollFreePhoneNumner)'
 
     Company:
       conditions:
@@ -135,3 +174,181 @@ Seeder:
         fieldType: 'db'
         dataType: 'like(varchar%)'
       field: 'faker(url)'
+
+    Title:
+      conditions:
+        name: 'like(%title)'
+        fieldType: 'db'
+        dataType: 'like(varchar%)'
+      field: 'faker(words,4)'
+
+    Label:
+      conditions:
+        name: 'like(%label)'
+        fieldType: 'db'
+        dataType: 'like(varchar%)'
+      field: 'faker(words,2)'
+
+    Content:
+      conditions:
+        name: 'like(%content)'
+        fieldType: 'db'
+        dataType: 'like(text)'
+      field: 'faker(paragraphs,6)'
+
+    Description:
+      conditions:
+        name: 'like(%description)'
+        fieldType: 'db'
+        dataType: 'like(text)'
+      field: 'faker(paragraphs,3)'
+
+    Blurb:
+      conditions:
+        name: 'like(%blurb)'
+        fieldType: 'db'
+        dataType: 'like(text)'
+      field: 'faker(sentences,3)'
+
+    Price:
+      conditions:
+        name:
+          - 'like(%price)'
+          - 'like(%amount)'
+        fieldType: 'db'
+        dataType:
+          - 'like(currency%)'
+          - 'like(decimal%)'
+          - 'like(float%)'
+      field: 'faker(randomFloat,2,5,1000)'
+
+    StartDate:
+      conditions:
+        name:
+          - 'like(%start%)'
+          - 'like(%begin%)'
+        fieldType: 'db'
+        dataType:
+          - 'like(ss_datetime)'
+          - 'like(date)'
+      field: 'date(+7 days)'
+
+    CreatedDate:
+      conditions:
+        name:
+          - 'like(%created%)'
+        fieldType: 'db'
+        dateType:
+          - 'like(ss_datetime)'
+          - 'like(date)'
+      field: 'date(-7 days)'
+
+    EndDate:
+      conditions:
+        name:
+          - 'like(end%)'
+          - 'like(%finish%)'
+        fieldType: 'db'
+        dateType:
+          - 'like(ss_datetime)'
+          - 'like(date)'
+      field: 'date(+1 month)'
+
+    Image:
+      conditions:
+        dataType: 'is_a(Image)'
+      field: 'image()'
+
+    BannerImage:
+      conditions:
+        name:
+          - 'like(%background%)'
+          - 'like(%banner%)'
+        dataType: 'is_a(Image)'
+      field: 'image(1600,800)'
+
+    ProfileImage:
+      conditions:
+        name:
+          - 'like(%profile%)'
+          - 'like(%display%)'
+        dataType: 'is_a(Image)'
+      field: 'image(400,400)'
+
+    Icon:
+      conditions:
+        name: 'like(%icon%)'
+        dataType: 'is_a(Image)'
+      field: 'image(200,200)'
+
+    Parent:
+      conditions:
+        name: 'Parent'
+        fieldType: 'has_one'
+        parent: 'is_a(SiteTree)'
+        dataType: 'is_a(SiteTree)'
+      field: '{$Up}'
+
+    Sort:
+      conditions:
+        name:
+          - 'like(%sort%)'
+          - 'like(%order%)'
+        dataType: 'like(int%)'
+        parent: 'is_a(DataObject)'
+      field: 'sort()'
+
+    URLSegment:
+      conditions:
+        name: 'URLSegment'
+        parent: 'is_a(SiteTree)'
+      field: 'URLSegment()'
+
+    PageTitle:
+      conditions:
+        name: 'Title'
+        parent: 'is_a(SiteTree)'
+        parent.fieldType: 'root'
+      field: 'pageTitle()'
+
+    MenuTitle:
+      conditons:
+        name: 'MenuTitle'
+        parent: 'is_a(SiteTree)'
+      field: '{$Title}'
+
+    # cache heuristics
+
+    CacheFields:
+      conditions:
+        fieldType: db
+        totalCount: 'gt(20)'
+      cache: 20
+
+    # all url segments, unique fields, sorts must be unique
+    UniqueFields:
+      conditions:
+        fieldType: db
+        provider:
+          - 'is_a(URLSegmentProvider)'
+          - 'is_a(UniqueProvider)'
+          - 'is_a(SortProvider)'
+        totalCount: 'gt(1)'
+      nocache:
+
+    # all member emails must be unique
+    UniqueEmail:
+      conditions:
+        fieldType: 'db'
+        name: 'Email'
+        parent: 'is_a(Member)'
+        totalCount: 'gt(1)'
+      nocache:
+
+    CacheImageFields:
+      conditions:
+        totalCount: 'gt(3)'
+        provider: 'is_a(ImageProvider)'
+      cache: 3
+
+

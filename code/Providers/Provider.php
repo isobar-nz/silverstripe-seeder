@@ -62,6 +62,10 @@ abstract class Provider extends \Object
 
         $fields = $this->dataObjectRecordProperty->getValue($object);
         foreach ($field->fields as $objectField) {
+            if ($objectField->ignore) {
+                continue;
+            }
+
             $values = $objectField->provider->generate($objectField, $state);
             if (!empty($values)) {
                 $fields[$objectField->fieldName] = $values[0];
@@ -77,6 +81,10 @@ abstract class Provider extends \Object
             $writer->write($object, $field);
         });
         foreach ($field->hasOne as $hasOneField) {
+            if ($hasOneField->ignore) {
+                continue;
+            }
+
             $values = $hasOneField->provider->generate($hasOneField, $state);
             if (!empty($values[0])) {
                 $value = $values[0];
@@ -94,6 +102,10 @@ abstract class Provider extends \Object
         }
 
         foreach ($field->manyMany as $manyManyField) {
+            if ($manyManyField->ignore) {
+                continue;
+            }
+
             $values = $manyManyField->provider->generate($manyManyField, $state);
             if (!empty($values)) {
                 $relation = $manyManyField->methodName;
@@ -106,6 +118,10 @@ abstract class Provider extends \Object
         }
 
         foreach ($field->hasMany as $hasManyField) {
+            if ($hasManyField->ignore) {
+                continue;
+            }
+
             $values = $hasManyField->provider->generate($hasManyField, $state);
             if (!empty($values)) {
                 $object->onAfterExistsCallback(function ($object) use ($values, $writer, $hasManyField) {

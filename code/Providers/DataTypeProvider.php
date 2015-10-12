@@ -70,7 +70,6 @@ class DataTypeProvider extends Provider
             // todo
             return date('Y-m-d H:i:s');
         } else if (strpos($dataType, 'decimal') === 0) {
-            return 100.0;
             $min = 0;
             $max = 1000;
             $decimals = 4;
@@ -86,7 +85,6 @@ class DataTypeProvider extends Provider
             }
             return $this->faker->randomFloat($decimals, $min, $max);
         } else if ($dataType === 'int') {
-            return 10;
             $min = 0;
             $max = PHP_INT_MAX;
             if (!empty($args['range'])) {
@@ -109,7 +107,6 @@ class DataTypeProvider extends Provider
             // todo
             return '<p>TODO</p>';
         } else if ($dataType === 'text') {
-            return  'This is some random text';
             $count = 3;
             if (!empty($args['count'])) {
                 if (strpos($args['count'], ',') !== false) {
@@ -126,7 +123,6 @@ class DataTypeProvider extends Provider
             }
             return implode(PHP_EOL, $this->faker->paragraphs($count));
         } else if (strpos($dataType, 'varchar') !== false) {
-            return 'This is some random text';
             $length = 60;
             preg_match('/\(([0-9]*)\)/', $dataType, $matches);
             if ($matches) {

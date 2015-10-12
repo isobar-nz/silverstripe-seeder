@@ -31,7 +31,29 @@ class HeuristicParser
                 $options = $this->configParser->parseProviderOptions($options);
             }
 
-            $heuristic = new Heuristic($name, $options);
+            $heuristic = new Heuristic($name);
+            $heuristic->setOptions($options);
+
+            if (array_key_exists('nocache', $heuristicConfig)) {
+                $noCache = true;
+                if ($heuristicConfig['nocache'] !== null) {
+                    $noCache = boolval($heuristicConfig['nocache']);
+                }
+                $heuristic->setNoCache($noCache);
+            }
+
+            if (isset($heuristicConfig['cache'])) {
+                $cacheSize = intval($heuristicConfig['cache']);
+                $heuristic->setCache($cacheSize);
+            }
+
+            if (array_key_exists('ignore', $heuristicConfig)) {
+                $ignore = true;
+                if ($heuristicConfig['ignore'] !== null) {
+                    $ignore = boolval($heuristicConfig['ignore']);
+                }
+                $heuristic->setIgnore($ignore);
+            }
 
             foreach ($heuristicConfig['conditions'] as $field => $options) {
                 $condition = new Condition($field);
@@ -45,13 +67,14 @@ class HeuristicParser
 
                     preg_match('/^(\w+)\((.+)\)$/', $option, $matches);
                     if (count($matches) === 3) {
-                        if ($matches[1] === 'like') {
+                        $matcherName = strtolower($matches[1]);
+                        if ($matcherName === 'like') {
                             $matcher = new LikeMatcher($matches[2]);
-                        } else if ($matches[1] === 'gt') {
+                        } else if ($matcherName === 'gt') {
                             $matcher = new GreaterThanMatcher($matches[2]);
-                        } else if ($matches[1] === 'lt') {
+                        } else if ($matcherName === 'lt') {
                             $matcher = new LessThanMatcher($matches[2]);
-                        } else if ($matches[1] === 'is_a') {
+                        } else if ($matcherName === 'is_a') {
                             $matcher = new IsAMatcher($matches[2]);
                         }
                     }
