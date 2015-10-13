@@ -83,8 +83,15 @@ class ImageProvider extends Provider
         }
 
         $folder = Folder::find_or_make('Seeder');
-        $fileName = $this->faker->image($folder->getFullPath(), $width, $height);
-        $fileName = str_replace($folder->getFullPath() . DIRECTORY_SEPARATOR, '', $fileName);
+
+
+
+        $file = file_get_contents("http://placehold.it/{$width}x{$height}");
+        $fileName = uniqid('test-image') . '.jpg';
+        file_put_contents($folder->getFullPath() . DIRECTORY_SEPARATOR . $fileName, $file);
+
+//        $fileName = $this->faker->image($folder->getFullPath(), $width, $height);
+//        $fileName = str_replace($folder->getFullPath() . DIRECTORY_SEPARATOR, '', $fileName);
 
         $imageClassName = $field->dataType;
         $image = new $imageClassName();

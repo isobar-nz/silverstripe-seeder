@@ -25,7 +25,8 @@ class ProviderCache extends Provider
             return $result;
         }
 
-        return array_rand($this->cache);
+        $key = array_rand($this->cache);
+        return $this->cache[$key];
     }
 
     public function setCacheSize($size)
