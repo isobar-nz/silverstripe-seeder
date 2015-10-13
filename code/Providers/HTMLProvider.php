@@ -28,7 +28,7 @@ class HTMLProvider extends Provider
         $list .= '</ul>';
 
         $elements[] = $list;
-        
+
     }
 }
 
