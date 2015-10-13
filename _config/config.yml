@@ -1,15 +1,21 @@
 ---
-Name: silverstripe-seeder
+Name: seeder
 ---
 
 Seeder:
   providers:
     - DataTypeProvider
+    - DateProvider
     - FakerProvider
+    - HTMLProvider
     - ImageProvider
-    - ValueProvider
-    - ObjectProvider
     - MemberProvider
+    - ObjectProvider
+    - PageTitleProvider
+    - SortProvider
+    - UniqueProvider
+    - URLSegmentProvider
+    - ValueProvider
   empty_shorthand_provider: ValueProvider
   default_provider: DataTypeProvider
   default_providers:

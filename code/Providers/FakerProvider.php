@@ -32,15 +32,22 @@ class FakerProvider extends Provider
     protected function generateField($field, $state)
     {
         if (empty($field->arguments['type'])) {
+            var_dump($field);
             throw new Exception('faker provider requires a \'type\'');
         }
 
         $type = $field->arguments['type'];
         // todo are there any faker methods without an argument?
         if (!empty($field->arguments['arguments'])) {
-            return call_user_func_array(array($this->faker, $type), $field->arguments['arguments']);
+            $value = call_user_func_array(array($this->faker, $type), $field->arguments['arguments']);
         } else {
-            return $this->faker->$type;
+            $value = $this->faker->$type;
         }
+
+        if (is_array($value)) {
+            $value = implode("\n", $value);
+        }
+
+        return $value;
     }
 }

@@ -42,20 +42,11 @@ class SeederState
         return new SeederState($field, $dataObject, $index, $this);
     }
 
-    public function getClassAncestry()
+    public function isAncestor($object)
     {
-        $ancestry = array();
-        if ($this->object) {
-            $ancestry[] = $this->object->ClassName;
+        if (!$this->object) {
+            return false;
         }
-
-        $state = $this;
-        while ($state = $state->up()) {
-            if ($state->object()) {
-                $ancestry[] = $state->object()->ClassName;
-            }
-        }
-
-        return $ancestry;
+        return $this->object === $object || ($this->up && $this->up->isAncestor($object));
     }
 }

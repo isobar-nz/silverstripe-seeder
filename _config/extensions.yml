@@ -1,0 +1,8 @@
+---
+name: silverstripe-seeder-extensions
+---
+
+DataObject:
+  extensions:
+    - IsSeededExtension
+    - WriteCallbackExtension

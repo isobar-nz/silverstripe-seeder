@@ -1,0 +1,383 @@
+---
+name: seeder-heuristics
+---
+
+Seeder:
+  heuristics:
+
+    # field types
+
+    HTML:
+      conditions:
+        dataType: 'like(html%)'
+        fieldType: 'db'
+      field: 'html()'
+
+    # field name heuristics
+
+    Role:
+      conditions:
+        name:
+          - 'like(%role%)'
+          - 'like(%position)'
+        parent.dataType:
+          - 'is_a(Member)'
+          - 'like(%people%)'
+          - 'like(%person%)'
+          - 'like(%member%)'
+          - 'like(%partner%)'
+        fieldType: 'db'
+        dataType: 'like(varchar%)'
+      field: 'faker(words,5)'
+
+    Name:
+      conditions:
+        name:
+          - 'like(name)'
+        fieldType: db
+        dataType:
+          - 'is_a(Member)'
+          - 'like(%people%)'
+          - 'like(%person%)'
+          - 'like(%member%)'
+          - 'like(%partner%)'
+      field: 'faker(name)'
+
+    FirstName:
+      conditions:
+        name:
+          - 'like(%firstname%)'
+          - 'like(%givenname%)'
+        fieldType: db
+        dataType: 'like(varchar%)'
+      field: 'faker(firstName)'
+
+    Surname:
+      conditions:
+        name:
+          - 'like(%lastname%)'
+          - 'like(%surname%)'
+        fieldType: db
+        dataType: 'like(%varchar)'
+      field: 'faker(lastName)'
+
+    Email:
+      conditions:
+        name: 'like(%email%)'
+        fieldType: db
+        dataType: 'like(varchar%)'
+      field: 'faker(email)'
+
+    Phone:
+      conditions:
+        name:
+          - 'like(%phone%)'
+          - 'like(%mobile%)'
+        fieldType: 'db'
+        dataType: 'like(varchar%)'
+      field: 'faker(phoneNumber)'
+
+    TollFree:
+      conditions:
+        name:
+          - 'like(%tollfree%)'
+        fieldType: 'db'
+        dataType: 'like(varchar%)'
+      field: 'faker(tollFreePhoneNumner)'
+
+    Company:
+      conditions:
+        name: 'like(company%)'
+        fieldType: 'db'
+        dataType: 'like(varchar%)'
+      field: 'faker(company)'
+
+    Address:
+      conditions:
+        name: 'like(%address)'
+        fieldType: 'db'
+        dataType: 'like(varchar%)'
+      field: 'faker(address)'
+
+    Address1:
+      conditions:
+        name:
+          - 'like(%address1)'
+          - 'like(%street%)'
+        fieldType: 'db'
+        dataType: 'like(varchar%)'
+      field: 'faker(streetAddress)'
+
+    Address2:
+      conditions:
+        name:
+          - 'like(%address2)'
+          - 'like(%addressline2)'
+          - 'like(%suburb)'
+        fieldType: 'db'
+        dataType: 'like(varchar%)'
+      field: 'faker(secondaryAddress)'
+
+    City:
+      conditions:
+        name: 'like(%city%)'
+        fieldType: 'db'
+        dataType: 'like(varchar%)'
+      field: 'faker(city)'
+
+    Postcode:
+      conditions:
+        name:
+          - 'like(%postcode%)'
+          - 'like(%postalcode%)'
+          - 'like(%zipcode%)'
+        fieldType: 'db'
+        dataType: 'like(varchar%)'
+      field: 'faker(postcode)'
+
+    State:
+      conditions:
+        name: 'like(%state)'
+        fieldType: 'db'
+        dataType: 'like(varchar%)'
+      field: 'faker(state)'
+
+    Country:
+      conditions:
+        name: 'like(%country)'
+        fieldType: 'db'
+        dataType: 'like(varchar%)'
+      field: 'faker(country)'
+
+    CountryCode:
+      conditions:
+        name: 'like(%countrycode)'
+        fieldType: 'db'
+        dataType: 'like(varchar%)'
+      field: 'faker(countryCode)'
+
+    Latitude:
+      conditions:
+        name:
+          - 'like(%latitude)'
+          - 'like(lat)'
+        fieldType: 'db'
+        dataType: 'like(varchar%)'
+      field: 'faker(latitude)'
+
+    Longitude:
+      conditions:
+        name:
+          - 'like(%longitude)'
+          - 'like(lng)'
+        fieldType: 'db'
+        dataType: 'like(varchar%)'
+      field: 'faker(longitude)'
+
+    Link:
+      conditions:
+        name:
+          - 'like(%link)'
+          - 'like(%url)'
+        fieldType: 'db'
+        dataType: 'like(varchar%)'
+      field: 'faker(url)'
+
+    Title:
+      conditions:
+        name: 'like(%title)'
+        fieldType: 'db'
+        dataType: 'like(varchar%)'
+      field: 'faker(words,4)'
+
+    Label:
+      conditions:
+        name: 'like(%label)'
+        fieldType: 'db'
+        dataType: 'like(varchar%)'
+      field: 'faker(words,2)'
+
+    Content:
+      conditions:
+        name: 'like(%content)'
+        fieldType: 'db'
+        dataType: 'like(text)'
+      field: 'faker(paragraphs,6)'
+
+    Content:
+      conditions:
+        name: 'like(%content)'
+        fieldType: 'db'
+        dataType: 'like(html*)'
+      field: 'html()'
+
+    Description:
+      conditions:
+        name: 'like(%description)'
+        fieldType: 'db'
+        dataType: 'like(text)'
+      field: 'faker(paragraphs,3)'
+
+    Blurb:
+      conditions:
+        name: 'like(%blurb)'
+        fieldType: 'db'
+        dataType: 'like(text)'
+      field: 'faker(sentences,3)'
+
+    Price:
+      conditions:
+        name:
+          - 'like(%price)'
+          - 'like(%amount)'
+        fieldType: 'db'
+        dataType:
+          - 'like(currency%)'
+          - 'like(decimal%)'
+          - 'like(float%)'
+      field: 'faker(randomFloat,2,5,1000)'
+
+    StartDate:
+      conditions:
+        name:
+          - 'like(%start%)'
+          - 'like(%begin%)'
+        fieldType: 'db'
+        dataType:
+          - 'like(ss_datetime)'
+          - 'like(date)'
+      field: 'date(+7 days)'
+
+    CreatedDate:
+      conditions:
+        name:
+          - 'like(%created%)'
+        fieldType: 'db'
+        dateType:
+          - 'like(ss_datetime)'
+          - 'like(date)'
+      field: 'date(-7 days)'
+
+    EndDate:
+      conditions:
+        name:
+          - 'like(end%)'
+          - 'like(%finish%)'
+        fieldType: 'db'
+        dateType:
+          - 'like(ss_datetime)'
+          - 'like(date)'
+      field: 'date(+1 month)'
+
+    Image:
+      conditions:
+        dataType: 'is_a(Image)'
+      field: 'image()'
+
+    BannerImage:
+      conditions:
+        name:
+          - 'like(%background%)'
+          - 'like(%banner%)'
+        dataType: 'is_a(Image)'
+      field: 'image(1600,800)'
+
+    ProfileImage:
+      conditions:
+        name:
+          - 'like(%profile%)'
+          - 'like(%display%)'
+        dataType: 'is_a(Image)'
+      field: 'image(400,400)'
+
+    Icon:
+      conditions:
+        name: 'like(%icon%)'
+        dataType: 'is_a(Image)'
+      field: 'image(200,200)'
+
+    Parent:
+      conditions:
+        name: 'Parent'
+        fieldType: 'has_one'
+        parent: 'is_a(SiteTree)'
+        dataType: 'is_a(SiteTree)'
+      field: '{$Up}'
+
+    Sort:
+      conditions:
+        name:
+          - 'like(%sort%)'
+          - 'like(%order%)'
+        dataType: 'like(int%)'
+        parent: 'is_a(DataObject)'
+      field: 'sort()'
+
+    URLSegment:
+      conditions:
+        name: 'URLSegment'
+        parent: 'is_a(SiteTree)'
+      field: 'URLSegment()'
+
+    PageTitle:
+      conditions:
+        name: 'Title'
+        parent: 'is_a(SiteTree)'
+        parent.fieldType: 'root'
+      field: 'pageTitle()'
+
+    MenuTitle:
+      conditons:
+        name: 'MenuTitle'
+        parent: 'is_a(SiteTree)'
+      field: '{$Title}'
+
+    ShowInMenus:
+      conditions:
+        name: 'ShowInMenus'
+        parent: 'is_a(SiteTree)'
+      field: 0
+
+    ShowInMenus:
+      conditions:
+        name: 'ShowInMenus'
+        parent: 'is_a(SiteTree)'
+        parent.fieldType: 'root'
+        totalCount: 1
+      field: 1
+
+    # cache heuristics
+
+    CacheFields:
+      conditions:
+        fieldType: db
+        totalCount: 'gt(20)'
+      cache: 20
+
+    # all url segments, unique fields, sorts must be unique
+    UniqueFields:
+      conditions:
+        fieldType: db
+        provider:
+          - 'is_a(URLSegmentProvider)'
+          - 'is_a(UniqueProvider)'
+          - 'is_a(SortProvider)'
+        totalCount: 'gt(1)'
+      nocache:
+
+    # all member emails must be unique
+    UniqueEmail:
+      conditions:
+        fieldType: 'db'
+        name: 'Email'
+        parent: 'is_a(Member)'
+        totalCount: 'gt(1)'
+      nocache:
+
+    CacheImageFields:
+      conditions:
+        totalCount: 'gt(3)'
+        provider: 'is_a(ImageProvider)'
+      cache: 3
+
+

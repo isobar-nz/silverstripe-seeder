@@ -4,17 +4,8 @@ namespace LittleGiant\SilverStripeSeeder\Util;
 
 class RecordWriter
 {
-    private $tree;
-
-    public function __construct()
+    public function write(\DataObject $object, Field $field)
     {
-        $this->tree = new CounterTree();
-    }
-
-    public function write(\DataObject $object, Field $field, SeederState $state, $forceRecord = false)
-    {
-        $record = $forceRecord || !$object->exists();
-
         if ($object->has_extension('Versioned')) {
             $object->writeToStage('Stage');
 
@@ -28,24 +19,64 @@ class RecordWriter
             $object->write();
         }
 
-        if ($record) {
+        if (!$object->isSeeded()) {
             $seed = new \SeedRecord();
             $seed->SeedClassName = $object->ClassName;
             $seed->SeedID = $object->ID;
             $seed->Key = $field->key;
 
-            $ancestry = $state->getClassAncestry();
-            $seed->Root = count($ancestry) === 1;
+            $seed->Root = $field->fieldType === Field::FT_ROOT;
 
             $seed->write();
 
-            $this->tree->record($ancestry);
+            $object->setIsSeeded();
         }
     }
 
-    public function getTree()
+    public function writeManyMany($object, $relation, $manyManyObjects)
     {
-        return $this->tree;
+        $object->$relation()->addMany($manyManyObjects);
+    }
+
+    public function delete($objects)
+    {
+        foreach ($objects as $object) {
+            $object->delete();
+        }
+    }
+
+    public function deleteIDs($className, $ids)
+    {
+        foreach ($ids as $id) {
+            $object = $className::get()->byID($id);
+            if ($object) {
+                $object->delete();
+            }
+        }
+    }
+
+    public function deleteFromStage($objects, $stage)
+    {
+        $stages = array_slice(func_get_args(), 1);
+        foreach ($objects as $object) {
+            foreach ($stages as $stage) {
+                $object->deleteFromStage($stage);
+            }
+        }
+    }
+
+    public function deleteIDsFromStage($className, $ids, $stage)
+    {
+        $stages = array_slice(func_get_args(), 2);
+        foreach ($ids as $id) {
+            $object = $className::get()->byID($id);
+
+            if ($object) {
+                foreach ($stages as $stage) {
+                    $object->deleteFromStage($stage);
+                }
+            }
+        }
     }
 
     public function finish()
