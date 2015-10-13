@@ -16,6 +16,8 @@ Seeder:
     - UniqueProvider
     - URLSegmentProvider
     - ValueProvider
+    # tests
+    - LittleGiant\SilverStripeSeeder\Tests\TestProvider
   empty_shorthand_provider: ValueProvider
   default_provider: DataTypeProvider
   default_providers:
