@@ -2,14 +2,38 @@
 
 namespace LittleGiant\SilverStripeSeeder;
 
-use LittleGiant\SilverStripeSeeder\Util\CounterTree;
-
+/**
+ * Interface OutputFormatter
+ * @package LittleGiant\SilverStripeSeeder
+ */
 interface OutputFormatter
 {
+    /**
+     * @return mixed
+     */
     public function beginSeed();
+
+    /**
+     * @param $className
+     * @return mixed
+     */
     public function creatingDataObject($className);
+
+    /**
+     * @param $className
+     * @param $count
+     * @return mixed
+     */
     public function dataObjectsCreated($className, $count);
-    public function reportDataObjectsCreated(CounterTree $tree);
+
+    /**
+     * @return mixed
+     */
     public function beginUnseed();
+
+    /**
+     * @param $deleted
+     * @return mixed
+     */
     public function reportDataObjectsDeleted($deleted);
 }

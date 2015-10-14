@@ -2,10 +2,21 @@
 
 use LittleGiant\SilverStripeSeeder\Providers\Provider;
 
+/**
+ * Class UniqueProvider
+ */
 class UniqueProvider extends Provider
 {
+    /**
+     * @var string
+     */
     public static $shorthand = 'unique';
 
+    /**
+     * @param $field
+     * @param $state
+     * @return string
+     */
     protected function generateField($field, $state)
     {
         $prefix = '';

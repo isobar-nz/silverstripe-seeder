@@ -2,10 +2,21 @@
 
 use LittleGiant\SilverStripeSeeder\Providers\Provider;
 
+/**
+ * Class DateProvider
+ */
 class DateProvider extends Provider
 {
+    /**
+     * @var string
+     */
     public static $shorthand = 'Date';
 
+    /**
+     * @param $field
+     * @param $state
+     * @return bool|string
+     */
     protected function generateField($field, $state)
     {
         $time = 'now';

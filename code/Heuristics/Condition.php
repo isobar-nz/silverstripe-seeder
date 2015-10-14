@@ -2,22 +2,42 @@
 
 namespace LittleGiant\SilverStripeSeeder\Heuristics;
 
+/**
+ * Class Condition
+ * @package LittleGiant\SilverStripeSeeder\Heuristics
+ */
 class Condition
 {
+    /**
+     * @var
+     */
     private $property;
 
+    /**
+     * @var array
+     */
     private $matchers = array();
 
+    /**
+     * @param $property
+     */
     public function __construct($property)
     {
         $this->property = $property;
     }
 
+    /**
+     * @param Matcher $matcher
+     */
     public function addMatcher(Matcher $matcher)
     {
         $this->matchers[] = $matcher;
     }
 
+    /**
+     * @param $field
+     * @return bool
+     */
     public function match($field)
     {
         $properties = explode('.', $this->property);

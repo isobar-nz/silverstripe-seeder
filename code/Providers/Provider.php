@@ -4,22 +4,28 @@ namespace LittleGiant\SilverStripeSeeder\Providers;
 
 use LittleGiant\SilverStripeSeeder\Util\Field;
 
+/**
+ * Class Provider
+ * @package LittleGiant\SilverStripeSeeder\Providers
+ */
 abstract class Provider extends \Object
 {
+    /**
+     * @var
+     */
     protected $writer;
 
-    private $dataObjectRecordProperty;
-
+    /**
+     * @param $field
+     * @param $state
+     * @return mixed
+     */
     abstract protected function generateField($field, $state);
 
-    public function __construct()
-    {
-        parent::__construct();
-
-        $this->dataObjectRecordProperty = new \ReflectionProperty('DataObject', 'record');
-        $this->dataObjectRecordProperty->setAccessible(true);
-    }
-
+    /**
+     * @param $argumentString
+     * @return array
+     */
     public static function parseOptions($argumentString)
     {
         $options = array();
@@ -29,6 +35,11 @@ abstract class Provider extends \Object
         return $options;
     }
 
+    /**
+     * @param $field
+     * @param $state
+     * @return array
+     */
     public function generate($field, $state)
     {
         $values = array();
@@ -53,6 +64,12 @@ abstract class Provider extends \Object
         return $values;
     }
 
+    /**
+     * @param $field
+     * @param $upState
+     * @param int $index
+     * @return mixed
+     */
     protected function generateObject($field, $upState, $index = 0)
     {
         $className = $field->dataType;
@@ -60,7 +77,6 @@ abstract class Provider extends \Object
 
         $state = $upState->down($field, $object, $index);
 
-        $fields = $this->dataObjectRecordProperty->getValue($object);
         foreach ($field->fields as $objectField) {
             if ($objectField->ignore) {
                 continue;
@@ -68,10 +84,9 @@ abstract class Provider extends \Object
 
             $values = $objectField->provider->generate($objectField, $state);
             if (!empty($values)) {
-                $fields[$objectField->fieldName] = $values[0];
+                $object->setField($objectField->fieldName, $values[0]);
             }
         }
-        $this->dataObjectRecordProperty->setValue($object, $fields);
 
         $writer = $this->writer;
 
@@ -80,6 +95,7 @@ abstract class Provider extends \Object
         $afterHasOneExists = new \OnAfterExists(function () use ($object, $field, $writer) {
             $writer->write($object, $field);
         });
+
         foreach ($field->hasOne as $hasOneField) {
             if ($hasOneField->ignore) {
                 continue;
@@ -91,12 +107,9 @@ abstract class Provider extends \Object
                 $relation = $hasOneField->fieldName;
 
                 $hasOneIsAncestor = $hasOneIsAncestor || $state->isAncestor($value);
+
                 $afterHasOneExists->addCondition($values[0], function ($value) use ($object, $relation) {
-                    // set has_one field ID
-                    $fields = $this->dataObjectRecordProperty->getValue($value);
-                    $objectFields = $this->dataObjectRecordProperty->getValue($object);
-                    $objectFields[$relation] = $fields['ID'];
-                    $this->dataObjectRecordProperty->setValue($object, $objectFields);
+                    $object->setField($relation, $value->getField('ID'));
                 });
             }
         }
@@ -133,14 +146,11 @@ abstract class Provider extends \Object
                     }
 
                     if ($relation) {
-                        $objectFields = $this->dataObjectRecordProperty->getValue($object);
-                        $id = $objectFields['ID'];
+                        $id = $object->getField('ID');
                         foreach ($values as $value) {
                             // set has_many field to object ID
-                            $fields = $this->dataObjectRecordProperty->getValue($value);
-                            $fields[$relation] = $id;
-                            $this->dataObjectRecordProperty->setValue($value, $fields);
-                            $this->writer->write($value, $hasManyField);
+                            $value->setField($relation, $id);
+                            $writer->write($value, $hasManyField);
                         }
                     }
                 });
@@ -158,12 +168,22 @@ abstract class Provider extends \Object
         return $object;
     }
 
+    /**
+     * @param $field
+     * @param $state
+     * @return mixed
+     */
     protected function generateHasOneField($field, $state)
     {
         $object = $this->generateObject($field, $state);
         return $object;
     }
 
+    /**
+     * @param $field
+     * @param $state
+     * @return array
+     */
     protected function generateHasManyField($field, $state)
     {
         $objects = array();
@@ -173,16 +193,25 @@ abstract class Provider extends \Object
         return $objects;
     }
 
+    /**
+     * @return array|\scalar
+     */
     public function get_shorthand()
     {
         return $this->config()->get('shorthand');
     }
 
+    /**
+     * @return array|\scalar
+     */
     public function get_order()
     {
         return $this->config()->get('order');
     }
 
+    /**
+     * @param $writer
+     */
     public function setWriter($writer)
     {
         $this->writer = $writer;

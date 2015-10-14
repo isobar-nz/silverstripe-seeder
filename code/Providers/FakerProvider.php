@@ -3,12 +3,24 @@
 use Faker\Factory;
 use LittleGiant\SilverStripeSeeder\Providers\Provider;
 
+/**
+ * Class FakerProvider
+ */
 class FakerProvider extends Provider
 {
+    /**
+     * @var
+     */
     private $faker;
 
+    /**
+     * @var string
+     */
     public static $shorthand = 'Faker';
 
+    /**
+     *
+     */
     public function __construct()
     {
         parent::__construct();
@@ -16,6 +28,10 @@ class FakerProvider extends Provider
         $this->faker = Factory::create();
     }
 
+    /**
+     * @param $argumentString
+     * @return array
+     */
     public static function parseOptions($argumentString)
     {
         $options = array();
@@ -29,6 +45,12 @@ class FakerProvider extends Provider
         return $options;
     }
 
+    /**
+     * @param $field
+     * @param $state
+     * @return mixed|string
+     * @throws Exception
+     */
     protected function generateField($field, $state)
     {
         if (empty($field->arguments['type'])) {

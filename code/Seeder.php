@@ -7,14 +7,30 @@ use \LittleGiant\SilverStripeSeeder\Util\Field;
 use \LittleGiant\SilverStripeSeeder\Util\SeederState;
 use \LittleGiant\SilverStripeSeeder\Util\RecordWriter;
 
+/**
+ * Class Seeder
+ */
 class Seeder extends Object
 {
+    /**
+     * @var
+     */
     private $writer;
 
+    /**
+     * @var bool
+     */
     private $ignoreSeeds = false;
 
+    /**
+     * @var OutputFormatter
+     */
     private $outputFormatter;
 
+    /**
+     * @param $writer
+     * @param OutputFormatter $outputFormatter
+     */
     public function __construct($writer, OutputFormatter $outputFormatter)
     {
         parent::__construct();
@@ -22,6 +38,11 @@ class Seeder extends Object
         $this->outputFormatter = $outputFormatter;
     }
 
+    /**
+     * @param null $className
+     * @param null $key
+     * @throws Exception
+     */
     public function seed($className = null, $key = null)
     {
         // seed random to get different results each run
@@ -76,6 +97,10 @@ class Seeder extends Object
         }
     }
 
+    /**
+     * @param $field
+     * @return int
+     */
     private function getCount($field)
     {
         $count = isset($field->arguments['count']) ? $field->arguments['count'] : 1;
@@ -94,6 +119,10 @@ class Seeder extends Object
         return $count;
     }
 
+    /**
+     * @param $field
+     * @param $heuristics
+     */
     public function applyHeuristics($field, $heuristics)
     {
         $matching = array();
@@ -128,6 +157,9 @@ class Seeder extends Object
         }
     }
 
+    /**
+     * @param null $key
+     */
     public function unseed($key = null)
     {
         $this->outputFormatter->beginUnseed();
@@ -172,6 +204,9 @@ class Seeder extends Object
         $this->outputFormatter->reportDataObjectsDeleted($deleted);
     }
 
+    /**
+     * @param bool $ignoreSeeds
+     */
     public function setIgnoreSeeds($ignoreSeeds = false)
     {
         $this->ignoreSeeds = $ignoreSeeds;

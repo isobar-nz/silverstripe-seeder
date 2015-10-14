@@ -2,15 +2,20 @@
 
 use LittleGiant\SilverStripeSeeder\Providers\Provider;
 
+/**
+ * Class ValueProvider
+ */
 class ValueProvider extends Provider
 {
+    /**
+     * @var string
+     */
     public static $shorthand = 'Value';
 
-    public function __construct()
-    {
-        parent::__construct();
-    }
-
+    /**
+     * @param $argumentString
+     * @return array
+     */
     public static function parseOptions($argumentString)
     {
         return array(
@@ -18,6 +23,11 @@ class ValueProvider extends Provider
         );
     }
 
+    /**
+     * @param $field
+     * @param $state
+     * @return int|mixed|string
+     */
     protected function generateField($field, $state)
     {
         $value = $this->resolveValue($field, $state);
@@ -29,22 +39,43 @@ class ValueProvider extends Provider
         return $value;
     }
 
+    /**
+     * @param $field
+     * @param $state
+     * @return mixed|string
+     */
     protected function generateHasOneField($field, $state)
     {
         $value = $this->resolveValue($field, $state);
         return $value;
     }
 
+    /**
+     * @param $field
+     * @param $state
+     * @throws Exception
+     * @returns null
+     */
     protected function generateHasManyField($field, $state)
     {
         throw new Exception('value provider does not support generating has many fields');
     }
 
+    /**
+     * @param $field
+     * @param $state
+     * @throws Exception
+     */
     protected function generateManyManyField($field, $state)
     {
         throw new Exception('value provider does not support generating many many fields');
     }
 
+    /**
+     * @param $field
+     * @param $state
+     * @return mixed|string
+     */
     private function resolveValue($field, $state)
     {
         if (empty($field->arguments['value'])) {
@@ -70,6 +101,11 @@ class ValueProvider extends Provider
         return $value;
     }
 
+    /**
+     * @param $state
+     * @param $variable
+     * @return mixed
+     */
     private function resolveVariable($state, $variable)
     {
         $variables = explode('.', $variable);

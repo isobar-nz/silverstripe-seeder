@@ -6,10 +6,20 @@ namespace LittleGiant\SilverStripeSeeder\Tests;
 use LittleGiant\SilverStripeSeeder\Heuristics\HeuristicParser;
 use LittleGiant\SilverStripeSeeder\Util\Field;
 
+/**
+ * Class HeuristicParserTest
+ * @package LittleGiant\SilverStripeSeeder\Tests
+ */
 class HeuristicParserTest extends \SapphireTest
 {
+    /**
+     * @var bool
+     */
     protected $usesDatabase = true;
 
+    /**
+     * @var array
+     */
     protected $extraDataObjects = array(
         'LittleGiant\SilverStripeSeeder\Tests\Dog',
         'LittleGiant\SilverStripeSeeder\Tests\House',
@@ -18,12 +28,18 @@ class HeuristicParserTest extends \SapphireTest
         'LittleGiant\SilverStripeSeeder\Tests\Treat',
     );
 
+    /**
+     *
+     */
     public function __construct()
     {
         parent::__construct();
         $this->setUpOnce();
     }
 
+    /**
+     *
+     */
     public function testParse_HeuristicWithOneCondition_HeuristicParsedCorrectly()
     {
         $parser = new HeuristicParser();
@@ -48,6 +64,9 @@ class HeuristicParserTest extends \SapphireTest
         $this->assertFalse($heuristic->match($field));
     }
 
+    /**
+     *
+     */
     public function testParse_HeuristicWithMultipleConditionsMultipleMatchers_HeuristicParsedCorrectly()
     {
         $parser = new HeuristicParser();
@@ -76,6 +95,9 @@ class HeuristicParserTest extends \SapphireTest
         $this->assertFalse($heuristic->match($field));
     }
 
+    /**
+     *
+     */
     public function testParse_HeuristicsWithLikeMatcher_HeuristicParsedCorrectly()
     {
         $parser = new HeuristicParser();
@@ -119,6 +141,9 @@ class HeuristicParserTest extends \SapphireTest
         $this->assertFalse($heuristic->match($field));
     }
 
+    /**
+     *
+     */
     public function testParse_ParentHeuristics_HeuristicParsedCorrectly()
     {
         $parser = new HeuristicParser();
@@ -149,6 +174,9 @@ class HeuristicParserTest extends \SapphireTest
         $this->assertFalse($heuristic->match($childField));
     }
 
+    /**
+     *
+     */
     public static function tearDownAfterClass()
     {
         parent::tearDownAfterClass();

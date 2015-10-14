@@ -4,15 +4,30 @@ namespace LittleGiant\SilverStripeSeeder\Heuristics;
 
 use LittleGiant\SilverStripeSeeder\Helpers\ConfigParser;
 
+/**
+ * Class HeuristicParser
+ * @package LittleGiant\SilverStripeSeeder\Heuristics
+ */
 class HeuristicParser
 {
+    /**
+     * @var ConfigParser
+     */
     private $configParser;
 
+    /**
+     *
+     */
     public function __construct()
     {
         $this->configParser = new ConfigParser();
     }
 
+    /**
+     * @param $config
+     * @return array
+     * @throws \Exception
+     */
     public function parse($config)
     {
         if (!is_array($config)) {

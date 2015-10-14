@@ -4,27 +4,59 @@ namespace LittleGiant\SilverStripeSeeder\Heuristics;
 
 use ProviderCache;
 
+/**
+ * Class Heuristic
+ * @package LittleGiant\SilverStripeSeeder\Heuristics
+ */
 class Heuristic
 {
+    /**
+     * @var
+     */
     public $name;
 
+    /**
+     * @var array
+     */
     private $options = array();
+    /**
+     * @var null
+     */
     private $ignore = null;
+    /**
+     * @var bool
+     */
     private $cache = false;
+    /**
+     * @var bool
+     */
     private $noCache = false;
 
+    /**
+     * @var array
+     */
     private $conditions = array();
 
+    /**
+     * @param $name
+     */
     public function __construct($name)
     {
         $this->name = $name;
     }
 
+    /**
+     * @param $condition
+     */
     public function addCondition($condition)
     {
         $this->conditions[] = $condition;
     }
 
+    /**
+     * @param $field
+     * @return bool
+     */
     public function match($field)
     {
         foreach ($this->conditions as $condition) {
@@ -35,11 +67,17 @@ class Heuristic
         return true;
     }
 
+    /**
+     * @return int
+     */
     public function getSpecificity()
     {
         return count($this->conditions);
     }
 
+    /**
+     * @param $field
+     */
     public function apply($field)
     {
         if (!$field->explicit) {
@@ -77,21 +115,33 @@ class Heuristic
         }
     }
 
+    /**
+     * @param $options
+     */
     public function setOptions($options)
     {
         $this->options = $options;
     }
 
+    /**
+     * @param bool $ignore
+     */
     public function setIgnore($ignore = false)
     {
         $this->ignore = $ignore;
     }
 
+    /**
+     * @param bool $cache
+     */
     public function setCache($cache = false)
     {
         $this->cache = $cache;
     }
 
+    /**
+     * @param bool $noCache
+     */
     public function setNoCache($noCache = false)
     {
         $this->noCache = $noCache;

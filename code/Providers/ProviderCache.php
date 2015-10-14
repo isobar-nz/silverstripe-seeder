@@ -2,14 +2,30 @@
 
 use LittleGiant\SilverStripeSeeder\Providers\Provider;
 
+/**
+ * Class ProviderCache
+ */
 class ProviderCache extends Provider
 {
+    /**
+     * @var
+     */
     public $provider;
 
+    /**
+     * @var
+     */
     private $cacheSize;
 
+    /**
+     * @var array
+     */
     private $cache = array();
 
+    /**
+     * @param $provider
+     * @param $cacheSize
+     */
     public function __construct($provider, $cacheSize)
     {
         parent::__construct();
@@ -17,6 +33,11 @@ class ProviderCache extends Provider
         $this->setCacheSize($cacheSize);
     }
 
+    /**
+     * @param $field
+     * @param $state
+     * @return mixed
+     */
     public function generate($field, $state)
     {
         if (count($this->cache) < $this->cacheSize) {
@@ -29,14 +50,19 @@ class ProviderCache extends Provider
         return $this->cache[$key];
     }
 
+    /**
+     * @param $size
+     */
     public function setCacheSize($size)
     {
-        if ($size < 1) {
-            $size = 1;
-        }
-        $this->cacheSize = $size;
+        $this->cacheSize = max($size, 1);
     }
 
+    /**
+     * @param $field
+     * @param $state
+     * @returns null
+     */
     protected function generateField($field, $state)
     {
         // error

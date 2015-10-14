@@ -3,12 +3,24 @@
 use Faker\Factory;
 use LittleGiant\SilverStripeSeeder\Providers\Provider;
 
+/**
+ * Class DataTypeProvider
+ */
 class DataTypeProvider extends Provider
 {
+    /**
+     * @var string
+     */
     public static $shorthand = 'Type';
 
+    /**
+     * @var
+     */
     private $faker;
 
+    /**
+     * @var array
+     */
     private $dataType = array(
         'boolean',
         'currency',
@@ -24,12 +36,19 @@ class DataTypeProvider extends Provider
         'text',
     );
 
+    /**
+     *
+     */
     public function __construct()
     {
         parent::__construct();
         $this->faker = Factory::create();
     }
 
+    /**
+     * @param $argumentString
+     * @return array
+     */
     public static function parseOptions($argumentString)
     {
         return array(
@@ -38,6 +57,11 @@ class DataTypeProvider extends Provider
     }
 
 
+    /**
+     * @param $field
+     * @param $state
+     * @return bool|mixed|null|string
+     */
     protected function generateField($field, $state)
     {
         $dataType = strtolower($field->dataType);

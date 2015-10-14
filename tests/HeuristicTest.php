@@ -5,8 +5,15 @@ namespace LittleGiant\SilverStripeSeeder\Tests;
 use LittleGiant\SilverStripeSeeder\Heuristics\HeuristicParser;
 use LittleGiant\SilverStripeSeeder\Util\Field;
 
+/**
+ * Class HeuristicTest
+ * @package LittleGiant\SilverStripeSeeder\Tests
+ */
 class HeuristicTest extends \SapphireTest
 {
+    /**
+     *
+     */
     public function testMatch_IsAMatcher_SiteTreeIsASiteTree()
     {
         $parser = new HeuristicParser();

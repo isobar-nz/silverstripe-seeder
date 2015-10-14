@@ -3,18 +3,35 @@
 use Faker\Factory;
 use LittleGiant\SilverStripeSeeder\Providers\Provider;
 
+/**
+ * Class MemberProvider
+ */
 class MemberProvider extends Provider
 {
+    /**
+     * @var
+     */
     private $faker;
 
+    /**
+     * @var string
+     */
     public static $shorthand = 'Member';
 
+    /**
+     *
+     */
     public function __construct()
     {
         parent::__construct();
         $this->faker = Factory::create();
     }
 
+    /**
+     * @param $argumentString
+     * @return array
+     * @throws Exception
+     */
     public static function parseOptions($argumentString)
     {
         $args = array_map(function ($arg) {
@@ -37,11 +54,23 @@ class MemberProvider extends Provider
         return $options;
     }
 
+    /**
+     * @param $field
+     * @param $state
+     * @throws Exception
+     * @returns null
+     */
     protected function generateField($field, $state)
     {
         throw new Exception('member provider does not support generating db fields');
     }
 
+    /**
+     * @param $field
+     * @param $upState
+     * @return mixed
+     * @throws Exception
+     */
     protected function generateHasOneField($field, $upState)
     {
         if (empty($field->arguments['email'])) {

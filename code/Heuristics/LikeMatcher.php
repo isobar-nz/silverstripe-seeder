@@ -2,13 +2,29 @@
 
 namespace LittleGiant\SilverStripeSeeder\Heuristics;
 
+/**
+ * Class LikeMatcher
+ * @package LittleGiant\SilverStripeSeeder\Heuristics
+ */
 class LikeMatcher implements Matcher
 {
+    /**
+     * @var string
+     */
     private $like;
 
+    /**
+     * @var bool
+     */
     private $matchStart = true;
+    /**
+     * @var bool
+     */
     private $matchEnd = true;
 
+    /**
+     * @param $like
+     */
     public function __construct($like)
     {
         if (strpos($like, '%') === 0) {
@@ -24,6 +40,10 @@ class LikeMatcher implements Matcher
         $this->like = strtolower($like);
     }
 
+    /**
+     * @param $value
+     * @return bool
+     */
     public function match($value)
     {
         $value = strtolower($value);

@@ -2,14 +2,31 @@
 
 use LittleGiant\SilverStripeSeeder\Providers\Provider;
 
+/**
+ * Class SortProvider
+ */
 class SortProvider extends Provider
 {
+    /**
+     * @var string
+     */
     public static $shorthand = 'sort';
 
+    /**
+     * @var array
+     */
     private static $classCache = array();
 
+    /**
+     * @var array
+     */
     private static $sortCache = array();
 
+    /**
+     * @param $field
+     * @param $state
+     * @return int
+     */
     protected function generateField($field, $state)
     {
         if (!$state->up() || !$state->up()->object()) {
@@ -19,9 +36,9 @@ class SortProvider extends Provider
         $obj = $state->up()->object();
         $className = $obj->class;
         if (!isset(self::$classCache[$className])) {
-            $ancestry = $className->getClassAncestry();
+            $ancestry = singleton($className)->getClassAncestry();
             foreach ($ancestry as $ancestor) {
-                $fields = Object::custom_database_fields($ancestor);
+                $fields = DataObject::custom_database_fields($ancestor);
                 if (isset($fields[$field->name])) {
                     self::$classCache[$className] = $ancestor;
                     break;
@@ -32,7 +49,7 @@ class SortProvider extends Provider
         $sortClass = self::$classCache[$className];
 
         if (!isset(self::$sortCache[$sortClass])) {
-            self::$sortCache[$sortClass] = $sortClass::get()->max($field);
+            self::$sortCache[$sortClass] = $sortClass::get()->max($field->name);
         }
 
         $sort = self::$sortCache[$sortClass] + 1;

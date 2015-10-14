@@ -3,18 +3,34 @@
 use Faker\Factory;
 use LittleGiant\SilverStripeSeeder\Providers\Provider;
 
+/**
+ * Class ImageProvider
+ */
 class ImageProvider extends Provider
 {
+    /**
+     * @var
+     */
     private $faker;
 
+    /**
+     * @var string
+     */
     public static $shorthand = 'Image';
 
+    /**
+     *
+     */
     public function __construct()
     {
         parent::__construct();
         $this->faker = Factory::create();
     }
 
+    /**
+     * @param $argumentString
+     * @return array
+     */
     public static function parseOptions($argumentString)
     {
         $arguments = array_map(function ($arg) {
@@ -33,16 +49,32 @@ class ImageProvider extends Provider
         return $options;
     }
 
+    /**
+     * @param $field
+     * @param $state
+     * @throws Exception
+     * @returns null
+     */
     protected function generateField($field, $state)
     {
         throw new Exception('image provider does not support generating db fields');
     }
 
+    /**
+     * @param $field
+     * @param $state
+     * @return mixed
+     */
     protected function generateHasOneField($field, $state)
     {
         return $this->createImage($field, $state);
     }
 
+    /**
+     * @param $field
+     * @param $state
+     * @return array
+     */
     protected function generateHasManyField($field, $state)
     {
         $images = array();
@@ -54,11 +86,21 @@ class ImageProvider extends Provider
         return $images;
     }
 
+    /**
+     * @param $field
+     * @param $state
+     * @return array
+     */
     protected function generateManyManyField($field, $state)
     {
         return $this->generateHasManyField($field, $state);
     }
 
+    /**
+     * @param $field
+     * @param $upState
+     * @return mixed
+     */
     private function createImage($field, $upState)
     {
         $width = 600;

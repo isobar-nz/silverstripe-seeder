@@ -2,10 +2,20 @@
 
 use LittleGiant\SilverStripeSeeder\Providers\Provider;
 
+/**
+ * Class ObjectProvider
+ */
 class ObjectProvider extends Provider
 {
+    /**
+     * @var string
+     */
     public static $shorthand = 'Object';
 
+    /**
+     * @param $argumentString
+     * @return array
+     */
     public static function parseOptions($argumentString)
     {
         $args = array_map(function ($arg) {
@@ -23,11 +33,23 @@ class ObjectProvider extends Provider
         return $options;
     }
 
+    /**
+     * @param $field
+     * @param $state
+     * @throws Exception
+     * @returns null
+     */
     protected function generateField($field, $state)
     {
         throw new Exception('object provider does not support generating db fields');
     }
 
+    /**
+     * @param $field
+     * @param $state
+     * @return mixed
+     * @throws Exception
+     */
     protected function generateHasOneField($field, $state)
     {
         if (empty($field->arguments['class'])) {
@@ -47,6 +69,12 @@ class ObjectProvider extends Provider
         return $object;
     }
 
+    /**
+     * @param $field
+     * @param $state
+     * @return mixed
+     * @throws Exception
+     */
     protected function generateHasManyField($field, $state)
     {
         if (empty($field->arguments['class'])) {
@@ -62,6 +90,12 @@ class ObjectProvider extends Provider
         return $objects;
     }
 
+    /**
+     * @param $field
+     * @param $state
+     * @return mixed
+     * @throws Exception
+     */
     protected function generateManyManyField($field, $state)
     {
         return $this->generateHasManyField($field, $state);

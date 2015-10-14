@@ -15,8 +15,14 @@ use Symfony\Component\Console\Output\OutputInterface;
  */
 class Seed extends CliController
 {
+    /**
+     * @var string
+     */
     protected $title = "Seed the database";
 
+    /**
+     * @var string
+     */
     protected $description = "Populate the database with placeholder content.";
 
     /**
@@ -30,8 +36,14 @@ class Seed extends CliController
     }
 }
 
+/**
+ * Class SeedCommand
+ */
 class SeedCommand extends Command
 {
+    /**
+     *
+     */
     protected function configure()
     {
         $this->setName('seed')
@@ -43,6 +55,12 @@ class SeedCommand extends Command
             ->addOption('force', 'f', InputOption::VALUE_NONE, 'Ignore current seeds when calculating how many to create');
     }
 
+    /**
+     * @param InputInterface $input
+     * @param OutputInterface $output
+     * @throws Exception
+     * @returns null
+     */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         if (!Check::fileToUrlMapping()) {
@@ -82,5 +100,7 @@ class SeedCommand extends Command
         }
 
         $seeder->seed($className, $key);
+
+        return;
     }
 }

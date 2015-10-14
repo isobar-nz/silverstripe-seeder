@@ -6,10 +6,20 @@ use LittleGiant\SilverStripeSeeder\Helpers\ConfigParser;
 use LittleGiant\SilverStripeSeeder\Util\BatchedSeedWriter;
 use LittleGiant\SilverStripeSeeder\Util\SeederState;
 
+/**
+ * Class ProviderTest
+ * @package LittleGiant\SilverStripeSeeder\Tests
+ */
 class ProviderTest extends \SapphireTest
 {
+    /**
+     * @var bool
+     */
     protected $usesDatabase = true;
 
+    /**
+     * @var array
+     */
     protected $extraDataObjects = array(
         'LittleGiant\SilverStripeSeeder\Tests\Dog',
         'LittleGiant\SilverStripeSeeder\Tests\House',
@@ -18,12 +28,18 @@ class ProviderTest extends \SapphireTest
         'LittleGiant\SilverStripeSeeder\Tests\Treat',
     );
 
+    /**
+     *
+     */
     public function __construct()
     {
         parent::__construct();
         $this->setUpOnce();
     }
 
+    /**
+     *
+     */
     public function testGenerate_SimpleFields_GeneratesObjectWithFields()
     {
         $writer = new BatchedSeedWriter();
@@ -53,6 +69,9 @@ class ProviderTest extends \SapphireTest
         $this->assertEquals(TestProvider::TEST_STRING, $dog->Breed);
     }
 
+    /**
+     *
+     */
     public function testGenerate_HasOneField_GeneratesObjectWithHasOneField()
     {
         $writer = new BatchedSeedWriter();
@@ -87,6 +106,9 @@ class ProviderTest extends \SapphireTest
         $this->assertEquals(TestProvider::TEST_INT, $parent->Age);
     }
 
+    /**
+     *
+     */
     public function testGenerate_HasOneDependency_GeneratesObject()
     {
         $writer = new BatchedSeedWriter();
@@ -125,6 +147,9 @@ class ProviderTest extends \SapphireTest
         $this->assertEquals($person->ID, $parent->Parent()->ParentID);
     }
 
+    /**
+     *
+     */
     public function testGenerate_HasManyField_GeneratesObjectWithHasOneManyField()
     {
         $writer = new BatchedSeedWriter();
@@ -161,6 +186,9 @@ class ProviderTest extends \SapphireTest
         }
     }
 
+    /**
+     *
+     */
     public function testGenerate_ManyManyField_GeneratesObjectWithManyManyField()
     {
         $writer = new BatchedSeedWriter();
@@ -203,6 +231,9 @@ class ProviderTest extends \SapphireTest
         }
     }
 
+    /**
+     *
+     */
     public function testGenerate_UnpublishedPage_GeneratesUnpublishedPage()
     {
         $writer = new BatchedSeedWriter();
@@ -235,6 +266,9 @@ class ProviderTest extends \SapphireTest
         \Versioned::reading_stage($currentStage);
     }
 
+    /**
+     *
+     */
     public function testGenerate_PublishedPage_GeneratesPublishedPage()
     {
         $writer = new BatchedSeedWriter();
@@ -266,6 +300,9 @@ class ProviderTest extends \SapphireTest
         \Versioned::reading_stage($currentStage);
     }
 
+    /**
+     *
+     */
     public static function tearDownAfterClass()
     {
         parent::tearDownAfterClass();

@@ -4,18 +4,51 @@ namespace LittleGiant\SilverStripeSeeder\Tests;
 
 use LittleGiant\SilverStripeSeeder\Providers\Provider;
 
+/**
+ * Class TestProvider
+ * @package LittleGiant\SilverStripeSeeder\Tests
+ */
 class TestProvider extends Provider
 {
+    /**
+     * @var string
+     */
     public static $shorthand = 'test';
 
+    /**
+     *
+     */
     const TEST_BOOL = false;
+    /**
+     *
+     */
     const TEST_STRING = 'test';
+    /**
+     *
+     */
     const TEST_DATE = '2024-08-17';
+    /**
+     *
+     */
     const TEST_TIME = '12:05:34';
+    /**
+     *
+     */
     const TEST_DATETIME = '2021-10-02 12:59:18';
+    /**
+     *
+     */
     const TEST_DECIMAL = 100.15;
+    /**
+     *
+     */
     const TEST_INT = 176;
 
+    /**
+     * @param $field
+     * @param $state
+     * @return bool|float|int|string
+     */
     protected function generateField($field, $state)
     {
         $type = strtolower($field->dataType);

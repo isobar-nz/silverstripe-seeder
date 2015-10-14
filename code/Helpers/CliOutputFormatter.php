@@ -4,8 +4,15 @@ namespace LittleGiant\SilverStripeSeeder;
 
 use LittleGiant\SilverStripeSeeder\Util\CounterTree;
 
+/**
+ * Class CliOutputFormatter
+ * @package LittleGiant\SilverStripeSeeder
+ */
 class CliOutputFormatter implements OutputFormatter
 {
+    /**
+     *
+     */
     public function beginSeed()
     {
         echo PHP_EOL;
@@ -13,26 +20,29 @@ class CliOutputFormatter implements OutputFormatter
         echo PHP_EOL;
     }
 
+    /**
+     * @param $className
+     * @returns null
+     */
     public function creatingDataObject($className)
     {
         echo "creating '{$className}'...", PHP_EOL;
     }
 
+    /**
+     * @param $className
+     * @param $count
+     * @returns null
+     */
     public function dataObjectsCreated($className, $count)
     {
         echo "{$count} '{$className}' created", PHP_EOL;
     }
 
-    public function reportDataObjectsCreated(CounterTree $tree)
-    {
-        echo PHP_EOL;
-        $nodes = $tree->getTree();
-        foreach ($nodes as $node) {
-            $this->printTree($node);
-        }
-        echo PHP_EOL;
-    }
-
+    /**
+     * @param $node
+     * @param int $depth
+     */
     private function printTree(&$node, $depth = 0)
     {
         $details = "- {$node['class']} ({$node['count']})";
@@ -43,6 +53,9 @@ class CliOutputFormatter implements OutputFormatter
         }
     }
 
+    /**
+     *
+     */
     public function beginUnseed()
     {
         echo PHP_EOL;
@@ -50,6 +63,10 @@ class CliOutputFormatter implements OutputFormatter
         echo PHP_EOL;
     }
 
+    /**
+     * @param $deleted
+     * @returns null
+     */
     public function reportDataObjectsDeleted($deleted)
     {
         foreach ($deleted as $className => $count) {

@@ -2,18 +2,35 @@
 
 use LittleGiant\SilverStripeSeeder\Providers\Provider;
 
+/**
+ * Class HTMLProvider
+ */
 class HTMLProvider extends Provider
 {
+    /**
+     * @var string
+     */
     public static $shorthand = 'html';
 
+    /**
+     * @var
+     */
     private $faker;
 
+    /**
+     *
+     */
     public function __construct()
     {
         parent::__construct();
         $this->faker = Faker\Factory::create();
     }
 
+    /**
+     * @param $field
+     * @param $state
+     * @return string
+     */
     protected function generateField($field, $state)
     {
         $elements = array();
@@ -29,6 +46,13 @@ class HTMLProvider extends Provider
 
         $elements[] = $list;
 
+        if (stripos($field->dataType, 'htmltext') !== false) {
+            $html = implode($elements, PHP_EOL);
+            return $html;
+        }
+
+        $key = array_rand($elements);
+        return $elements[$key];
     }
 }
 

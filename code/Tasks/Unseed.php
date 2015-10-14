@@ -15,8 +15,14 @@ use LittleGiant\SilverStripeSeeder\Util\RecordWriter;
  */
 class Unseed extends CliController
 {
+    /**
+     * @var string
+     */
     protected $title = "Unseed the database";
 
+    /**
+     * @var string
+     */
     protected $description = "Remove seeded database rows.";
 
     /**
@@ -31,8 +37,14 @@ class Unseed extends CliController
     }
 }
 
+/**
+ * Class UnseedCommand
+ */
 class UnseedCommand extends Command
 {
+    /**
+     *
+     */
     protected function configure()
     {
         $this->setName('unseed')
@@ -41,6 +53,12 @@ class UnseedCommand extends Command
             ->addOption('key', 'k', InputOption::VALUE_REQUIRED, 'Choose key to unseed');
     }
 
+    /**
+     * @param InputInterface $input
+     * @param OutputInterface $output
+     * @throws Exception
+     * @returns null
+     */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         if (!Check::fileToUrlMapping()) {

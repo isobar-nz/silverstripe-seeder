@@ -2,8 +2,18 @@
 
 namespace LittleGiant\SilverStripeSeeder\Util;
 
+/**
+ * Class RecordWriter
+ * @package LittleGiant\SilverStripeSeeder\Util
+ */
 class RecordWriter
 {
+    /**
+     * @param \DataObject $object
+     * @param Field $field
+     * @throws \ValidationException
+     * @throws null
+     */
     public function write(\DataObject $object, Field $field)
     {
         if ($object->has_extension('Versioned')) {
@@ -33,11 +43,19 @@ class RecordWriter
         }
     }
 
+    /**
+     * @param $object
+     * @param $relation
+     * @param $manyManyObjects
+     */
     public function writeManyMany($object, $relation, $manyManyObjects)
     {
         $object->$relation()->addMany($manyManyObjects);
     }
 
+    /**
+     * @param $objects
+     */
     public function delete($objects)
     {
         foreach ($objects as $object) {
@@ -45,6 +63,10 @@ class RecordWriter
         }
     }
 
+    /**
+     * @param $className
+     * @param $ids
+     */
     public function deleteIDs($className, $ids)
     {
         foreach ($ids as $id) {
@@ -55,6 +77,10 @@ class RecordWriter
         }
     }
 
+    /**
+     * @param $objects
+     * @param $stage
+     */
     public function deleteFromStage($objects, $stage)
     {
         $stages = array_slice(func_get_args(), 1);
@@ -65,6 +91,11 @@ class RecordWriter
         }
     }
 
+    /**
+     * @param $className
+     * @param $ids
+     * @param $stage
+     */
     public function deleteIDsFromStage($className, $ids, $stage)
     {
         $stages = array_slice(func_get_args(), 2);
@@ -79,6 +110,9 @@ class RecordWriter
         }
     }
 
+    /**
+     *
+     */
     public function finish()
     {
 

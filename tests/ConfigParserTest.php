@@ -6,10 +6,20 @@ use LittleGiant\SilverStripeSeeder\Helpers\ConfigParser;
 use LittleGiant\SilverStripeSeeder\Util\BatchedSeedWriter;
 use LittleGiant\SilverStripeSeeder\Util\Field;
 
+/**
+ * Class ConfigParserTest
+ * @package LittleGiant\SilverStripeSeeder\Tests
+ */
 class ConfigParserTest extends \SapphireTest
 {
+    /**
+     * @var bool
+     */
     protected $usesDatabase = true;
 
+    /**
+     * @var array
+     */
     protected $extraDataObjects = array(
         'LittleGiant\SilverStripeSeeder\Tests\Dog',
         'LittleGiant\SilverStripeSeeder\Tests\House',
@@ -18,12 +28,18 @@ class ConfigParserTest extends \SapphireTest
         'LittleGiant\SilverStripeSeeder\Tests\Treat',
     );
 
+    /**
+     *
+     */
     public function __construct()
     {
         parent::__construct();
         $this->setUpOnce();
     }
 
+    /**
+     *
+     */
     public function testObjectConfig2Field_EmptyPropertiesConfig_CreatesFieldWithObjectFields()
     {
         $config = new ConfigParser(new BatchedSeedWriter());
@@ -70,6 +86,9 @@ class ConfigParserTest extends \SapphireTest
         $this->assertEquals(100, $ageField->totalCount);
     }
 
+    /**
+     *
+     */
     public function testObjectConfig2Field_HasOneConfig_CreatesFieldWithHasOneField()
     {
         $config = new ConfigParser(new BatchedSeedWriter());
@@ -96,6 +115,9 @@ class ConfigParserTest extends \SapphireTest
         $this->assertCount(0, $parentField->hasOne);
     }
 
+    /**
+     *
+     */
     public function testObjectConfig2Field_HasManyConfig_CreatesFieldWithHasManyField()
     {
         $config = new ConfigParser(new BatchedSeedWriter());
@@ -120,6 +142,9 @@ class ConfigParserTest extends \SapphireTest
         $this->assertCount(2, $treatsField->fields);
     }
 
+    /**
+     *
+     */
     public function testObjectConfig2Field_ManyManyConfig_CreatesFieldWithManyManyField()
     {
         $config = new ConfigParser(new BatchedSeedWriter());
@@ -144,6 +169,9 @@ class ConfigParserTest extends \SapphireTest
         $this->assertCount(2, $petsField->fields);
     }
 
+    /**
+     *
+     */
     public function testObjectConfig2Field_NestedFields_CorrectTotalCount()
     {
         $config = new ConfigParser(new BatchedSeedWriter());
@@ -163,6 +191,9 @@ class ConfigParserTest extends \SapphireTest
         $this->assertEquals(5000, $petsField->totalCount);
     }
 
+    /**
+     *
+     */
     public function testObjectConfig2Field_ExplicitAndImplicitFields_MarkedCorrectly()
     {
         $config = new ConfigParser(new BatchedSeedWriter());
@@ -181,6 +212,9 @@ class ConfigParserTest extends \SapphireTest
         $this->assertFalse($ageField->explicit);
     }
 
+    /**
+     *
+     */
     public static function tearDownAfterClass()
     {
         parent::tearDownAfterClass();

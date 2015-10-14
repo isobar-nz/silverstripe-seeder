@@ -5,8 +5,15 @@ namespace LittleGiant\SilverStripeSeeder\Tests;
 use LittleGiant\SilverStripeSeeder\Util\Field;
 use LittleGiant\SilverStripeSeeder\Util\SeederState;
 
+/**
+ * Class FakerProviderTest
+ * @package LittleGiant\SilverStripeSeeder\Tests
+ */
 class FakerProviderTest extends \SapphireTest
 {
+    /**
+     *
+     */
     public function testGenerateField_Sentences_JoinsWithSpaces()
     {
         $provider = new \FakerProvider();
@@ -25,6 +32,9 @@ class FakerProviderTest extends \SapphireTest
         $this->assertFalse(strpos($value, "\n"));
     }
 
+    /**
+     *
+     */
     public function testGenerateField_Paragraphs_JoinsWithNewLines()
     {
         $provider = new \FakerProvider();

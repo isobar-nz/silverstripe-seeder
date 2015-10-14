@@ -6,10 +6,20 @@ use LittleGiant\SilverStripeSeeder\Util\BatchedSeedWriter;
 use LittleGiant\SilverStripeSeeder\Util\Field;
 use LittleGiant\SilverStripeSeeder\Util\SeederState;
 
+/**
+ * Class BatchSeedWriterTest
+ * @package LittleGiant\SilverStripeSeeder\Tests
+ */
 class BatchSeedWriterTest extends \SapphireTest
 {
+    /**
+     * @var bool
+     */
     protected $usesDatabase = true;
 
+    /**
+     * @var array
+     */
     protected $extraDataObjects = array(
         'LittleGiant\SilverStripeSeeder\Tests\Dog',
         'LittleGiant\SilverStripeSeeder\Tests\House',
@@ -18,12 +28,18 @@ class BatchSeedWriterTest extends \SapphireTest
         'LittleGiant\SilverStripeSeeder\Tests\Treat',
     );
 
+    /**
+     *
+     */
     public function __construct()
     {
         parent::__construct();
         $this->setUpOnce();
     }
 
+    /**
+     *
+     */
     public function testWrite_WriteObject_SeedAndObjectWritten()
     {
         $batchSizes = array(10, 30, 100, 300);
@@ -53,6 +69,9 @@ class BatchSeedWriterTest extends \SapphireTest
         }
     }
 
+    /**
+     *
+     */
     public function testWrite_WriteManyObjects_SeedsAndObjectsWritten()
     {
         $batchSizes = array(10, 30, 100, 300);
@@ -113,6 +132,9 @@ class BatchSeedWriterTest extends \SapphireTest
         }
     }
 
+    /**
+     *
+     */
     public function testWrite_WriteObjectsTwice_SeedsWrittenOnce()
     {
         $batchSizes = array(10, 30, 100, 300);
@@ -144,6 +166,9 @@ class BatchSeedWriterTest extends \SapphireTest
         }
     }
 
+    /**
+     *
+     */
     public function testWrite_WriteVersionedObjectsNotPublished_ObjectsWrittenToStage()
     {
         $batchSizes = array(10, 30, 100, 300);
@@ -180,6 +205,9 @@ class BatchSeedWriterTest extends \SapphireTest
         }
     }
 
+    /**
+     *
+     */
     public function testWrite_WriteVersionedObjects_ObjectsWrittenToLive()
     {
         $batchSizes = array(10, 30, 100, 300);
@@ -217,6 +245,9 @@ class BatchSeedWriterTest extends \SapphireTest
         }
     }
 
+    /**
+     *
+     */
     public function testWriteManyMany_WriteManyManyObjects_ObjectsAccessibleFromManyMany()
     {
         $batchSizes = array(10, 30, 100, 300);
@@ -261,6 +292,9 @@ class BatchSeedWriterTest extends \SapphireTest
         }
     }
 
+    /**
+     * @return Field
+     */
     private function createField()
     {
         $field = new Field();
@@ -268,6 +302,9 @@ class BatchSeedWriterTest extends \SapphireTest
         return $field;
     }
 
+    /**
+     *
+     */
     public static function tearDownAfterClass()
     {
         parent::tearDownAfterClass();

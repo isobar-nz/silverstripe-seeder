@@ -5,12 +5,25 @@ namespace LittleGiant\SilverStripeSeeder\Helpers;
 use Exception;
 use LittleGiant\SilverStripeSeeder\Util\Field;
 
+/**
+ * Class ConfigParser
+ * @package LittleGiant\SilverStripeSeeder\Helpers
+ */
 class ConfigParser
 {
+    /**
+     * @var \Config_ForClass
+     */
     private $config;
 
+    /**
+     * @var null
+     */
     private $writer;
 
+    /**
+     * @param null $writer
+     */
     public function __construct($writer = null)
     {
         $config = \Config::inst();
@@ -18,6 +31,10 @@ class ConfigParser
         $this->writer = $writer;
     }
 
+    /**
+     * @param $config
+     * @return Field
+     */
     public function objectConfig2Field($config)
     {
         if (!isset($config['key'])) {
@@ -35,6 +52,13 @@ class ConfigParser
         return $field;
     }
 
+    /**
+     * @param $className
+     * @param $options
+     * @param null $key
+     * @return Field
+     * @throws Exception
+     */
     private function createObjectField($className, $options, $key = null)
     {
         $field = new Field();
@@ -165,6 +189,11 @@ class ConfigParser
         return $field;
     }
 
+    /**
+     * @param $optionString
+     * @return mixed
+     * @throws Exception
+     */
     public function parseProviderOptions($optionString)
     {
         if (preg_match('/^([a-zA-Z-_0-9]+)\(([^)]+)?\)$/', $optionString, $matches)) {
@@ -189,6 +218,11 @@ class ConfigParser
         return $options;
     }
 
+    /**
+     * @param $field
+     * @param $options
+     * @return array
+     */
     private function getIgnoreFields($field, $options)
     {
         $defaultIgnores = $this->config->default_ignores;
@@ -207,6 +241,10 @@ class ConfigParser
         return array_unique($ignoreFields);
     }
 
+    /**
+     * @param $field
+     * @return array
+     */
     private function getDefaultProperties($field)
     {
         $properties = array();
@@ -221,6 +259,12 @@ class ConfigParser
         return $properties;
     }
 
+    /**
+     * @param $dataType
+     * @param $options
+     * @return Field
+     * @throws Exception
+     */
     private function createField($dataType, $options)
     {
         $field = new Field();
@@ -236,6 +280,10 @@ class ConfigParser
         return $field;
     }
 
+    /**
+     * @param $field
+     * @param $options
+     */
     private function setProvider($field, $options)
     {
         if (!empty($options['provider'])) {
@@ -250,6 +298,10 @@ class ConfigParser
         $field->provider->setWriter($this->writer);
     }
 
+    /**
+     * @param $field
+     * @return mixed
+     */
     private function getDefaultProvider($field)
     {
         $providerClassName = $this->config->default_provider;
@@ -270,6 +322,10 @@ class ConfigParser
         return $provider;
     }
 
+    /**
+     * @param $field
+     * @param int $mul
+     */
     private function setTotalCounts($field, $mul = 1)
     {
         $field->totalCount = $field->count * $mul;

@@ -2,14 +2,25 @@
 
 use LittleGiant\SilverStripeSeeder\Providers\Provider;
 
+/**
+ * Class URLSegmentProvider
+ */
 class URLSegmentProvider extends Provider
 {
+    /**
+     * @var string
+     */
     public static $shorthand = 'URLSegment';
 
+    /**
+     * @param $field
+     * @param $state
+     * @return string
+     */
     protected function generateField($field, $state)
     {
-        if (!$state->up() || !$state->up->object()) {
-            return uniqid('Title');
+        if (!$state->up() || !$state->up()->object()) {
+            return uniqid('url');
         }
 
         $page = $state->up()->object();
@@ -20,6 +31,7 @@ class URLSegmentProvider extends Provider
 
         $page = $state->up()->object();
         $name = str_replace(array('Page', 'Holder'), '', $page->class);
+        $name = FormField::name_to_label($name);
 
         // check if already exists
         $url = Convert::raw2url($name);

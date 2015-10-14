@@ -2,8 +2,16 @@
 
 namespace LittleGiant\SilverStripeSeeder\Util;
 
+/**
+ * Class Check
+ * @package LittleGiant\SilverStripeSeeder\Util
+ */
 class Check
 {
+    /**
+     * @return bool
+     * @throws \Exception
+     */
     static function fileToUrlMapping()
     {
         global $_FILE_TO_URL_MAPPING;
