@@ -45,7 +45,11 @@ class FakerProvider extends Provider
         }
 
         if (is_array($value)) {
-            $value = implode("\n", $value);
+            $join = ' ';
+            if (stripos($field->dataType, 'text') !== false  || stripos($type, 'paragraph') !== false) {
+                $join = "\n";
+            }
+            $value = implode($join, $value);
         }
 
         return $value;

@@ -61,13 +61,10 @@ class DataTypeProvider extends Provider
             }
             return $this->faker->randomFloat(2, $min, $max);
         } else if ($dataType === 'date') {
-            // todo
             return date('Y-m-d');
         } else if ($dataType === 'time') {
-            // todo
             return date('H:i:s');
         } else if ($dataType === 'ss_datetime') {
-            // todo
             return date('Y-m-d H:i:s');
         } else if (strpos($dataType, 'decimal') === 0) {
             $min = 0;
@@ -101,11 +98,9 @@ class DataTypeProvider extends Provider
                 ->enumValues();
             return array_rand($values);
         } else if (strpos($dataType, 'htmltext') === 0) {
-            // todo
-            return '<p>TODO</p>';
+            return "<p>{$this->faker->paragraph(5)}</p>";
         } else if (strpos($dataType, 'htmlvarchar') === 0) {
-            // todo
-            return '<p>TODO</p>';
+            return "<p>{$this->faker->sentence(10)}</p>";
         } else if ($dataType === 'text') {
             $count = 3;
             if (!empty($args['count'])) {
@@ -115,7 +110,6 @@ class DataTypeProvider extends Provider
                     }, explode(',', $args['count']));
                     $min = min($limits);
                     $max = min($limits);
-                    // todo check whether inclusive
                     $count = $this->faker->numberBetween($min, $max);
                 } else {
                     $count = intval($args['count']);
@@ -134,8 +128,6 @@ class DataTypeProvider extends Provider
             return $this->faker->text($length);
         }
 
-        // change to warning
-//        throw new Exception("unknown data type '{$field->dataType}'");
         return null;
     }
 }

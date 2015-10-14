@@ -280,7 +280,7 @@ Seeder:
           - 'like(%background%)'
           - 'like(%banner%)'
         dataType: 'is_a(Image)'
-      field: 'image(1600,800)'
+      field: 'image(2550,800)'
 
     ProfileImage:
       conditions:
@@ -338,7 +338,7 @@ Seeder:
         parent: 'is_a(SiteTree)'
       field: 0
 
-    ShowInMenus:
+    TopLevelPageShowInMenus:
       conditions:
         name: 'ShowInMenus'
         parent: 'is_a(SiteTree)'

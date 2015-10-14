@@ -65,7 +65,7 @@ class HeuristicParser
                 foreach ($options as $option) {
                     $matcher = new EqualMatcher($option);
 
-                    preg_match('/^(\w+)\((.+)\)$/', $option, $matches);
+                    preg_match('/^([a-zA-Z0-9_-]+)\((.+)\)$/', $option, $matches);
                     if (count($matches) === 3) {
                         $matcherName = strtolower($matches[1]);
                         if ($matcherName === 'like') {

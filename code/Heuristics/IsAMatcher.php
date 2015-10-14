@@ -16,8 +16,8 @@ class IsAMatcher implements Matcher
     public function match($value)
     {
         if ($value instanceof Field) {
-            return is_a($value->dataType, $this->value);
+            return is_a($value->dataType, $this->value, true);
         }
-        return is_a($value, $this->value);
+        return is_a($value, $this->value, true);
     }
 }
