@@ -1,10 +1,10 @@
 ---
-name: seeder-heuristics
+Name: seeder-heuristics
+After: 'framework/*', 'cms/*'
 ---
 
 Seeder:
   heuristics:
-
     # field types
 
     HTML:
@@ -20,7 +20,7 @@ Seeder:
         name:
           - 'like(%role%)'
           - 'like(%position)'
-        parent.dataType:
+        parent:
           - 'is_a(Member)'
           - 'like(%people%)'
           - 'like(%person%)'
@@ -41,6 +41,7 @@ Seeder:
           - 'like(%person%)'
           - 'like(%member%)'
           - 'like(%partner%)'
+          - 'like(%child%)'
       field: 'faker(name)'
 
     FirstName:
@@ -116,7 +117,7 @@ Seeder:
           - 'like(%suburb)'
         fieldType: 'db'
         dataType: 'like(varchar%)'
-      field: 'faker(secondaryAddress)'
+      field: 'faker(city)'
 
     City:
       conditions:
@@ -300,8 +301,8 @@ Seeder:
       conditions:
         name: 'Parent'
         fieldType: 'has_one'
+        parent.parent: 'is_a(SiteTree)'
         parent: 'is_a(SiteTree)'
-        dataType: 'is_a(SiteTree)'
       field: '{$Up}'
 
     Sort:
@@ -310,6 +311,7 @@ Seeder:
           - 'like(%sort%)'
           - 'like(%order%)'
         dataType: 'like(int%)'
+        fieldType: 'db'
         parent: 'is_a(DataObject)'
       field: 'sort()'
 
@@ -317,18 +319,23 @@ Seeder:
       conditions:
         name: 'URLSegment'
         parent: 'is_a(SiteTree)'
+        fieldType: 'db'
       field: 'URLSegment()'
 
     PageTitle:
       conditions:
         name: 'Title'
+        fieldType: 'db'
+        totalCount: 1
         parent: 'is_a(SiteTree)'
         parent.fieldType: 'root'
       field: 'pageTitle()'
 
     MenuTitle:
-      conditons:
+      conditions:
         name: 'MenuTitle'
+        fieldType: 'db'
+        dataType: 'like(varchar%)'
         parent: 'is_a(SiteTree)'
       field: '{$Title}'
 
@@ -336,6 +343,7 @@ Seeder:
       conditions:
         name: 'ShowInMenus'
         parent: 'is_a(SiteTree)'
+        fieldType: 'db'
       field: 0
 
     TopLevelPageShowInMenus:
@@ -343,6 +351,7 @@ Seeder:
         name: 'ShowInMenus'
         parent: 'is_a(SiteTree)'
         parent.fieldType: 'root'
+        fieldType: 'db'
         totalCount: 1
       field: 1
 

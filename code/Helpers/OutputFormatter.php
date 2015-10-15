@@ -6,6 +6,10 @@ namespace LittleGiant\SilverStripeSeeder;
  * Interface OutputFormatter
  * @package LittleGiant\SilverStripeSeeder
  */
+/**
+ * Interface OutputFormatter
+ * @package LittleGiant\SilverStripeSeeder
+ */
 interface OutputFormatter
 {
     /**
@@ -15,9 +19,17 @@ interface OutputFormatter
 
     /**
      * @param $className
+     * @param $key
      * @return mixed
      */
-    public function creatingDataObject($className);
+    public function alreadySeeded($className, $key);
+
+    /**
+     * @param $className
+     * @param $key
+     * @return mixed
+     */
+    public function creatingDataObject($className, $key);
 
     /**
      * @param $className

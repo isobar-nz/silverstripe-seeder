@@ -74,7 +74,7 @@ class Seeder extends Object
                     && (!$className || $className === $option['class'])
                     && (!$key || $key === $option['key'])
                 ) {
-                    $this->outputFormatter->creatingDataObject($option['class']);
+
                     $field = $configParser->objectConfig2Field($option);
                     $field->name = $option['class'];
                     // has_many will generate the number passed in count
@@ -82,14 +82,20 @@ class Seeder extends Object
                     $field->methodName = '';
                     $field->count = $this->getCount($field);
 
-                    $this->applyHeuristics($field, $heuristics);
+                    if (!$field->count) {
+                        $this->outputFormatter->alreadySeeded($option['class'], $option['key']);
+                    } else {
+                        $this->outputFormatter->creatingDataObject($option['class'], $option['key']);
 
-                    $state = new SeederState();
-                    $objects = $field->provider->generate($field, $state);
+                        $this->applyHeuristics($field, $heuristics);
 
-                    $this->writer->finish();
+                        $state = new SeederState();
+                        $objects = $field->provider->generate($field, $state);
 
-                    $this->outputFormatter->dataObjectsCreated($option['class'], count($objects));
+                        $this->writer->finish();
+
+                        $this->outputFormatter->dataObjectsCreated($option['class'], count($objects));
+                    }
                 }
             }
         } else {
@@ -137,7 +143,7 @@ class Seeder extends Object
         });
 
         foreach ($matching as $heuristic) {
-            $heuristic->apply($field);
+            $heuristic->apply($field, $this->writer);
         }
 
         foreach ($field->fields as $db) {

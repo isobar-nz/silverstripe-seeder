@@ -19,11 +19,11 @@ class PageTitleProvider extends Provider
      */
     protected function generateField($field, $state)
     {
-        if (!$state->up() || !$state->up()->object()) {
+        if (!$state->object()) {
             return 'Page Title';
         }
 
-        $page = $state->up()->object();
+        $page = $state->object();
 
         $name = str_replace(array('Page', 'Holder'), '', $page->class);
         $name = FormField::name_to_label($name);

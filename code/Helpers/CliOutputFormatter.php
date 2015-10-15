@@ -22,11 +22,30 @@ class CliOutputFormatter implements OutputFormatter
 
     /**
      * @param $className
+     * @param $key
+     * @return mixed
+     */
+    public function alreadySeeded($className, $key)
+    {
+        if ($className !== $key) {
+            echo "'{$className}' ({$key}) already seeded", PHP_EOL;
+        } else {
+            echo "'{$className}' already seeded", PHP_EOL;
+        }
+    }
+
+    /**
+     * @param $className
+     * @param $key
      * @returns null
      */
-    public function creatingDataObject($className)
+    public function creatingDataObject($className, $key)
     {
-        echo "creating '{$className}'...", PHP_EOL;
+        if ($className !== $key) {
+            echo "creating '{$className}' ({$key})...", PHP_EOL;
+        } else {
+            echo "creating '{$className}'...", PHP_EOL;
+        }
     }
 
     /**
@@ -37,20 +56,6 @@ class CliOutputFormatter implements OutputFormatter
     public function dataObjectsCreated($className, $count)
     {
         echo "{$count} '{$className}' created", PHP_EOL;
-    }
-
-    /**
-     * @param $node
-     * @param int $depth
-     */
-    private function printTree(&$node, $depth = 0)
-    {
-        $details = "- {$node['class']} ({$node['count']})";
-        echo str_repeat('  ', $depth) . $details, PHP_EOL;;
-
-        foreach ($node['children'] as $child) {
-            $this->printTree($child, $depth + 1);
-        }
     }
 
     /**
@@ -74,5 +79,4 @@ class CliOutputFormatter implements OutputFormatter
         }
         echo PHP_EOL;
     }
-
 }

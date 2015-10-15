@@ -1,5 +1,6 @@
 ---
-name: silverstripe-seeder-extensions
+Name: silverstripe-seeder-extensions
+After: 'framework/*', 'cms/*'
 ---
 
 DataObject:

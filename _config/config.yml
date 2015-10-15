@@ -1,5 +1,6 @@
 ---
-Name: seeder
+Name: silverstripe-seeder
+After: 'framework/*', 'cms/*'
 ---
 
 Seeder:
@@ -53,14 +54,4 @@ Seeder:
       CanViewType: Anyone
       CanEditType: LoggedInUsers
 
----
-Only:
-  environment: 'dev'
----
-DevelopmentAdmin:
-  registered_controllers:
-    seed:
-      controller: DevSeedController
-    unseed:
-      controller: DevUnseedController
 

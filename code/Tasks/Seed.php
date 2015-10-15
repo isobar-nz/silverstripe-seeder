@@ -6,6 +6,7 @@ use LittleGiant\SilverStripeSeeder\Util\Check;
 use LittleGiant\SilverStripeSeeder\Util\RecordWriter;
 use Symfony\Component\Console\Application;
 use Symfony\Component\Console\Command\Command;
+use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -48,6 +49,7 @@ class SeedCommand extends Command
     {
         $this->setName('seed')
             ->setDescription('Seed database')
+            ->addArgument('flush', InputArgument::OPTIONAL, 1)
             ->addOption('class', 'c', InputOption::VALUE_REQUIRED, 'Choose class to seed')
             ->addOption('key', 'k', InputOption::VALUE_REQUIRED, 'Choose key to seed')
             ->addOption('batch', 'b', InputOption::VALUE_NONE, 'Batch writes for better performance')

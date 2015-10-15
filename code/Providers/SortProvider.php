@@ -29,11 +29,11 @@ class SortProvider extends Provider
      */
     protected function generateField($field, $state)
     {
-        if (!$state->up() || !$state->up()->object()) {
+        if (!$state->object()) {
             return 0;
         }
 
-        $obj = $state->up()->object();
+        $obj = $state->object();
         $className = $obj->class;
         if (!isset(self::$classCache[$className])) {
             $ancestry = singleton($className)->getClassAncestry();

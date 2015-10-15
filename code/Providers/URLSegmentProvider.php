@@ -19,17 +19,16 @@ class URLSegmentProvider extends Provider
      */
     protected function generateField($field, $state)
     {
-        if (!$state->up() || !$state->up()->object()) {
+        if (!$state->object()) {
             return uniqid('url');
         }
 
-        $page = $state->up()->object();
+        $page = $state->object();
 
         if ($field->totalCount > 1) {
             return Convert::raw2url(uniqid($page->Title));
         }
 
-        $page = $state->up()->object();
         $name = str_replace(array('Page', 'Holder'), '', $page->class);
         $name = FormField::name_to_label($name);
 

@@ -40,11 +40,10 @@ class PageTitleProviderTest extends \SapphireTest
         $this->assertNotNull($titleField);
 
         $state = new SeederState($field, new SiteTree());
-        $fieldState = $state->down($titleField);
 
         $provider = new PageTitleProvider();
 
-        $title = $provider->generate($titleField, $fieldState);
+        $title = $provider->generate($titleField, $state);
 
         $this->assertEquals('Site Tree', $title[0]);
     }

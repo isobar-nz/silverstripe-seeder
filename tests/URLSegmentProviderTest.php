@@ -40,11 +40,10 @@ class URLSegmentProviderTest extends \SapphireTest
         $this->assertNotNull($urlField);
 
         $state = new SeederState($field, new SiteTree());
-        $fieldState = $state->down($urlField);
 
         $provider = new URLSegmentProvider();
 
-        $url = $provider->generate($urlField, $fieldState);
+        $url = $provider->generate($urlField, $state);
 
         $this->assertEquals('site-tree', $url[0]);
     }

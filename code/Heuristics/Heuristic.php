@@ -78,13 +78,15 @@ class Heuristic
     /**
      * @param $field
      */
-    public function apply($field)
+    public function apply($field, $writer)
     {
         if (!$field->explicit) {
             // if a new provider then reset options
             if (isset($this->options['provider'])) {
                 $providerClassName = $this->options['provider'];
                 $provider = new $providerClassName();
+                $provider->setWriter($writer);
+
                 if ($field->provider instanceof ProviderCache) {
                     $field->provider->provider = $provider;
                 } else {

@@ -40,13 +40,12 @@ class SortProviderTest extends \SapphireTest
         $this->assertNotNull($sortField);
 
         $state = new SeederState($field, new SiteTree());
-        $fieldState = $state->down($sortField);
 
         $provider = new SortProvider();
 
-        $value1 = $provider->generate($sortField, $fieldState);
-        $value2 = $provider->generate($sortField, $fieldState);
-        $value3 = $provider->generate($sortField, $fieldState);
+        $value1 = $provider->generate($sortField, $state);
+        $value2 = $provider->generate($sortField, $state);
+        $value3 = $provider->generate($sortField, $state);
 
         $this->assertTrue($value1[0] < $value2[0]);
         $this->assertTrue($value2[0] < $value3[0]);
