@@ -254,7 +254,7 @@ Seeder:
         name:
           - 'like(%created%)'
         fieldType: 'db'
-        dateType:
+        dataType:
           - 'like(ss_datetime)'
           - 'like(date)'
       field: 'date(-7 days)'
@@ -265,7 +265,7 @@ Seeder:
           - 'like(end%)'
           - 'like(%finish%)'
         fieldType: 'db'
-        dateType:
+        dataType:
           - 'like(ss_datetime)'
           - 'like(date)'
       field: 'date(+1 month)'

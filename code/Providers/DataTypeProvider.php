@@ -149,7 +149,7 @@ class DataTypeProvider extends Provider
             if (isset($args['length'])) {
                 $length = intval($args['length']);
             }
-            return $this->faker->text($length);
+            return $this->faker->text(min($length, 5));
         }
 
         return null;
