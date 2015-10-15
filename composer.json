@@ -1,5 +1,5 @@
 {
-  "name": "Little-Giant/silverstripe-seeder",
+  "name": "littlegiant/silverstripe-seeder",
   "description": "Seed data objects for dev",
   "type": "silverstripe-module",
   "homepage": "http://github.com/Little-Giant/silverstripe-seeder",
