@@ -149,7 +149,8 @@ class DataTypeProvider extends Provider
             if (isset($args['length'])) {
                 $length = intval($args['length']);
             }
-            return $this->faker->text(min($length, 5));
+            // faker requires length >= 5
+            return $this->faker->text(max($length, 5));
         }
 
         return null;
