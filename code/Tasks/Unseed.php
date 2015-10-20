@@ -49,7 +49,9 @@ class UnseedCommand extends Command
     {
         $this->setName('unseed')
             ->setDescription('Unseed database')
+            ->addArgument('flush', InputArgument::OPTIONAL, 1)
             ->addOption('batch', 'b', InputOption::VALUE_OPTIONAL, 'Batch writes for better performance', 100)
+            ->addOption('size', 's', InputOption::VALUE_OPTIONAL, 'Specify batch size', 100)
             ->addOption('key', 'k', InputOption::VALUE_REQUIRED, 'Choose key to unseed');
     }
 
@@ -78,8 +80,6 @@ class UnseedCommand extends Command
         }
         error_reporting(E_ALL);
 
-        global $argv;
-
         $writer = new RecordWriter();
         if ($batchSize = $input->getOption('batch')) {
             $writer = new BatchedSeedWriter($batchSize);
@@ -87,19 +87,7 @@ class UnseedCommand extends Command
 
         $seeder = new Seeder($writer, new CliOutputFormatter());
 
-        $key = null;
-
-        $nextKey = false;
-        foreach ($argv as $arg) {
-            if ($nextKey) {
-                $key = $arg;
-                $nextKey = false;
-            }
-
-            if ($arg === '-k' || $arg === '--key') {
-                $nextKey = true;
-            }
-        }
+        $key = $input->getOption('key');
 
         $seeder->unseed($key);
     }
