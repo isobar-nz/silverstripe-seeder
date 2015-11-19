@@ -3,8 +3,8 @@
 namespace Seeder\Tests;
 
 use Seeder\Helpers\ConfigParser;
-use Seeder\Util\BatchedSeedWriter;
 use Seeder\Util\Field;
+use Seeder\Util\RecordWriter;
 
 /**
  * Class ConfigParserTest
@@ -42,7 +42,7 @@ class ConfigParserTest extends \SapphireTest
      */
     public function testObjectConfig2Field_EmptyPropertiesConfig_CreatesFieldWithObjectFields()
     {
-        $config = new ConfigParser(new BatchedSeedWriter());
+        $config = new ConfigParser(new RecordWriter());
 
         $field = $config->objectConfig2Field(array(
             'class' => 'Seeder\Tests\Dog',
@@ -91,7 +91,7 @@ class ConfigParserTest extends \SapphireTest
      */
     public function testObjectConfig2Field_HasOneConfig_CreatesFieldWithHasOneField()
     {
-        $config = new ConfigParser(new BatchedSeedWriter());
+        $config = new ConfigParser(new RecordWriter());
 
         $field = $config->objectConfig2Field(array(
             'class' => 'Seeder\Tests\Human',
@@ -120,7 +120,7 @@ class ConfigParserTest extends \SapphireTest
      */
     public function testObjectConfig2Field_HasManyConfig_CreatesFieldWithHasManyField()
     {
-        $config = new ConfigParser(new BatchedSeedWriter());
+        $config = new ConfigParser(new RecordWriter());
 
         $field = $config->objectConfig2Field(array(
             'class' => 'Seeder\Tests\Dog',
@@ -147,7 +147,7 @@ class ConfigParserTest extends \SapphireTest
      */
     public function testObjectConfig2Field_ManyManyConfig_CreatesFieldWithManyManyField()
     {
-        $config = new ConfigParser(new BatchedSeedWriter());
+        $config = new ConfigParser(new RecordWriter());
 
         $field = $config->objectConfig2Field(array(
             'class' => 'Seeder\Tests\Human',
@@ -174,7 +174,7 @@ class ConfigParserTest extends \SapphireTest
      */
     public function testObjectConfig2Field_NestedFields_CorrectTotalCount()
     {
-        $config = new ConfigParser(new BatchedSeedWriter());
+        $config = new ConfigParser(new RecordWriter());
 
         $field = $config->objectConfig2Field(array(
             'class' => 'Seeder\Tests\Human',
@@ -196,7 +196,7 @@ class ConfigParserTest extends \SapphireTest
      */
     public function testObjectConfig2Field_ExplicitAndImplicitFields_MarkedCorrectly()
     {
-        $config = new ConfigParser(new BatchedSeedWriter());
+        $config = new ConfigParser(new RecordWriter());
 
         $field = $config->objectConfig2Field(array(
             'class' => 'Seeder\Tests\Human',

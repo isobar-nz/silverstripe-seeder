@@ -5,6 +5,7 @@ namespace Seeder\Tests;
 use Seeder\Helpers\HeuristicParser;
 use Seeder\Util\BatchedSeedWriter;
 use Seeder\Util\Field;
+use Seeder\Util\RecordWriter;
 
 /**
  * Class HeuristicTest
@@ -44,7 +45,7 @@ class HeuristicTest extends \SapphireTest
 
         $this->assertTrue($heuristic->match($urlField));
 
-        $heuristic->apply($urlField, new BatchedSeedWriter());
+        $heuristic->apply($urlField, new RecordWriter());
 
         $this->assertInstanceOf('Seeder\URLSegmentProvider', $urlField->provider);
     }
@@ -83,7 +84,7 @@ class HeuristicTest extends \SapphireTest
 
         $this->assertTrue($heuristic->match($titleField));
 
-        $heuristic->apply($titleField, new BatchedSeedWriter());
+        $heuristic->apply($titleField, new RecordWriter());
 
         $this->assertInstanceOf('Seeder\ValueProvider', $titleField->provider);
     }

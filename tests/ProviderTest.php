@@ -3,7 +3,7 @@
 namespace Seeder\Tests;
 
 use Seeder\Helpers\ConfigParser;
-use Seeder\Util\BatchedSeedWriter;
+use Seeder\Util\RecordWriter;
 use Seeder\Util\SeederState;
 
 /**
@@ -42,7 +42,7 @@ class ProviderTest extends \SapphireTest
      */
     public function testGenerate_SimpleFields_GeneratesObjectWithFields()
     {
-        $writer = new BatchedSeedWriter();
+        $writer = new RecordWriter();
         $configParser = new ConfigParser($writer);
 
         $field = $configParser->objectConfig2Field(array(
@@ -74,7 +74,7 @@ class ProviderTest extends \SapphireTest
      */
     public function testGenerate_HasOneField_GeneratesObjectWithHasOneField()
     {
-        $writer = new BatchedSeedWriter();
+        $writer = new RecordWriter();
         $configParser = new ConfigParser($writer);
 
         $field = $configParser->objectConfig2Field(array(
@@ -111,7 +111,7 @@ class ProviderTest extends \SapphireTest
      */
     public function testGenerate_HasOneDependency_GeneratesObject()
     {
-        $writer = new BatchedSeedWriter();
+        $writer = new RecordWriter();
         $configParser = new ConfigParser($writer);
 
         $field = $configParser->objectConfig2Field(array(
@@ -152,7 +152,7 @@ class ProviderTest extends \SapphireTest
      */
     public function testGenerate_HasManyField_GeneratesObjectWithHasOneManyField()
     {
-        $writer = new BatchedSeedWriter();
+        $writer = new RecordWriter();
         $configParser = new ConfigParser($writer);
 
         $field = $configParser->objectConfig2Field(array(
@@ -191,7 +191,7 @@ class ProviderTest extends \SapphireTest
      */
     public function testGenerate_ManyManyField_GeneratesObjectWithManyManyField()
     {
-        $writer = new BatchedSeedWriter();
+        $writer = new RecordWriter();
         $configParser = new ConfigParser($writer);
 
         $field = $configParser->objectConfig2Field(array(
@@ -236,7 +236,7 @@ class ProviderTest extends \SapphireTest
      */
     public function testGenerate_UnpublishedPage_GeneratesUnpublishedPage()
     {
-        $writer = new BatchedSeedWriter();
+        $writer = new RecordWriter();
         $configParser = new ConfigParser($writer);
 
         $field = $configParser->objectConfig2Field(array(
@@ -271,7 +271,7 @@ class ProviderTest extends \SapphireTest
      */
     public function testGenerate_PublishedPage_GeneratesPublishedPage()
     {
-        $writer = new BatchedSeedWriter();
+        $writer = new RecordWriter();
         $configParser = new ConfigParser($writer);
 
         $field = $configParser->objectConfig2Field(array(
