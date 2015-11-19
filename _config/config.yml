@@ -13,6 +13,7 @@ Seeder:
     - MemberProvider
     - ObjectProvider
     - PageTitleProvider
+    - RandomObjectProvider
     - SortProvider
     - UniqueProvider
     - URLSegmentProvider
