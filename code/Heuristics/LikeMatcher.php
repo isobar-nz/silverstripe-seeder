@@ -46,6 +46,10 @@ class LikeMatcher implements Matcher
      */
     public function match($value)
     {
+        if (!is_string($value)) {
+            return false;
+        }
+
         $value = strtolower($value);
         if ($this->matchStart && $this->matchEnd) {
             return $this->like == $value;
