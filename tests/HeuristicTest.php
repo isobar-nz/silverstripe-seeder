@@ -46,7 +46,7 @@ class HeuristicTest extends \SapphireTest
 
         $heuristic->apply($urlField, new BatchedSeedWriter());
 
-        $this->assertInstanceOf('URLSegmentProvider', $urlField->provider);
+        $this->assertInstanceOf('Seeder\URLSegmentProvider', $urlField->provider);
     }
 
     /**
@@ -85,6 +85,6 @@ class HeuristicTest extends \SapphireTest
 
         $heuristic->apply($titleField, new BatchedSeedWriter());
 
-        $this->assertInstanceOf('ValueProvider', $titleField->provider);
+        $this->assertInstanceOf('Seeder\ValueProvider', $titleField->provider);
     }
 }
