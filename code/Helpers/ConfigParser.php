@@ -201,7 +201,10 @@ class ConfigParser
             $arguments = isset($matches[2]) ? $matches[2] : '';
 
             foreach ($this->config->providers as $provider) {
-                if (isset($provider::$shorthand)) {
+                if (!class_exists($provider)) {
+                    // todo log somewhere else? this would log every time parser options are checked
+                    SS_Log::log("provider class '{$provider}' cannot be found");
+                } else if (isset($provider::$shorthand)) {
                     if (strtolower($provider::$shorthand) === $shorthand) {
                         $options = $provider::parseOptions($arguments);
                         $options['provider'] = $provider;
