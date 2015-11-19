@@ -11,7 +11,7 @@ Seeder:
     - HTMLProvider
     - ImageProvider
     - MemberProvider
-    - ObjectProvider
+    - FirstObjectProvider
     - PageTitleProvider
     - RandomObjectProvider
     - SortProvider
@@ -19,7 +19,7 @@ Seeder:
     - URLSegmentProvider
     - ValueProvider
     # tests
-    - LittleGiant\SilverStripeSeeder\Tests\TestProvider
+    - TestProvider
   empty_shorthand_provider: ValueProvider
   default_provider: DataTypeProvider
   default_providers:

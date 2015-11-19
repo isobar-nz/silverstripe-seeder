@@ -203,7 +203,7 @@ class ConfigParser
             foreach ($this->config->providers as $provider) {
                 if (!class_exists($provider)) {
                     // todo log somewhere else? this would log every time parser options are checked
-                    SS_Log::log("provider class '{$provider}' cannot be found");
+                    \SS_Log::log("provider class '{$provider}' cannot be found", \SS_Log::WARN);
                 } else if (isset($provider::$shorthand)) {
                     if (strtolower($provider::$shorthand) === $shorthand) {
                         $options = $provider::parseOptions($arguments);
