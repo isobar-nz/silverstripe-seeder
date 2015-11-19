@@ -62,18 +62,20 @@ class Seeder extends Object
 
         if (is_array($dataObjects)) {
             foreach ($dataObjects as $index => $option) {
-                if (is_string($index) && class_exists($index)) {
-                    $option['class'] = $index;
+                $className = $index;
+                if (is_string($index)) {
+                    $className = $index;
                 }
 
                 if (empty($option['key'])) {
-                    $option['key'] = $option['class'];
+                    $option['key'] = $className;
                 };
 
-                if (class_exists($option['class'])
-                    && (!$className || $className === $option['class'])
+                if (class_exists($className)
+                    && (!$className || $className === $className)
                     && (!$key || $key === $option['key'])
                 ) {
+                    $option['class'] = $className;
 
                     $field = $configParser->objectConfig2Field($option);
                     $field->name = $option['class'];
