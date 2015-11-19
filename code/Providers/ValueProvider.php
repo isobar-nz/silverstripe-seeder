@@ -44,7 +44,7 @@ class ValueProvider extends Provider
      * @param $state
      * @return mixed|string
      */
-    protected function generateHasOneField($field, $state)
+    protected function generateOne($field, $state)
     {
         $value = $this->resolveValue($field, $state);
         return $value;
@@ -56,19 +56,9 @@ class ValueProvider extends Provider
      * @throws Exception
      * @returns null
      */
-    protected function generateHasManyField($field, $state)
+    protected function generateMany($field, $state)
     {
         throw new Exception('value provider does not support generating has many fields');
-    }
-
-    /**
-     * @param $field
-     * @param $state
-     * @throws Exception
-     */
-    protected function generateManyManyField($field, $state)
-    {
-        throw new Exception('value provider does not support generating many many fields');
     }
 
     /**

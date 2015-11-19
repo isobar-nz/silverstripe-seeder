@@ -53,12 +53,12 @@ abstract class Provider extends \Object
         if ($field->fieldType === Field::FT_FIELD) {
             $values[] = $this->generateField($field, $state);
         } else if ($field->fieldType === Field::FT_HAS_ONE) {
-            $values[] = $this->generateHasOneField($field, $state);
+            $values[] = $this->generateOne($field, $state);
         } else if ($field->fieldType === Field::FT_HAS_MANY
             || $field->fieldType === Field::FT_MANY_MANY
             || $field->fieldType === Field::FT_ROOT
         ) {
-            $values = $this->generateHasManyField($field, $state);
+            $values = $this->generateMany($field, $state);
         }
 
         return $values;
@@ -173,7 +173,7 @@ abstract class Provider extends \Object
      * @param $state
      * @return mixed
      */
-    protected function generateHasOneField($field, $state)
+    protected function generateOne($field, $state)
     {
         $object = $this->generateObject($field, $state);
         return $object;
@@ -184,7 +184,7 @@ abstract class Provider extends \Object
      * @param $state
      * @return array
      */
-    protected function generateHasManyField($field, $state)
+    protected function generateMany($field, $state)
     {
         $objects = array();
         for ($i = 0; $i < $field->count; $i++) {
@@ -194,7 +194,7 @@ abstract class Provider extends \Object
     }
 
     /**
-     * @return array|\scalar
+     * @return array
      */
     public function get_shorthand()
     {
@@ -202,7 +202,7 @@ abstract class Provider extends \Object
     }
 
     /**
-     * @return array|\scalar
+     * @return array
      */
     public function get_order()
     {

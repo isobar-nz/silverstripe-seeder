@@ -50,7 +50,7 @@ class ObjectProvider extends Provider
      * @return mixed
      * @throws Exception
      */
-    protected function generateHasOneField($field, $state)
+    protected function generateOne($field, $state)
     {
         if (empty($field->arguments['class'])) {
             throw new Exception('object provider requires a \'class\'');
@@ -75,7 +75,7 @@ class ObjectProvider extends Provider
      * @return mixed
      * @throws Exception
      */
-    protected function generateHasManyField($field, $state)
+    protected function generateMany($field, $state)
     {
         if (empty($field->arguments['class'])) {
             throw new Exception('object provider requires a \'class\'');
@@ -88,16 +88,5 @@ class ObjectProvider extends Provider
         $className = $field->arguments['class'];
         $objects = $className::get()->sort('RAND()')->limit($field->count)->toArray();
         return $objects;
-    }
-
-    /**
-     * @param $field
-     * @param $state
-     * @return mixed
-     * @throws Exception
-     */
-    protected function generateManyManyField($field, $state)
-    {
-        return $this->generateHasManyField($field, $state);
     }
 }

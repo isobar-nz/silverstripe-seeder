@@ -65,7 +65,7 @@ class ImageProvider extends Provider
      * @param $state
      * @return mixed
      */
-    protected function generateHasOneField($field, $state)
+    protected function generateOne($field, $state)
     {
         return $this->createImage($field, $state);
     }
@@ -75,7 +75,7 @@ class ImageProvider extends Provider
      * @param $state
      * @return array
      */
-    protected function generateHasManyField($field, $state)
+    protected function generateMany($field, $state)
     {
         $images = array();
 
@@ -84,16 +84,6 @@ class ImageProvider extends Provider
         }
 
         return $images;
-    }
-
-    /**
-     * @param $field
-     * @param $state
-     * @return array
-     */
-    protected function generateManyManyField($field, $state)
-    {
-        return $this->generateHasManyField($field, $state);
     }
 
     /**

@@ -71,7 +71,7 @@ class MemberProvider extends Provider
      * @return mixed
      * @throws Exception
      */
-    protected function generateHasOneField($field, $upState)
+    protected function generateOne($field, $upState)
     {
         if (empty($field->arguments['email'])) {
             throw new Exception('member provider requires an email');
