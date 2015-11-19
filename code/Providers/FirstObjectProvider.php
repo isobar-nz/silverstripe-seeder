@@ -3,14 +3,14 @@
 use LittleGiant\SilverStripeSeeder\Providers\Provider;
 
 /**
- * Class RandomObjectProvider
+ * Class FirstObjectProvider
  */
-class RandomObjectProvider extends Provider
+class FirstObjectProvider extends Provider
 {
     /**
      * @var string
      */
-    public static $shorthand = 'Random';
+    public static $shorthand = 'First';
 
     /**
      * @param $field
@@ -20,7 +20,7 @@ class RandomObjectProvider extends Provider
      */
     protected function generateField($field, $state)
     {
-        throw new Exception('random object provider does not support generating db fields');
+        throw new Exception('first object provider does not support generating db fields');
     }
 
     /**
@@ -31,17 +31,21 @@ class RandomObjectProvider extends Provider
      */
     protected function generateOne($field, $state)
     {
-        $args = $field->arguments['arguments'];
-
         $className = $field->dataType;
+
+        $args = $field->arguments['arguments'];
         if (count($args) && !empty($args[0])) {
             $className = $args[0];
+        }
+
+        if (!class_exists($className)) {
+            throw new Exception("class '{$className}' does not exist");
         }
 
         $object = $className::get()->first();
 
         if (!$object) {
-            SS_Log::log("random for {$className} not found", SS_Log::WARN);
+            SS_Log::log("no instances found for '{$className}' not found", SS_Log::WARN);
         }
 
         return $object;
@@ -55,18 +59,6 @@ class RandomObjectProvider extends Provider
      */
     protected function generateMany($field, $state)
     {
-        $args = $field->arguments['arguments'];
-
-        $className = $field->dataType;
-        if (count($args) && !empty($args[0])) {
-            $className = $args[0];
-        }
-
-        $count = 1;
-        if (count($args) > 1 && !empty($args[1])) {
-            $count = intval($args[1]);
-        }
-
-        return $className::get()->sort('RAND()')->limit($count)->toArray();
+        return $this->generateOne($field, $state);
     }
 }

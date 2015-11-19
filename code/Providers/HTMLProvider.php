@@ -46,11 +46,14 @@ class HTMLProvider extends Provider
 
         $elements[] = $list;
 
+        // if text return all elements
         if (stripos($field->dataType, 'htmltext') !== false) {
+            shuffle($elements);
             $html = implode($elements, PHP_EOL);
             return $html;
         }
 
+        // if varchar then return a random element
         $key = array_rand($elements);
         return $elements[$key];
     }
