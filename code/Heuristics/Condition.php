@@ -44,7 +44,7 @@ class Condition
 
         $value = $field;
         foreach ($properties as $property) {
-            if (!is_object($value)) {
+            if (!is_object($value) || !isset($value->$property)) {
                 return false;
             }
             $value = $value->$property;

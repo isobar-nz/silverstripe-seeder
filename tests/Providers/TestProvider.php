@@ -1,7 +1,5 @@
 <?php
 
-namespace LittleGiant\SilverStripeSeeder\Tests;
-
 use LittleGiant\SilverStripeSeeder\Providers\Provider;
 
 /**
