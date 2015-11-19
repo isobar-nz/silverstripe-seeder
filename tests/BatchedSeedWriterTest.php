@@ -1,14 +1,13 @@
 <?php
 
-namespace LittleGiant\SilverStripeSeeder\Tests;
+namespace Seeder\Tests;
 
-use LittleGiant\SilverStripeSeeder\Util\BatchedSeedWriter;
-use LittleGiant\SilverStripeSeeder\Util\Field;
-use LittleGiant\SilverStripeSeeder\Util\SeederState;
+use Seeder\Util\BatchedSeedWriter;
+use Seeder\Util\Field;
 
 /**
  * Class BatchSeedWriterTest
- * @package LittleGiant\SilverStripeSeeder\Tests
+ * @package Seeder\Tests
  */
 class BatchSeedWriterTest extends \SapphireTest
 {
@@ -21,11 +20,11 @@ class BatchSeedWriterTest extends \SapphireTest
      * @var array
      */
     protected $extraDataObjects = array(
-        'LittleGiant\SilverStripeSeeder\Tests\Dog',
-        'LittleGiant\SilverStripeSeeder\Tests\House',
-        'LittleGiant\SilverStripeSeeder\Tests\Human',
-        'LittleGiant\SilverStripeSeeder\Tests\Pet',
-        'LittleGiant\SilverStripeSeeder\Tests\Treat',
+        'Seeder\Tests\Dog',
+        'Seeder\Tests\House',
+        'Seeder\Tests\Human',
+        'Seeder\Tests\Pet',
+        'Seeder\Tests\Treat',
     );
 
     /**
@@ -61,7 +60,7 @@ class BatchSeedWriterTest extends \SapphireTest
             $seed = \SeedRecord::get()->first();
             $dog = Dog::get()->first();
 
-            $this->assertEquals('LittleGiant\SilverStripeSeeder\Tests\Dog', $seed->SeedClassName);
+            $this->assertEquals('Seeder\Tests\Dog', $seed->SeedClassName);
             $this->assertEquals($dog->ID, $seed->SeedID);
 
             $seed->delete();
@@ -97,8 +96,8 @@ class BatchSeedWriterTest extends \SapphireTest
 
             $writer->finish();
 
-            $dogSeeds = \SeedRecord::get()->filter('SeedClassName', 'LittleGiant\SilverStripeSeeder\Tests\Dog');
-            $ownerSeeds = \SeedRecord::get()->filter('SeedClassName', 'LittleGiant\SilverStripeSeeder\Tests\Human');
+            $dogSeeds = \SeedRecord::get()->filter('SeedClassName', 'Seeder\Tests\Dog');
+            $ownerSeeds = \SeedRecord::get()->filter('SeedClassName', 'Seeder\Tests\Human');
             $dogs = Dog::get();
             $owners = Human::get();
 
@@ -114,9 +113,9 @@ class BatchSeedWriterTest extends \SapphireTest
                 $ownerSeed = $ownerSeeds[$i];
                 $dogSeed = $dogSeeds[$i];
 
-                $this->assertEquals('LittleGiant\SilverStripeSeeder\Tests\Dog', $dogSeed->SeedClassName);
+                $this->assertEquals('Seeder\Tests\Dog', $dogSeed->SeedClassName);
                 $this->assertEquals($dog->ID, $dogSeed->SeedID);
-                $this->assertEquals('LittleGiant\SilverStripeSeeder\Tests\Human', $ownerSeed->SeedClassName);
+                $this->assertEquals('Seeder\Tests\Human', $ownerSeed->SeedClassName);
                 $this->assertEquals($owner->ID, $ownerSeed->SeedID);
             }
 
@@ -302,14 +301,14 @@ class BatchSeedWriterTest extends \SapphireTest
         return $field;
     }
 
-    /**
-     *
-     */
-    public static function tearDownAfterClass()
-    {
-        parent::tearDownAfterClass();
-        \SapphireTest::delete_all_temp_dbs();
-    }
+//    /**
+//     *
+//     */
+//    public static function tearDownAfterClass()
+//    {
+//        parent::tearDownAfterClass();
+//        \SapphireTest::delete_all_temp_dbs();
+//    }
 }
 
 

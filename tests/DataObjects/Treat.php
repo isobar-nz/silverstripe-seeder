@@ -1,11 +1,11 @@
 <?php
 
-namespace LittleGiant\SilverStripeSeeder\Tests;
+namespace Seeder\Tests;
 
 
 /**
  * Class Treat
- * @package LittleGiant\SilverStripeSeeder\Tests
+ * @package Seeder\Tests
  */
 class Treat extends \DataObject implements \TestOnly
 {
@@ -21,7 +21,7 @@ class Treat extends \DataObject implements \TestOnly
      * @var array
      */
     private static $has_one = array(
-        'Pet' => 'LittleGiant\SilverStripeSeeder\Tests\Pet',
+        'Pet' => 'Seeder\Tests\Pet',
     );
 }
 

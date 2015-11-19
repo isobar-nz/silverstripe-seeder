@@ -1,9 +1,12 @@
 <?php
 
-use LittleGiant\SilverStripeSeeder\Providers\Provider;
+namespace Seeder;
+
+use Faker\Factory;
 
 /**
  * Class HTMLProvider
+ * @package Seeder
  */
 class HTMLProvider extends Provider
 {
@@ -23,7 +26,7 @@ class HTMLProvider extends Provider
     public function __construct()
     {
         parent::__construct();
-        $this->faker = Faker\Factory::create();
+        $this->faker = Factory::create();
     }
 
     /**

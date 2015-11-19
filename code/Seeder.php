@@ -1,11 +1,9 @@
 <?php
 
-use LittleGiant\SilverStripeSeeder\Helpers\ConfigParser;
-use LittleGiant\SilverStripeSeeder\Heuristics\HeuristicParser;
-use \LittleGiant\SilverStripeSeeder\OutputFormatter;
-use \LittleGiant\SilverStripeSeeder\Util\Field;
-use \LittleGiant\SilverStripeSeeder\Util\SeederState;
-use \LittleGiant\SilverStripeSeeder\Util\RecordWriter;
+use Seeder\Helpers\ConfigParser;
+use Seeder\Helpers\HeuristicParser;
+use Seeder\Helpers\OutputFormatter;
+use Seeder\Util\SeederState;
 
 /**
  * Class Seeder
@@ -39,11 +37,11 @@ class Seeder extends Object
     }
 
     /**
-     * @param null $className
+     * @param null $onlyClassName
      * @param null $key
      * @throws Exception
      */
-    public function seed($className = null, $key = null)
+    public function seed($onlyClassName = null, $key = null)
     {
         // seed random to get different results each run
         srand();
@@ -72,7 +70,7 @@ class Seeder extends Object
                 };
 
                 if (class_exists($className)
-                    && (!$className || $className === $className)
+                    && (!$onlyClassName || $onlyClassName === $className)
                     && (!$key || $key === $option['key'])
                 ) {
                     $option['class'] = $className;
@@ -172,24 +170,23 @@ class Seeder extends Object
     {
         $this->outputFormatter->beginUnseed();
 
-        // TODO check which classes (check super classes as well, above SiteTree/DataObjet) have onBeforeDelete/onAfterDelete and feed through ->delete()
         // TODO delete has_many tables
 
         echo 'Seed count: ', SeedRecord::get()->Count(), PHP_EOL;
 
         $deleted = array();
 
-        while (SeedRecord::get()->Count()) {
-            $seeds = SeedRecord::get()->limit(1000);
-            if ($key) {
-                $seeds = $seeds->filter('Key', $key);
-            }
-            // sort by id desc to delete in reverse
-            $seeds = $seeds->sort('ID DESC');
+        $seeds = SeedRecord::get();
+        if ($key) {
+            $seeds = $seeds->filter('Key', $key);
+        }
 
+        while ($seeds->Count()) {
+            // sort by id desc to delete in reverse
+            $seedBatch = $seeds->limit(1000)->sort('ID DESC');
 
             $classes = array();
-            foreach ($seeds as $seed) {
+            foreach ($seedBatch as $seed) {
                 $className = $seed->SeedClassName;
                 $classes[$className][] = $seed->SeedID;
                 $this->writer->delete($seed);

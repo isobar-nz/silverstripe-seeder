@@ -1,14 +1,14 @@
 <?php
 
-namespace LittleGiant\SilverStripeSeeder\Tests;
+namespace Seeder\Tests;
 
 
-use LittleGiant\SilverStripeSeeder\Heuristics\HeuristicParser;
-use LittleGiant\SilverStripeSeeder\Util\Field;
+use Seeder\Helpers\HeuristicParser;
+use Seeder\Util\Field;
 
 /**
  * Class HeuristicParserTest
- * @package LittleGiant\SilverStripeSeeder\Tests
+ * @package Seeder\Tests
  */
 class HeuristicParserTest extends \SapphireTest
 {
@@ -21,11 +21,11 @@ class HeuristicParserTest extends \SapphireTest
      * @var array
      */
     protected $extraDataObjects = array(
-        'LittleGiant\SilverStripeSeeder\Tests\Dog',
-        'LittleGiant\SilverStripeSeeder\Tests\House',
-        'LittleGiant\SilverStripeSeeder\Tests\Human',
-        'LittleGiant\SilverStripeSeeder\Tests\Pet',
-        'LittleGiant\SilverStripeSeeder\Tests\Treat',
+        'Seeder\Tests\Dog',
+        'Seeder\Tests\House',
+        'Seeder\Tests\Human',
+        'Seeder\Tests\Pet',
+        'Seeder\Tests\Treat',
     );
 
     /**
@@ -173,14 +173,14 @@ class HeuristicParserTest extends \SapphireTest
         $field->fieldType = 'has_one';
         $this->assertFalse($heuristic->match($childField));
     }
-
-    /**
-     *
-     */
-    public static function tearDownAfterClass()
-    {
-        parent::tearDownAfterClass();
-        \SapphireTest::delete_all_temp_dbs();
-    }
+//
+//    /**
+//     *
+//     */
+//    public static function tearDownAfterClass()
+//    {
+//        parent::tearDownAfterClass();
+//        \SapphireTest::delete_all_temp_dbs();
+//    }
 }
 

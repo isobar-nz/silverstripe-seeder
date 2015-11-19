@@ -1,14 +1,14 @@
 <?php
 
-namespace LittleGiant\SilverStripeSeeder\Tests;
+namespace Seeder\Tests;
 
-use LittleGiant\SilverStripeSeeder\Helpers\ConfigParser;
-use LittleGiant\SilverStripeSeeder\Util\BatchedSeedWriter;
-use LittleGiant\SilverStripeSeeder\Util\Field;
+use Seeder\Helpers\ConfigParser;
+use Seeder\Util\BatchedSeedWriter;
+use Seeder\Util\Field;
 
 /**
  * Class ConfigParserTest
- * @package LittleGiant\SilverStripeSeeder\Tests
+ * @package Seeder\Tests
  */
 class ConfigParserTest extends \SapphireTest
 {
@@ -21,11 +21,11 @@ class ConfigParserTest extends \SapphireTest
      * @var array
      */
     protected $extraDataObjects = array(
-        'LittleGiant\SilverStripeSeeder\Tests\Dog',
-        'LittleGiant\SilverStripeSeeder\Tests\House',
-        'LittleGiant\SilverStripeSeeder\Tests\Human',
-        'LittleGiant\SilverStripeSeeder\Tests\Pet',
-        'LittleGiant\SilverStripeSeeder\Tests\Treat',
+        'Seeder\Tests\Dog',
+        'Seeder\Tests\House',
+        'Seeder\Tests\Human',
+        'Seeder\Tests\Pet',
+        'Seeder\Tests\Treat',
     );
 
     /**
@@ -45,22 +45,22 @@ class ConfigParserTest extends \SapphireTest
         $config = new ConfigParser(new BatchedSeedWriter());
 
         $field = $config->objectConfig2Field(array(
-            'class' => 'LittleGiant\SilverStripeSeeder\Tests\Dog',
+            'class' => 'Seeder\Tests\Dog',
             'key' => 'Dog',
-            'provider' => 'LittleGiant\SilverStripeSeeder\Tests\TestProvider',
+            'provider' => 'Seeder\Tests\TestProvider',
             'count' => 100,
             'ignore' => array('Breed'),
             'fields' => array(
                 'Name' => array(
-                    'provider' => 'LittleGiant\SilverStripeSeeder\Tests\TestProvider',
+                    'provider' => 'Seeder\Tests\TestProvider',
                 ),
                 'Age' => 'test()',
             ),
         ));
 
-        $this->assertEquals('LittleGiant\SilverStripeSeeder\Tests\Dog', $field->dataType);
+        $this->assertEquals('Seeder\Tests\Dog', $field->dataType);
         $this->assertEquals('Dog', $field->key);
-        $this->assertInstanceOf('LittleGiant\SilverStripeSeeder\Tests\TestProvider', $field->provider);
+        $this->assertInstanceOf('Seeder\Tests\TestProvider', $field->provider);
         $this->assertEquals(100, $field->count);
         $this->assertEquals(100, $field->totalCount);
         $this->assertCount(2, $field->fields);
@@ -74,7 +74,7 @@ class ConfigParserTest extends \SapphireTest
         $this->assertStringStartsWith('Varchar', $nameField->dataType);
         $this->assertEquals('Name', $nameField->name);
         $this->assertEquals('Name', $nameField->fieldName);
-        $this->assertInstanceOf('LittleGiant\SilverStripeSeeder\Tests\TestProvider', $nameField->provider);
+        $this->assertInstanceOf('Seeder\Tests\TestProvider', $nameField->provider);
         $this->assertEquals(100, $nameField->totalCount);
 
         $ageField = $field->fields[1];
@@ -82,7 +82,7 @@ class ConfigParserTest extends \SapphireTest
         $this->assertEquals('Int', $ageField->dataType);
         $this->assertEquals('Age', $ageField->name);
         $this->assertEquals('Age', $ageField->fieldName);
-        $this->assertInstanceOf('LittleGiant\SilverStripeSeeder\Tests\TestProvider', $ageField->provider);
+        $this->assertInstanceOf('Seeder\Tests\TestProvider', $ageField->provider);
         $this->assertEquals(100, $ageField->totalCount);
     }
 
@@ -94,11 +94,11 @@ class ConfigParserTest extends \SapphireTest
         $config = new ConfigParser(new BatchedSeedWriter());
 
         $field = $config->objectConfig2Field(array(
-            'class' => 'LittleGiant\SilverStripeSeeder\Tests\Human',
+            'class' => 'Seeder\Tests\Human',
             'fields' => array(
                 'Parent' => array(
                     'count' => 10,
-                    'provider' => 'LittleGiant\SilverStripeSeeder\Tests\TestProvider',
+                    'provider' => 'Seeder\Tests\TestProvider',
                 ),
             ),
         ));
@@ -108,7 +108,7 @@ class ConfigParserTest extends \SapphireTest
         $this->assertEquals('Parent', $parentField->name);
         $this->assertEquals('ParentID', $parentField->fieldName);
         $this->assertEquals('Parent', $parentField->methodName);
-        $this->assertInstanceOf('LittleGiant\SilverStripeSeeder\Tests\TestProvider', $parentField->provider);
+        $this->assertInstanceOf('Seeder\Tests\TestProvider', $parentField->provider);
         $this->assertEquals(1, $parentField->count);
         $this->assertEquals(1, $parentField->totalCount);
         $this->assertCount(2, $parentField->fields);
@@ -123,11 +123,11 @@ class ConfigParserTest extends \SapphireTest
         $config = new ConfigParser(new BatchedSeedWriter());
 
         $field = $config->objectConfig2Field(array(
-            'class' => 'LittleGiant\SilverStripeSeeder\Tests\Dog',
+            'class' => 'Seeder\Tests\Dog',
             'fields' => array(
                 'Treats' => array(
                     'count' => 10,
-                    'provider' => 'LittleGiant\SilverStripeSeeder\Tests\TestProvider',
+                    'provider' => 'Seeder\Tests\TestProvider',
                 ),
             ),
         ));
@@ -136,7 +136,7 @@ class ConfigParserTest extends \SapphireTest
         $this->assertEquals(Field::FT_HAS_MANY, $treatsField->fieldType);
         $this->assertEquals('Treats', $treatsField->name);
         $this->assertEquals('Treats', $treatsField->methodName);
-        $this->assertInstanceOf('LittleGiant\SilverStripeSeeder\Tests\TestProvider', $treatsField->provider);
+        $this->assertInstanceOf('Seeder\Tests\TestProvider', $treatsField->provider);
         $this->assertEquals(10, $treatsField->count);
         $this->assertEquals(10, $treatsField->totalCount);
         $this->assertCount(2, $treatsField->fields);
@@ -150,11 +150,11 @@ class ConfigParserTest extends \SapphireTest
         $config = new ConfigParser(new BatchedSeedWriter());
 
         $field = $config->objectConfig2Field(array(
-            'class' => 'LittleGiant\SilverStripeSeeder\Tests\Human',
+            'class' => 'Seeder\Tests\Human',
             'fields' => array(
                 'Pets' => array(
                     'count' => 5,
-                    'provider' => 'LittleGiant\SilverStripeSeeder\Tests\TestProvider',
+                    'provider' => 'Seeder\Tests\TestProvider',
                 ),
             ),
         ));
@@ -163,7 +163,7 @@ class ConfigParserTest extends \SapphireTest
         $this->assertEquals(Field::FT_MANY_MANY, $petsField->fieldType);
         $this->assertEquals('Pets', $petsField->name);
         $this->assertEquals('Pets', $petsField->methodName);
-        $this->assertInstanceOf('LittleGiant\SilverStripeSeeder\Tests\TestProvider', $petsField->provider);
+        $this->assertInstanceOf('Seeder\Tests\TestProvider', $petsField->provider);
         $this->assertEquals(5, $petsField->count);
         $this->assertEquals(5, $petsField->totalCount);
         $this->assertCount(2, $petsField->fields);
@@ -177,7 +177,7 @@ class ConfigParserTest extends \SapphireTest
         $config = new ConfigParser(new BatchedSeedWriter());
 
         $field = $config->objectConfig2Field(array(
-            'class' => 'LittleGiant\SilverStripeSeeder\Tests\Human',
+            'class' => 'Seeder\Tests\Human',
             'count' => 100,
             'fields' => array(
                 'Pets' => array(
@@ -199,7 +199,7 @@ class ConfigParserTest extends \SapphireTest
         $config = new ConfigParser(new BatchedSeedWriter());
 
         $field = $config->objectConfig2Field(array(
-            'class' => 'LittleGiant\SilverStripeSeeder\Tests\Human',
+            'class' => 'Seeder\Tests\Human',
             'fields' => array(
                 'Name' => 'test()',
             ),
@@ -212,12 +212,12 @@ class ConfigParserTest extends \SapphireTest
         $this->assertFalse($ageField->explicit);
     }
 
-    /**
-     *
-     */
-    public static function tearDownAfterClass()
-    {
-        parent::tearDownAfterClass();
-        \SapphireTest::delete_all_temp_dbs();
-    }
+//    /**
+//     *
+//     */
+//    public static function tearDownAfterClass()
+//    {
+//        parent::tearDownAfterClass();
+//        \SapphireTest::delete_all_temp_dbs();
+//    }
 }

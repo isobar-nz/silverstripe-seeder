@@ -1,11 +1,11 @@
 <?php
 
-namespace LittleGiant\SilverStripeSeeder\Tests;
+namespace Seeder\Tests;
 
 
 /**
  * Class Dog
- * @package LittleGiant\SilverStripeSeeder\Tests
+ * @package Seeder\Tests
  */
 class Dog extends Pet implements \TestOnly
 {

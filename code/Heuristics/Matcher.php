@@ -1,10 +1,10 @@
 <?php
 
-namespace LittleGiant\SilverStripeSeeder\Heuristics;
+namespace Seeder\Heuristics;
 
 /**
  * Interface Matcher
- * @package LittleGiant\SilverStripeSeeder\Heuristics
+ * @package Seeder\Heuristics
  */
 interface Matcher
 {

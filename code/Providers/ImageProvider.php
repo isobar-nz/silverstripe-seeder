@@ -1,10 +1,14 @@
 <?php
 
+namespace Seeder;
+
+use Exception;
 use Faker\Factory;
-use LittleGiant\SilverStripeSeeder\Providers\Provider;
+use Folder;
 
 /**
  * Class ImageProvider
+ * @package Seeder
  */
 class ImageProvider extends Provider
 {
@@ -116,14 +120,9 @@ class ImageProvider extends Provider
 
         $folder = Folder::find_or_make('Seeder');
 
-
-
         $file = file_get_contents("http://placehold.it/{$width}x{$height}");
         $fileName = uniqid('test-image') . '.jpg';
         file_put_contents($folder->getFullPath() . DIRECTORY_SEPARATOR . $fileName, $file);
-
-//        $fileName = $this->faker->image($folder->getFullPath(), $width, $height);
-//        $fileName = str_replace($folder->getFullPath() . DIRECTORY_SEPARATOR, '', $fileName);
 
         $imageClassName = $field->dataType;
         $image = new $imageClassName();

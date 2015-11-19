@@ -1,6 +1,6 @@
 ---
 Name: seeder-heuristics
-After: 'framework/*', 'cms/*'
+After: framework/*, cms/*
 ---
 
 Seeder:
@@ -9,349 +9,395 @@ Seeder:
 
     HTML:
       conditions:
-        dataType: 'like(html%)'
-        fieldType: 'db'
-      field: 'html()'
+        dataType: like(html%)
+        fieldType: db
+      field: html()
 
     # field name heuristics
 
-    Role:
-      conditions:
-        name:
-          - 'like(%role%)'
-          - 'like(%position)'
-        parent:
-          - 'is_a(Member)'
-          - 'like(%people%)'
-          - 'like(%person%)'
-          - 'like(%member%)'
-          - 'like(%partner%)'
-        fieldType: 'db'
-        dataType: 'like(varchar%)'
-      field: 'faker(words,5)'
-
+    # name fields
     Name:
       conditions:
         name:
-          - 'like(name)'
+          - like(name)
         fieldType: db
-        dataType:
-          - 'is_a(Member)'
-          - 'like(%people%)'
-          - 'like(%person%)'
-          - 'like(%member%)'
-          - 'like(%partner%)'
-          - 'like(%child%)'
-      field: 'faker(name)'
+        parent:
+          - is_a(Member)
+          - like(%people%)
+          - like(%person%)
+          - like(%member%)
+          - like(%partner%)
+          - like(%child%)
+        datatpyr: like(varchar%)
+      field: faker(name)
 
     FirstName:
       conditions:
         name:
-          - 'like(%firstname%)'
-          - 'like(%givenname%)'
+          - like(%firstname%)
+          - like(%givenname%)
         fieldType: db
-        dataType: 'like(varchar%)'
-      field: 'faker(firstName)'
+        dataType: like(varchar%)
+      field: faker(firstName)
 
     Surname:
       conditions:
         name:
-          - 'like(%lastname%)'
-          - 'like(%surname%)'
+          - like(%lastname%)
+          - like(%surname%)
         fieldType: db
-        dataType: 'like(%varchar)'
-      field: 'faker(lastName)'
+        dataType: like(%varchar)
+      field: faker(lastName)
+
+    Role:
+      conditions:
+        name:
+          - like(%role%)
+          - like(%position)
+        parent:
+          - is_a(Member)
+          - like(%people%)
+          - like(%person%)
+          - like(%member%)
+          - like(%partner%)
+        fieldType: db
+        dataType: like(varchar%)
+      field: faker(words,5)
 
     Email:
       conditions:
-        name: 'like(%email%)'
+        name: like(%email%)
         fieldType: db
-        dataType: 'like(varchar%)'
-      field: 'faker(email)'
+        dataType: like(varchar%)
+      field: faker(email)
 
     Phone:
       conditions:
         name:
-          - 'like(%phone%)'
-          - 'like(%mobile%)'
-        fieldType: 'db'
-        dataType: 'like(varchar%)'
-      field: 'faker(phoneNumber)'
+          - like(%phone%)
+          - like(%mobile%)
+        fieldType: db
+        dataType: like(varchar%)
+      field: faker(phoneNumber)
 
     TollFree:
       conditions:
         name:
-          - 'like(%tollfree%)'
-        fieldType: 'db'
-        dataType: 'like(varchar%)'
-      field: 'faker(tollFreePhoneNumner)'
+          - like(%tollfree%)
+        fieldType: db
+        dataType: like(varchar%)
+      field: faker(tollFreePhoneNumner)
 
     Company:
       conditions:
-        name: 'like(company%)'
-        fieldType: 'db'
-        dataType: 'like(varchar%)'
-      field: 'faker(company)'
+        name: like(company%)
+        fieldType: db
+        dataType: like(varchar%)
+      field: faker(company)
 
+
+    # company fields
+    CompanyName:
+      conditions:
+        name:
+          - like(%name)
+        fieldType: db
+        dataType: like(varchar%)
+        parent:
+          - is_a(%company%)
+          - is_a(%business%)
+          - is_a(%supplier%)
+      field: faker(company)
+
+    # addresses
     Address:
       conditions:
-        name: 'like(%address)'
-        fieldType: 'db'
-        dataType: 'like(varchar%)'
-      field: 'faker(address)'
+        name: like(%address)
+        fieldType: db
+        dataType:
+          - like(varchar%)
+          - like(text)
+      field: faker(address)
 
     Address1:
       conditions:
         name:
-          - 'like(%address1)'
-          - 'like(%street%)'
-        fieldType: 'db'
-        dataType: 'like(varchar%)'
-      field: 'faker(streetAddress)'
+          - like(%address1)
+          - like(%street%)
+        fieldType: db
+        dataType: like(varchar%)
+      field: faker(streetAddress)
 
     Address2:
       conditions:
         name:
-          - 'like(%address2)'
-          - 'like(%addressline2)'
-          - 'like(%suburb)'
-        fieldType: 'db'
-        dataType: 'like(varchar%)'
-      field: 'faker(city)'
+          - like(%address2)
+          - like(%addressline2)
+          - like(%suburb)
+        fieldType: db
+        dataType: like(varchar%)
+      field: faker(city)
 
     City:
       conditions:
-        name: 'like(%city%)'
-        fieldType: 'db'
-        dataType: 'like(varchar%)'
-      field: 'faker(city)'
+        name: like(%city%)
+        fieldType: db
+        dataType: like(varchar%)
+      field: faker(city)
 
     Postcode:
       conditions:
         name:
-          - 'like(%postcode%)'
-          - 'like(%postalcode%)'
-          - 'like(%zipcode%)'
-        fieldType: 'db'
-        dataType: 'like(varchar%)'
-      field: 'faker(postcode)'
+          - like(%postcode%)
+          - like(%postalcode%)
+          - like(%zipcode%)
+        fieldType: db
+        dataType: like(varchar%)
+      field: faker(postcode)
 
     State:
       conditions:
-        name: 'like(%state)'
-        fieldType: 'db'
-        dataType: 'like(varchar%)'
-      field: 'faker(state)'
+        name: like(%state)
+        fieldType: db
+        dataType: like(varchar%)
+      field: faker(state)
 
     Country:
       conditions:
-        name: 'like(%country)'
-        fieldType: 'db'
-        dataType: 'like(varchar%)'
-      field: 'faker(country)'
+        name: like(%country)
+        fieldType: db
+        dataType: like(varchar%)
+      field: faker(country)
 
     CountryCode:
       conditions:
-        name: 'like(%countrycode)'
-        fieldType: 'db'
-        dataType: 'like(varchar%)'
-      field: 'faker(countryCode)'
+        name: like(%countrycode)
+        fieldType: db
+        dataType: like(varchar%)
+      field: faker(countryCode)
 
     Latitude:
       conditions:
         name:
-          - 'like(%latitude)'
-          - 'like(lat)'
-        fieldType: 'db'
-        dataType: 'like(varchar%)'
-      field: 'faker(latitude)'
+          - like(%latitude)
+          - like(lat)
+        fieldType: db
+        dataType: like(varchar%)
+      field: faker(latitude)
 
     Longitude:
       conditions:
         name:
-          - 'like(%longitude)'
-          - 'like(lng)'
-        fieldType: 'db'
-        dataType: 'like(varchar%)'
-      field: 'faker(longitude)'
+          - like(%longitude)
+          - like(lng)
+        fieldType: db
+        dataType: like(varchar%)
+      field: faker(longitude)
 
     Link:
       conditions:
         name:
-          - 'like(%link)'
-          - 'like(%url)'
-        fieldType: 'db'
-        dataType: 'like(varchar%)'
-      field: 'faker(url)'
+          - like(%link)
+          - like(%url)
+        fieldType: db
+        dataType: like(varchar%)
+      field: faker(url)
+
+    # text
 
     Title:
       conditions:
-        name: 'like(%title)'
-        fieldType: 'db'
-        dataType: 'like(varchar%)'
-      field: 'faker(words,4)'
+        name: like(%title)
+        fieldType: db
+        dataType: like(varchar%)
+      field: faker(words,4)
 
     Label:
       conditions:
-        name: 'like(%label)'
-        fieldType: 'db'
-        dataType: 'like(varchar%)'
-      field: 'faker(words,2)'
+        name: like(%label)
+        fieldType: db
+        dataType: like(varchar%)
+      field: faker(words,2)
 
     Content:
       conditions:
-        name: 'like(%content)'
-        fieldType: 'db'
-        dataType: 'like(text)'
-      field: 'faker(paragraphs,6)'
+        name: like(%content)
+        fieldType: db
+        dataType: like(text)
+      field: faker(paragraphs,6)
 
-    Content:
+    HTMLContent:
       conditions:
-        name: 'like(%content)'
-        fieldType: 'db'
-        dataType: 'like(html*)'
-      field: 'html()'
+        name: like(%content)
+        fieldType: db
+        dataType: like(html*)
+      field: html()
 
     Description:
       conditions:
-        name: 'like(%description)'
-        fieldType: 'db'
-        dataType: 'like(text)'
-      field: 'faker(paragraphs,3)'
+        name: like(%description)
+        fieldType: db
+        dataType: like(text)
+      field: faker(paragraphs,3)
 
     Blurb:
       conditions:
-        name: 'like(%blurb)'
-        fieldType: 'db'
-        dataType: 'like(text)'
-      field: 'faker(sentences,3)'
+        name: like(%blurb)
+        fieldType: db
+        dataType: like(text)
+      field: faker(sentences,3)
+
+    # money
 
     Price:
       conditions:
         name:
-          - 'like(%price)'
-          - 'like(%amount)'
-        fieldType: 'db'
+          - like(%price)
+          - like(%amount)
+        fieldType: db
         dataType:
-          - 'like(currency%)'
-          - 'like(decimal%)'
-          - 'like(float%)'
-      field: 'faker(randomFloat,2,5,1000)'
+          - like(currency%)
+          - like(decimal%)
+          - like(float%)
+      field: faker(randomFloat,2,5,1000)
+
+    # dates
 
     StartDate:
       conditions:
         name:
-          - 'like(%start%)'
-          - 'like(%begin%)'
-        fieldType: 'db'
+          - like(%start%)
+          - like(%begin%)
+        fieldType: db
         dataType:
-          - 'like(ss_datetime)'
-          - 'like(date)'
-      field: 'date(+7 days)'
+          - like(ss_datetime)
+          - like(date)
+      field: date(+7 days)
 
     CreatedDate:
       conditions:
         name:
-          - 'like(%created%)'
-        fieldType: 'db'
+          - like(%created%)
+        fieldType: db
         dataType:
-          - 'like(ss_datetime)'
-          - 'like(date)'
-      field: 'date(-7 days)'
+          - like(ss_datetime)
+          - like(date)
+      field: date(-7 days)
 
     EndDate:
       conditions:
         name:
-          - 'like(end%)'
-          - 'like(%finish%)'
-        fieldType: 'db'
+          - like(end%)
+          - like(%finish%)
+        fieldType: db
         dataType:
-          - 'like(ss_datetime)'
-          - 'like(date)'
-      field: 'date(+1 month)'
+          - like(ss_datetime)
+          - like(date)
+      field: date(+1 month)
+
+    # images
 
     Image:
       conditions:
-        dataType: 'is_a(Image)'
-      field: 'image()'
+        dataType: is_a(Image)
+      field: image()
 
     BannerImage:
       conditions:
         name:
-          - 'like(%background%)'
-          - 'like(%banner%)'
-        dataType: 'is_a(Image)'
-      field: 'image(2550,800)'
+          - like(%background%)
+          - like(%banner%)
+        dataType: is_a(Image)
+      field: image(2550,800)
 
     ProfileImage:
       conditions:
         name:
-          - 'like(%profile%)'
-          - 'like(%display%)'
-        dataType: 'is_a(Image)'
-      field: 'image(400,400)'
+          - like(%profile%)
+          - like(%display%)
+        dataType: is_a(Image)
+      field: image(400,400)
 
     Icon:
       conditions:
-        name: 'like(%icon%)'
-        dataType: 'is_a(Image)'
-      field: 'image(200,200)'
+        name: like(%icon%)
+        dataType: is_a(Image)
+      field: image(200,200)
+
+    # find closest parent for SiteTree
+
+    SuperSuperParent:
+      conditions:
+        name: Parent
+        fieldType: has_one
+        parent.parent: is_a(SiteTree)
+      field: '{$Up.Up.Up}'
+
+    SuperParent:
+      conditions:
+        name: Parent
+        fieldType: has_one
+        parent.parent: is_a(SiteTree)
+      field: '{$Up.Up}'
 
     Parent:
       conditions:
-        name: 'Parent'
-        fieldType: 'has_one'
-        parent.parent: 'is_a(SiteTree)'
-        parent: 'is_a(SiteTree)'
+        name: Parent
+        fieldType: has_one
+        parent: is_a(SiteTree)
       field: '{$Up}'
+
+    # sort fields
 
     Sort:
       conditions:
         name:
-          - 'like(%sort%)'
-          - 'like(%order%)'
-        dataType: 'like(int%)'
-        fieldType: 'db'
-        parent: 'is_a(DataObject)'
-      field: 'sort()'
+          - like(%sort%)
+          - like(%order%)
+        dataType: like(int%)
+        fieldType: db
+        parent: is_a(DataObject)
+      field: sort()
+
+    # site tree fields
 
     URLSegment:
       conditions:
-        name: 'URLSegment'
-        parent: 'is_a(SiteTree)'
-        fieldType: 'db'
-      field: 'URLSegment()'
+        name: URLSegment
+        parent: is_a(SiteTree)
+        fieldType: db
+      field: URLSegment()
 
     PageTitle:
       conditions:
-        name: 'Title'
-        fieldType: 'db'
+        name: Title
+        fieldType: db
         totalCount: 1
-        parent: 'is_a(SiteTree)'
-        parent.fieldType: 'root'
-      field: 'pageTitle()'
+        parent: is_a(SiteTree)
+        parent.fieldType: root
+      field: pageTitle()
 
     MenuTitle:
       conditions:
-        name: 'MenuTitle'
-        fieldType: 'db'
-        dataType: 'like(varchar%)'
-        parent: 'is_a(SiteTree)'
+        name: MenuTitle
+        fieldType: db
+        dataType: like(varchar%)
+        parent: is_a(SiteTree)
       field: '{$Title}'
 
     ShowInMenus:
       conditions:
-        name: 'ShowInMenus'
-        parent: 'is_a(SiteTree)'
-        fieldType: 'db'
+        name: ShowInMenus
+        parent: is_a(SiteTree)
+        fieldType: db
       field: 0
 
     TopLevelPageShowInMenus:
       conditions:
-        name: 'ShowInMenus'
-        parent: 'is_a(SiteTree)'
-        parent.fieldType: 'root'
-        fieldType: 'db'
+        name: ShowInMenus
+        fieldType: db
+        parent: is_a(SiteTree)
+        parent.fieldType: root
         totalCount: 1
       field: 1
 
@@ -360,7 +406,7 @@ Seeder:
     CacheFields:
       conditions:
         fieldType: db
-        totalCount: 'gt(20)'
+        totalCount: gt(20)
       cache: 20
 
     # all url segments, unique fields, sorts must be unique
@@ -368,25 +414,25 @@ Seeder:
       conditions:
         fieldType: db
         provider:
-          - 'is_a(URLSegmentProvider)'
-          - 'is_a(UniqueProvider)'
-          - 'is_a(SortProvider)'
-        totalCount: 'gt(1)'
+          - is_a(URLSegmentProvider)
+          - is_a(UniqueProvider)
+          - is_a(SortProvider)
+        totalCount: gt(1)
       nocache:
 
     # all member emails must be unique
     UniqueEmail:
       conditions:
-        fieldType: 'db'
-        name: 'Email'
-        parent: 'is_a(Member)'
-        totalCount: 'gt(1)'
+        fieldType: db
+        name: Email
+        parent: is_a(Member)
+        totalCount: gt(1)
       nocache:
 
     CacheImageFields:
       conditions:
-        totalCount: 'gt(3)'
-        provider: 'is_a(ImageProvider)'
+        totalCount: gt(3)
+        provider: is_a(ImageProvider)
       cache: 3
 
 

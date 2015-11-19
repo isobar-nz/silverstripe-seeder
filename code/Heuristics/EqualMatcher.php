@@ -1,10 +1,10 @@
 <?php
 
-namespace LittleGiant\SilverStripeSeeder\Heuristics;
+namespace Seeder\Heuristics;
 
 /**
  * Class EqualMatcher
- * @package LittleGiant\SilverStripeSeeder\Heuristics
+ * @package Seeder\Heuristics
  */
 class EqualMatcher implements Matcher
 {

@@ -1,9 +1,13 @@
 <?php
 
-use LittleGiant\SilverStripeSeeder\Providers\Provider;
+namespace Seeder;
+
+use Exception;
+use SS_Log;
 
 /**
  * Class RandomObjectProvider
+ * @package Seeder
  */
 class RandomObjectProvider extends Provider
 {

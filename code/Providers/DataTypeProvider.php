@@ -1,10 +1,12 @@
 <?php
 
+namespace Seeder;
+
 use Faker\Factory;
-use LittleGiant\SilverStripeSeeder\Providers\Provider;
 
 /**
  * Class DataTypeProvider
+ * @package Seeder
  */
 class DataTypeProvider extends Provider
 {

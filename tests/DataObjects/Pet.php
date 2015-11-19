@@ -1,11 +1,11 @@
 <?php
 
-namespace LittleGiant\SilverStripeSeeder\Tests;
+namespace Seeder\Tests;
 
 
 /**
  * Class Pet
- * @package LittleGiant\SilverStripeSeeder\Tests
+ * @package Seeder\Tests
  */
 class Pet extends \DataObject implements \TestOnly
 {
@@ -21,14 +21,14 @@ class Pet extends \DataObject implements \TestOnly
      * @var array
      */
     private static $has_many = array(
-        'Treats' => 'LittleGiant\SilverStripeSeeder\Tests\Treat',
+        'Treats' => 'Seeder\Tests\Treat',
     );
 
     /**
      * @var array
      */
     private static $belongs_many_many = array(
-        'BelongsHuman' => 'LittleGiant\SilverStripeSeeder\Tests\Human',
+        'BelongsHuman' => 'Seeder\Tests\Human',
     );
 }
 

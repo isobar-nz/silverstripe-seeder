@@ -1,9 +1,14 @@
 <?php
 
-use LittleGiant\SilverStripeSeeder\Providers\Provider;
+namespace Seeder;
+
+use Convert;
+use FormField;
+use SiteTree;
 
 /**
  * Class URLSegmentProvider
+ * @package Seeder
  */
 class URLSegmentProvider extends Provider
 {

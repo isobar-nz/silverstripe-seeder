@@ -1,15 +1,15 @@
 <?php
 
-namespace LittleGiant\SilverStripeSeeder\Tests;
+namespace Seeder\Tests;
 
-use LittleGiant\SilverStripeSeeder\Helpers\ConfigParser;
-use LittleGiant\SilverStripeSeeder\Util\SeederState;
+use Seeder\Helpers\ConfigParser;
+use Seeder\Util\SeederState;
 use SiteTree;
-use PageTitleProvider;
+use Seeder\PageTitleProvider;
 
 /**
  * Class PageTitleProviderTest
- * @package LittleGiant\SilverStripeSeeder\Tests
+ * @package Seeder\Tests
  */
 class PageTitleProviderTest extends \SapphireTest
 {
@@ -48,12 +48,12 @@ class PageTitleProviderTest extends \SapphireTest
         $this->assertEquals('Site Tree', $title[0]);
     }
 
-    /**
-     *
-     */
-    public static function tearDownAfterClass()
-    {
-        parent::tearDownAfterClass();
-        \SapphireTest::delete_all_temp_dbs();
-    }
+//    /*
+//     *
+//     */
+//    public static function tearDownAfterClass()
+//    {
+//        parent::tearDownAfterClass();
+//        \SapphireTest::delete_all_temp_dbs();
+//    }
 }

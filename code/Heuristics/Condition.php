@@ -1,10 +1,10 @@
 <?php
 
-namespace LittleGiant\SilverStripeSeeder\Heuristics;
+namespace Seeder\Heuristics;
 
 /**
  * Class Condition
- * @package LittleGiant\SilverStripeSeeder\Heuristics
+ * @package Seeder\Heuristics
  */
 class Condition
 {

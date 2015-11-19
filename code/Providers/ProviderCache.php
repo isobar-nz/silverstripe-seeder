@@ -1,9 +1,10 @@
 <?php
 
-use LittleGiant\SilverStripeSeeder\Providers\Provider;
+namespace Seeder;
 
 /**
  * Class ProviderCache
+ * @package Seeder
  */
 class ProviderCache extends Provider
 {

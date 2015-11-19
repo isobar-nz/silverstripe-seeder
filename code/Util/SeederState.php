@@ -1,10 +1,10 @@
 <?php
 
-namespace LittleGiant\SilverStripeSeeder\Util;
+namespace Seeder\Util;
 
 /**
  * Class SeederState
- * @package LittleGiant\SilverStripeSeeder\Util
+ * @package Seeder\Util
  */
 class SeederState
 {

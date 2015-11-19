@@ -1,14 +1,14 @@
 <?php
 
-namespace LittleGiant\SilverStripeSeeder\Tests;
+namespace Seeder\Tests;
 
-use LittleGiant\SilverStripeSeeder\Helpers\ConfigParser;
-use LittleGiant\SilverStripeSeeder\Util\BatchedSeedWriter;
-use LittleGiant\SilverStripeSeeder\Util\SeederState;
+use Seeder\Helpers\ConfigParser;
+use Seeder\Util\BatchedSeedWriter;
+use Seeder\Util\SeederState;
 
 /**
  * Class ProviderTest
- * @package LittleGiant\SilverStripeSeeder\Tests
+ * @package Seeder\Tests
  */
 class ProviderTest extends \SapphireTest
 {
@@ -21,21 +21,21 @@ class ProviderTest extends \SapphireTest
      * @var array
      */
     protected $extraDataObjects = array(
-        'LittleGiant\SilverStripeSeeder\Tests\Dog',
-        'LittleGiant\SilverStripeSeeder\Tests\House',
-        'LittleGiant\SilverStripeSeeder\Tests\Human',
-        'LittleGiant\SilverStripeSeeder\Tests\Pet',
-        'LittleGiant\SilverStripeSeeder\Tests\Treat',
+        'Seeder\Tests\Dog',
+        'Seeder\Tests\House',
+        'Seeder\Tests\Human',
+        'Seeder\Tests\Pet',
+        'Seeder\Tests\Treat',
     );
 
-    /**
-     *
-     */
-    public function __construct()
-    {
-        parent::__construct();
-        $this->setUpOnce();
-    }
+//    /**
+//     *
+//     */
+//    public function __construct()
+//    {
+//        parent::__construct();
+//        $this->setUpOnce();
+//    }
 
     /**
      *
@@ -46,8 +46,8 @@ class ProviderTest extends \SapphireTest
         $configParser = new ConfigParser($writer);
 
         $field = $configParser->objectConfig2Field(array(
-            'class' => 'LittleGiant\SilverStripeSeeder\Tests\Dog',
-            'provider' => 'LittleGiant\SilverStripeSeeder\Tests\TestProvider',
+            'class' => 'Seeder\Tests\Dog',
+            'provider' => 'Seeder\Tests\TestProvider',
             'fields' => array(
                 'Name' => 'test()',
                 'Age' => 'test()',
@@ -78,11 +78,11 @@ class ProviderTest extends \SapphireTest
         $configParser = new ConfigParser($writer);
 
         $field = $configParser->objectConfig2Field(array(
-            'class' => 'LittleGiant\SilverStripeSeeder\Tests\Human',
-            'provider' => 'LittleGiant\SilverStripeSeeder\Tests\TestProvider',
+            'class' => 'Seeder\Tests\Human',
+            'provider' => 'Seeder\Tests\TestProvider',
             'fields' => array(
                 'Parent' => array(
-                    'provider' => 'LittleGiant\SilverStripeSeeder\Tests\TestProvider',
+                    'provider' => 'Seeder\Tests\TestProvider',
                     'fields' => array(
                         'Name' => 'test()',
                         'Age' => 'test()',
@@ -115,14 +115,14 @@ class ProviderTest extends \SapphireTest
         $configParser = new ConfigParser($writer);
 
         $field = $configParser->objectConfig2Field(array(
-            'class' => 'LittleGiant\SilverStripeSeeder\Tests\Human',
-            'provider' => 'LittleGiant\SilverStripeSeeder\Tests\TestProvider',
+            'class' => 'Seeder\Tests\Human',
+            'provider' => 'Seeder\Tests\TestProvider',
             'fields' => array(
                 'Parent' => array(
-                    'provider' => 'LittleGiant\SilverStripeSeeder\Tests\TestProvider',
+                    'provider' => 'Seeder\Tests\TestProvider',
                     'fields' => array(
                         'Parent' => array(
-                            'provider' => 'LittleGiant\SilverStripeSeeder\Tests\TestProvider',
+                            'provider' => 'Seeder\Tests\TestProvider',
                             'fields' => array(
                                 'Parent' => 'value({$Up.Up})',
                             ),
@@ -156,8 +156,8 @@ class ProviderTest extends \SapphireTest
         $configParser = new ConfigParser($writer);
 
         $field = $configParser->objectConfig2Field(array(
-            'class' => 'LittleGiant\SilverStripeSeeder\Tests\Dog',
-            'provider' => 'LittleGiant\SilverStripeSeeder\Tests\TestProvider',
+            'class' => 'Seeder\Tests\Dog',
+            'provider' => 'Seeder\Tests\TestProvider',
             'fields' => array(
                 'Treats' => array(
                     'count' =>  10,
@@ -195,12 +195,12 @@ class ProviderTest extends \SapphireTest
         $configParser = new ConfigParser($writer);
 
         $field = $configParser->objectConfig2Field(array(
-            'class' => 'LittleGiant\SilverStripeSeeder\Tests\Human',
-            'provider' => 'LittleGiant\SilverStripeSeeder\Tests\TestProvider',
+            'class' => 'Seeder\Tests\Human',
+            'provider' => 'Seeder\Tests\TestProvider',
             'fields' => array(
                 'Children' => array(
                     'count' => 10,
-                    'provider' => 'LittleGiant\SilverStripeSeeder\Tests\TestProvider',
+                    'provider' => 'Seeder\Tests\TestProvider',
                     'fields' => array(
                         'Name' => 'test()',
                         'Age' => 'test()',
@@ -208,7 +208,7 @@ class ProviderTest extends \SapphireTest
                 ),
                 'Pets' => array(
                     'count' => 5,
-                    'provider' => 'LittleGiant\SilverStripeSeeder\Tests\TestProvider',
+                    'provider' => 'Seeder\Tests\TestProvider',
                 ),
             ),
         ));
@@ -241,7 +241,7 @@ class ProviderTest extends \SapphireTest
 
         $field = $configParser->objectConfig2Field(array(
             'class' => 'SiteTree',
-            'provider' => 'LittleGiant\SilverStripeSeeder\Tests\TestProvider',
+            'provider' => 'Seeder\Tests\TestProvider',
             'publish' => false,
             'fields' => array(
                 'Title' => 'test()',
@@ -276,7 +276,7 @@ class ProviderTest extends \SapphireTest
 
         $field = $configParser->objectConfig2Field(array(
             'class' => 'SiteTree',
-            'provider' => 'LittleGiant\SilverStripeSeeder\Tests\TestProvider',
+            'provider' => 'Seeder\Tests\TestProvider',
             'fields' => array(
                 'Title' => 'test()',
             ),
@@ -300,13 +300,13 @@ class ProviderTest extends \SapphireTest
         \Versioned::reading_stage($currentStage);
     }
 
-    /**
-     *
-     */
-    public static function tearDownAfterClass()
-    {
-        parent::tearDownAfterClass();
-        \SapphireTest::delete_all_temp_dbs();
-    }
+//    /**
+//     *
+//     */
+//    public static function tearDownAfterClass()
+//    {
+//        parent::tearDownAfterClass();
+//        \SapphireTest::delete_all_temp_dbs();
+//    }
 
 }

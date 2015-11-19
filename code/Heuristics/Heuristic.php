@@ -1,12 +1,12 @@
 <?php
 
-namespace LittleGiant\SilverStripeSeeder\Heuristics;
+namespace Seeder\Heuristics;
 
-use ProviderCache;
+use Seeder\ProviderCache;
 
 /**
  * Class Heuristic
- * @package LittleGiant\SilverStripeSeeder\Heuristics
+ * @package Seeder\Heuristics
  */
 class Heuristic
 {
@@ -82,7 +82,7 @@ class Heuristic
     {
         if (!$field->explicit) {
             // if a new provider then reset options
-            if (isset($this->options['provider'])) {
+            if (isset($this->options['provider']) && class_exists($this->options['provider'])) {
                 $providerClassName = $this->options['provider'];
                 $provider = new $providerClassName();
                 $provider->setWriter($writer);

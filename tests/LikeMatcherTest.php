@@ -1,12 +1,12 @@
 <?php
 
-namespace LittleGiant\SilverStripeSeeder\Tests;
+namespace Seeder\Tests;
 
-use LittleGiant\SilverStripeSeeder\Heuristics\LikeMatcher;
+use Seeder\Heuristics\LikeMatcher;
 
 /**
  * Class LikeMatcherTest
- * @package LittleGiant\SilverStripeSeeder\Tests
+ * @package Seeder\Tests
  */
 class LikeMatcherTest extends \SapphireTest
 {

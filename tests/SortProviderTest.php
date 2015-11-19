@@ -1,15 +1,15 @@
 <?php
 
-namespace LittleGiant\SilverStripeSeeder\Tests;
+namespace Seeder\Tests;
 
-use LittleGiant\SilverStripeSeeder\Helpers\ConfigParser;
-use LittleGiant\SilverStripeSeeder\Util\SeederState;
+use Seeder\Helpers\ConfigParser;
+use Seeder\Util\SeederState;
 use SiteTree;
-use SortProvider;
+use Seeder\SortProvider;
 
 /**
  * Class SortProviderTest
- * @package LittleGiant\SilverStripeSeeder\Tests
+ * @package Seeder\Tests
  */
 class SortProviderTest extends \SapphireTest
 {
@@ -51,12 +51,12 @@ class SortProviderTest extends \SapphireTest
         $this->assertTrue($value2[0] < $value3[0]);
     }
 
-    /**
-     *
-     */
-    public static function tearDownAfterClass()
-    {
-        parent::tearDownAfterClass();
-        \SapphireTest::delete_all_temp_dbs();
-    }
+//    /**
+//     *
+//     */
+//    public static function tearDownAfterClass()
+//    {
+//        parent::tearDownAfterClass();
+//        \SapphireTest::delete_all_temp_dbs();
+//    }
 }

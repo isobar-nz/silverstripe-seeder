@@ -1,12 +1,12 @@
 <?php
 
-namespace LittleGiant\SilverStripeSeeder\Providers;
+namespace Seeder;
 
-use LittleGiant\SilverStripeSeeder\Util\Field;
+use Seeder\Util\Field;
 
 /**
  * Class Provider
- * @package LittleGiant\SilverStripeSeeder\Providers
+ * @package Seeder
  */
 abstract class Provider extends \Object
 {

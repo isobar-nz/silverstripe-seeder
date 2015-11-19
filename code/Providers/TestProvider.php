@@ -1,10 +1,12 @@
 <?php
 
-use LittleGiant\SilverStripeSeeder\Providers\Provider;
+namespace Seeder\Tests;
+
+use Seeder\Provider;
 
 /**
  * Class TestProvider
- * @package LittleGiant\SilverStripeSeeder\Tests
+ * @package Seeder\Tests
  */
 class TestProvider extends Provider
 {

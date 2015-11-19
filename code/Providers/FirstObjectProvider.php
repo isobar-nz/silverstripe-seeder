@@ -1,9 +1,13 @@
 <?php
 
-use LittleGiant\SilverStripeSeeder\Providers\Provider;
+namespace Seeder;
+
+use Exception;
+use SS_Log;
 
 /**
  * Class FirstObjectProvider
+ * @package Seeder
  */
 class FirstObjectProvider extends Provider
 {

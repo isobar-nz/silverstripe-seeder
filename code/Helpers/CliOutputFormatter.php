@@ -1,12 +1,10 @@
 <?php
 
-namespace LittleGiant\SilverStripeSeeder;
-
-use LittleGiant\SilverStripeSeeder\Util\CounterTree;
+namespace Seeder\Helpers;
 
 /**
  * Class CliOutputFormatter
- * @package LittleGiant\SilverStripeSeeder
+ * @package Seeder\Helpers
  */
 class CliOutputFormatter implements OutputFormatter
 {

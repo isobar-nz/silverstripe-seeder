@@ -1,12 +1,17 @@
 <?php
 
-namespace LittleGiant\SilverStripeSeeder\Heuristics;
-
-use LittleGiant\SilverStripeSeeder\Helpers\ConfigParser;
+namespace Seeder\Helpers;
+use Seeder\Heuristics\Heuristic;
+use Seeder\Heuristics\EqualMatcher;
+use Seeder\Heuristics\Condition;
+use Seeder\Heuristics\LikeMatcher;
+use Seeder\Heuristics\GreaterThanMatcher;
+use Seeder\Heuristics\LessThanMatcher;
+use Seeder\Heuristics\IsAMatcher;
 
 /**
  * Class HeuristicParser
- * @package LittleGiant\SilverStripeSeeder\Heuristics
+ * @package Seeder\Heuristics
  */
 class HeuristicParser
 {

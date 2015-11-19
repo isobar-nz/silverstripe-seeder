@@ -5,25 +5,25 @@ After: 'framework/*', 'cms/*'
 
 Seeder:
   providers:
-    - DataTypeProvider
-    - DateProvider
-    - FakerProvider
-    - HTMLProvider
-    - ImageProvider
-    - MemberProvider
-    - FirstObjectProvider
-    - PageTitleProvider
-    - RandomObjectProvider
-    - SortProvider
-    - UniqueProvider
-    - URLSegmentProvider
-    - ValueProvider
+    - \Seeder\DataTypeProvider
+    - \Seeder\DateProvider
+    - \Seeder\FakerProvider
+    - \Seeder\HTMLProvider
+    - \Seeder\ImageProvider
+    - \Seeder\MemberProvider
+    - \Seeder\FirstObjectProvider
+    - \Seeder\PageTitleProvider
+    - \Seeder\RandomObjectProvider
+    - \Seeder\SortProvider
+    - \Seeder\UniqueProvider
+    - \Seeder\URLSegmentProvider
+    - \Seeder\ValueProvider
     # tests
-    - TestProvider
-  empty_shorthand_provider: ValueProvider
-  default_provider: DataTypeProvider
+    - \Seeder\Tests\TestProvider
+  empty_shorthand_provider: \Seeder\ValueProvider
+  default_provider: \Seeder\DataTypeProvider
   default_providers:
-    Image: ImageProvider
+    Image: \Seeder\ImageProvider
   default_ignores:
     SiteTree:
       - Sort
@@ -32,6 +32,9 @@ Seeder:
       - ReportClass
       - Priority
       - Version
+      - MetaTitle
+      - MetaDescription
+      - ExtraMeta
     Member:
       - TempIDHash
       - TempIDExpired

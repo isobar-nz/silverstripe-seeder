@@ -1,9 +1,10 @@
 <?php
 
-use LittleGiant\SilverStripeSeeder\Providers\Provider;
+namespace Seeder;
 
 /**
  * Class ValueProvider
+ * @package Seeder
  */
 class ValueProvider extends Provider
 {

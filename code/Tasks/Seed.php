@@ -1,9 +1,9 @@
 <?php
 
-use LittleGiant\SilverStripeSeeder\CliOutputFormatter;
-use LittleGiant\SilverStripeSeeder\Util\BatchedSeedWriter;
-use LittleGiant\SilverStripeSeeder\Util\Check;
-use LittleGiant\SilverStripeSeeder\Util\RecordWriter;
+use Seeder\Helpers\CliOutputFormatter;
+use Seeder\Util\BatchedSeedWriter;
+use Seeder\Util\Check;
+use Seeder\Util\RecordWriter;
 use Symfony\Component\Console\Application;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;

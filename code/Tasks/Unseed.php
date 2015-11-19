@@ -1,15 +1,15 @@
 <?php
 
-use LittleGiant\SilverStripeSeeder\CliOutputFormatter;
-use LittleGiant\SilverStripeSeeder\Util\BatchedSeedWriter;
+use Seeder\Helpers\CliOutputFormatter;
+use Seeder\Util\BatchedSeedWriter;
 use Symfony\Component\Console\Application;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
-use LittleGiant\SilverStripeSeeder\Util\Check;
-use LittleGiant\SilverStripeSeeder\Util\RecordWriter;
+use Seeder\Util\Check;
+use Seeder\Util\RecordWriter;
 
 /**
  * Class Unseed

@@ -1,14 +1,14 @@
 <?php
 
-namespace LittleGiant\SilverStripeSeeder\Tests;
+namespace Seeder\Tests;
 
-use LittleGiant\SilverStripeSeeder\Heuristics\HeuristicParser;
-use LittleGiant\SilverStripeSeeder\Util\BatchedSeedWriter;
-use LittleGiant\SilverStripeSeeder\Util\Field;
+use Seeder\Helpers\HeuristicParser;
+use Seeder\Util\BatchedSeedWriter;
+use Seeder\Util\Field;
 
 /**
  * Class HeuristicTest
- * @package LittleGiant\SilverStripeSeeder\Tests
+ * @package Seeder\Tests
  */
 class HeuristicTest extends \SapphireTest
 {
@@ -49,6 +49,9 @@ class HeuristicTest extends \SapphireTest
         $this->assertInstanceOf('URLSegmentProvider', $urlField->provider);
     }
 
+    /**
+     *
+     */
     public function testMatch_ManyConditions_MatchesSuccessfully()
     {
         $parser = new HeuristicParser();

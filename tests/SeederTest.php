@@ -1,8 +1,7 @@
 <?php
 
-use LittleGiant\SilverStripeSeeder\CliOutputFormatter;
-use LittleGiant\SilverStripeSeeder\Util\BatchedSeedWriter;
-use LittleGiant\SilverStripeSeeder\Util\RecordWriter;
+use Seeder\Helpers\CliOutputFormatter;
+use Seeder\Util\BatchedSeedWriter;
 
 /**
  * Class SeederTest
@@ -14,21 +13,21 @@ class SeederTest extends SapphireTest
      */
     protected $usesDatabase = true;
 
-    /**
-     * @throws Exception
-     */
-    public function testSeed()
-    {
-        $seeder = new Seeder(new BatchedSeedWriter(), new CliOutputFormatter());
-        $seeder->seed();
-    }
+//    /**
+//     * @throws Exception
+//     */
+//    public function testSeed()
+//    {
+//        $seeder = new Seeder(new BatchedSeedWriter(), new CliOutputFormatter());
+//        $seeder->seed();
+//    }
 
-    /**
-     *
-     */
-    public static function tearDownAfterClass()
-    {
-        parent::tearDownAfterClass();
-        SapphireTest::delete_all_temp_dbs();
-    }
+//    /**
+//     *
+//     */
+//    public static function tearDownAfterClass()
+//    {
+//        parent::tearDownAfterClass();
+//        SapphireTest::delete_all_temp_dbs();
+//    }
 }

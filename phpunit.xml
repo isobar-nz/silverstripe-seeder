@@ -1,7 +1,0 @@
-<phpunit bootstrap="../framework/tests/bootstrap.php" colours="true">
-    <testsuites>
-        <testsuite name="seeder-tests">
-            <directory>tests</directory>
-        </testsuite>
-    </testsuites>
-</phpunit>

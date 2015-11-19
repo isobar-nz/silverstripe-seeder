@@ -1,12 +1,12 @@
 <?php
 
-namespace LittleGiant\SilverStripeSeeder\Heuristics;
+namespace Seeder\Heuristics;
 
-use LittleGiant\SilverStripeSeeder\Util\Field;
+use Seeder\Util\Field;
 
 /**
  * Class IsAMatcher
- * @package LittleGiant\SilverStripeSeeder\Heuristics
+ * @package Seeder\Heuristics
  */
 class IsAMatcher implements Matcher
 {

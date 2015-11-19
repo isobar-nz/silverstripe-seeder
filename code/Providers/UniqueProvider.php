@@ -1,9 +1,10 @@
 <?php
 
-use LittleGiant\SilverStripeSeeder\Providers\Provider;
+namespace Seeder;
 
 /**
  * Class UniqueProvider
+ * @package Seeder
  */
 class UniqueProvider extends Provider
 {

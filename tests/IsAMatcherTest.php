@@ -1,12 +1,12 @@
 <?php
 
-namespace LittleGiant\SilverStripeSeeder\Tests;
+namespace Seeder\Tests;
 
-use LittleGiant\SilverStripeSeeder\Heuristics\IsAMatcher;
+use Seeder\Heuristics\IsAMatcher;
 
 /**
  * Class IsAMatcherTest
- * @package LittleGiant\SilverStripeSeeder\Tests
+ * @package Seeder\Tests
  */
 class IsAMatcherTest extends \SapphireTest
 {

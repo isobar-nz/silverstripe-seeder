@@ -1,14 +1,10 @@
 <?php
 
-namespace LittleGiant\SilverStripeSeeder;
+namespace Seeder\Helpers;
 
 /**
  * Interface OutputFormatter
- * @package LittleGiant\SilverStripeSeeder
- */
-/**
- * Interface OutputFormatter
- * @package LittleGiant\SilverStripeSeeder
+ * @package Seeder\Helpers
  */
 interface OutputFormatter
 {

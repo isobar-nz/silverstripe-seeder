@@ -1,15 +1,15 @@
 <?php
 
-namespace LittleGiant\SilverStripeSeeder\Tests;
+namespace Seeder\Tests;
 
-use LittleGiant\SilverStripeSeeder\Helpers\ConfigParser;
-use LittleGiant\SilverStripeSeeder\Util\SeederState;
+use Seeder\Helpers\ConfigParser;
+use Seeder\Util\SeederState;
 use SiteTree;
-use URLSegmentProvider;
+use Seeder\URLSegmentProvider;
 
 /**
  * Class URLSegmentProviderTest
- * @package LittleGiant\SilverStripeSeeder\Tests
+ * @package Seeder\Tests
  */
 class URLSegmentProviderTest extends \SapphireTest
 {
@@ -48,12 +48,13 @@ class URLSegmentProviderTest extends \SapphireTest
         $this->assertEquals('site-tree', $url[0]);
     }
 
-    /**
-     *
-     */
-    public static function tearDownAfterClass()
-    {
-        parent::tearDownAfterClass();
-        \SapphireTest::delete_all_temp_dbs();
-    }
+//    /**
+//     *
+//     */
+//    public static function tearDownAfterClass()
+//    {
+//        parent::tearDownAfterClass();
+//        \SapphireTest::delete_all_temp_dbs();
+//    }
 }
+

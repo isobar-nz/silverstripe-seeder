@@ -1,7 +1,10 @@
 <?php
 
+namespace Seeder;
+
+use Exception;
 use Faker\Factory;
-use LittleGiant\SilverStripeSeeder\Providers\Provider;
+use Member;
 
 /**
  * Class MemberProvider

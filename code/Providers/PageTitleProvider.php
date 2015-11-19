@@ -1,9 +1,12 @@
 <?php
 
-use LittleGiant\SilverStripeSeeder\Providers\Provider;
+namespace Seeder;
+
+use FormField;
 
 /**
  * Class PageTitleProvider
+ * @package Seeder
  */
 class PageTitleProvider extends Provider
 {
@@ -26,7 +29,7 @@ class PageTitleProvider extends Provider
         $page = $state->object();
 
         $name = str_replace(array('Page', 'Holder'), '', $page->class);
-        $name = FormField::name_to_label($name);
+        $name = ucwords(FormField::name_to_label($name));
 
         return $name;
     }

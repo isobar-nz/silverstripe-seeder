@@ -1,9 +1,12 @@
 <?php
 
-use LittleGiant\SilverStripeSeeder\Providers\Provider;
+namespace Seeder;
+
+use DataObject;
 
 /**
  * Class SortProvider
+ * @package Seeder
  */
 class SortProvider extends Provider
 {

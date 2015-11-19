@@ -1,13 +1,14 @@
 <?php
 
-namespace LittleGiant\SilverStripeSeeder\Tests;
+namespace Seeder\Tests;
 
-use LittleGiant\SilverStripeSeeder\Util\Field;
-use LittleGiant\SilverStripeSeeder\Util\SeederState;
+use Seeder\FakerProvider;
+use Seeder\Util\Field;
+use Seeder\Util\SeederState;
 
 /**
  * Class FakerProviderTest
- * @package LittleGiant\SilverStripeSeeder\Tests
+ * @package Seeder\Tests
  */
 class FakerProviderTest extends \SapphireTest
 {
@@ -16,7 +17,7 @@ class FakerProviderTest extends \SapphireTest
      */
     public function testGenerateField_Sentences_JoinsWithSpaces()
     {
-        $provider = new \FakerProvider();
+        $provider = new FakerProvider();
 
         $field = new Field();
         $field->fieldType = Field::FT_FIELD;
@@ -37,7 +38,7 @@ class FakerProviderTest extends \SapphireTest
      */
     public function testGenerateField_Paragraphs_JoinsWithNewLines()
     {
-        $provider = new \FakerProvider();
+        $provider = new FakerProvider();
 
         $field = new Field();
         $field->fieldType = Field::FT_FIELD;
