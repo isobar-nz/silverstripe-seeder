@@ -33,7 +33,7 @@ class FirstObjectProvider extends Provider
     {
         $className = $field->dataType;
 
-        $args = $field->arguments['arguments'];
+        $args = $field->options['arguments'];
         if (count($args) && !empty($args[0])) {
             $className = $args[0];
         }

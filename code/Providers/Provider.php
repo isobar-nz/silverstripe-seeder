@@ -44,7 +44,7 @@ abstract class Provider extends \Object
     {
         $values = array();
 
-        if (isset($field->arguments['nullable']) && $field->arguments['nullable']) {
+        if (isset($field->options['nullable']) && $field->options['nullable']) {
             if (rand(0, 100) < 20) {
                 return $values;
             }

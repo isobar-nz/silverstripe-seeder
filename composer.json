@@ -4,9 +4,9 @@
   "type": "silverstripe-module",
   "homepage": "http://github.com/Little-Giant/silverstripe-seeder",
   "keywords": ["silverstripe", "developer tool", "seed"],
-  "license": "BSD-2-Clause",
+  "license": "MIT",
   "authors": [
-    {"name": "Little Giant","email": "webmaster@littlegiant.co.nz"}
+    {"name": "Chris Barrett","email": "chris.barrett@littlegiant.co.nz"}
   ],
   "support": {
     "issues": "http://github.com/Little-Giant/silverstripe-seeder/issues"

@@ -31,7 +31,7 @@ class RandomObjectProvider extends Provider
      */
     protected function generateOne($field, $state)
     {
-        $args = $field->arguments['arguments'];
+        $args = $field->options['arguments'];
 
         $className = $field->dataType;
         if (count($args) && !empty($args[0])) {
@@ -55,7 +55,7 @@ class RandomObjectProvider extends Provider
      */
     protected function generateMany($field, $state)
     {
-        $args = $field->arguments['arguments'];
+        $args = $field->options['arguments'];
 
         $className = $field->dataType;
         if (count($args) && !empty($args[0])) {

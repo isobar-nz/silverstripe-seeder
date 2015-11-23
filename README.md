@@ -1,291 +1,137 @@
-# silverstripe-seeder
+SilverStripe Seeder
+===================
 
-## Basic Usage
+Sick of testing pagination by setting page length to 1 and making two data objects? Look no further!
 
-    framework/sake seed [-f|--force] [-c|--class ClassName]
-    framework/sake unseed
+- [Creating providers](http://github.com/Little-Giant/silverstripe-seeder/docs/providers.md)
 
+# Features
+-   Declaritive method of generating test data
+-   Easy to way to share data dependencies with other developers
+-   Easy to extend
 
-`--force` do not take into account current seeds when calculating how many records to create
+# Installation
+Installation via composer
 
-`--class ClassName` only create seeds for the given ClassName
+``` bash
+composer require littlegiant/silverstripe-seeder
+```
 
-note: Windows users can use `php framework/cli-script.php` instead of `framework/sake`
+# How to use
 
-## Basic Configuration
+Add to your configuration
 
-The seeder will populate db fields with sensible defaults. Has\_one, has\_many and many\_many relations need to be explicitly set in properties
+``` yaml
+Seeder:
+    create:
+        Page:
+            count: 100
+            fields:
+                Title: 'Hello Seeder! {$i}'
+        Member: member(test@test.com,password)
+```
 
-    Seeder:
-        create:
-            [dataobject]:
-                ignore:
-                    - [field]
-                nullable: true|false
-                properties:
-                    [field]: [string|int]
-                    [has_one field]:
-                        ... recurse
-                    [has_many|many_many field]:
-                        count: [int]
-                        ... recurse
-            [dataobject]:
-                ...
+Change to project root and run
 
-For example:
+``` bash
+(unix)      $ framework/sake seed flush=1
+(windows)   > php framework/cli-script.php seed flush=1
+```
 
-    Seeder:
-        create:
-            Team:
-                count: 2
-                properties:
-                    TeamMembers:
-                        count: 10
-                        properties:
-                            Image:
+## Command line options
 
-Would create 2 teams with 10 team members each
+``` bash
+framework/sake seed [-k|--key KEY] [-c|--class CLASS] [-f|--force] [flush=1|all]
+framework/sake unseed [-k|--key KEY] [flush=1|all]
+```
+
+Option | Description
+-- | --
+ `--force` | run the seeder ignoring current records
+ `--key` | only (un)seed records matching this key
+ `--class` | only seed records for this root class
+ `flush` | useful silverstripe CliController arg that flushes configuration
+
 
 ## Providers
 
-Providers add extra configuration to fields to control how values are generated
-
-### Basic provider configuration example
-    Seeder:
-        create:
-            [dataobject]:
-                properties:
-                    [field]:
-                        provider: [providername]
-                        [argument]: [value]
-
-
-For example:
-
-    Seeder:
-        create:
-            Team:
-                count: 2
-                properties:
-                    Title:
-                        provider: 'ValueProvider'
-                        value: 'Team Title'
-                    TeamMembers:
-                        count: 10
-                        FirstName:
-                            provider: 'DataTypeProvider'
-                            type: 'firstname'
-                        Image:
-                            provider: 'ImageProvider'
-                            width: 160
-                            height: 100
-
-### Provider shorthands
-
-Providers have shorthands to ease configuration. If no provider shorthand is included the default provider is used, which is the ValueProvider. To shorten the above example:
-
-    Seeder:
-        create:
-            Team:
-                count: 2
-                properties:
-                    Title: 'value(Team Title)' or 'Team Title'
-                    TeamMembers:
-                        count: 10
-                        FirstName: 'type(firstname)'
-                        Image: 'image(160,100)'
-
-# Advanced Configuration
-
-## Provider types
-
-### DataTypeProvider
-Data type provider matches the field name to a common list of fields, if there aren't any matches it will fall back to providing a sensible value based on the data type of the database field. This is the default provider for unspecified database fields.
-
-	[field]:
-		provider: 'DataTypeProvider'
-		type: [string:type]
-
-#### Type options
-
-	- firstname
-	- lastname
-	- email
-	- phone
-	- company
-	- address
-	- address1
-	- address2
-	- city
-	- postcode
-	- state
-	- country
-	- countrycode
-	- lat
-	- lng
-	- link
-	- boolean
-	- currency [range]
-	- decimal [range]
-	- percentage
-	- int [range]
-	- date
-	- time
-	- ss_datetime
-	- htmlvar
-	- htmltext
-	- varchar [length]
-	- text [count]
-
-	[range] allows you to specify the range of generated numbers e.g 10,30
-	[count] allows you to control the number of paragraphs e.g 1,3
-	[length] allows you to control the max number of characters e.g 50
-
-#### Example
-
-	Seeder:
-		create:
-			Person:
-				properties:
-					FirstName:
-						length: 60 # max length is 60
-					Bio:
-						count: 1,3 # 1 to 3 paragraphs
-					Age:
-						range: 21,30 # an age between 21 and 30
-
-### FakerProvider
-Populates fields by a given [Faker](https://github.com/fzaninotto/Faker) property or method
-
-	[field]:
-		provider: 'FakerProvider'
-		type: [string:property or method]
-		arguments:
-			- argument 1
-			- argument 2
-
-		[field]: 'faker(property)'
-
-		[field]: 'faker(method,arg1,arg2...)'
-
-#### Example:
-
-	Seeder:
-		create:
-			Person:
-				FirstName: 'faker(name)'
-				Address: 'faker(city)'
-				Bio: 'faker(text,300)'
-
-### ImageProvider
-
-	[field]:
-		provider: 'ImageProvider'
-		width: [int:width] or [int:min,int:max] e.g 100,450
-		height: [int:height] or [int:min,int:max] e.g 10,30
-
-	[field]: 'image(width,height)'
-
-Downloads a random image and stores it in the `assets/Uploads/Seeder` directory
-
-
-### MemberProvider
-
-Creates a member or subclass and sets firstname, surname, email, password and an optional group. If the same email is used multiple times a number will be inserted before the @ sign to ensure unique emails
-
-	[field]:
-		provider: 'MemberProvider'
-		email: [string:email]
-		password: [string]
-		group: [string] # optional
-
-	[field]: 'member(email,password[,group])'
-
-#### Example:
-
-	Customer: 'member(test@domain.com,m4g1c,customers)'
-
-Creates a customer with the email `test@domain.com`, password `m4g1c` and adds it to the `customers` group
-
-
-### ObjectProvider
-
-Select an object for a has one relationship or a list of random objects for a has many or many many.
-
-	[field]:
-		provider: 'ObjectProvider'
-		class: [string:dataobject class]
-		count: [int]
-
-	[field]: 'object(class)' # has_one
-
-	[field]: 'object(class,count)' # has_many and many_many
-
-##### Example
-
-	Seeder:
-		create:
-			ProductPage:
-				count: 10
-				properties:
-					Parent: 'object(ProductHolder)'
-					RelatedProducts: 'object(ProductPage,4)'
-
-
-### ValueProvider
-
-The value given to the value provider can include variables.
-
-    [field]:
-        provider: 'ValueProvider'
-        value: 'This is a {$variable}'
-
-    [field]: 'This is a {$variable}'
-
-Variables are taken from the current object, however no order is guarenteed and they may not be initialized yet. However there are special variables {\$i} (the current index, in has many and many many relationships) and {\$Up} (the parent object).
-
-    [field]: '{$i} is the current index of the object'
-    [field]: '{$Up.Title} is the parent's title'
-    [field]: '{$Up.Up.Title} is the parent's parent's title'
-
-## Configuration
-
-#### Default ignores
-
-Allows you to ignore a field for a class and all it's sub classes
-
-	Seeder:
-		default_ignores:
-			SiteTree:
-				- HasBrokenFile
-				- HasBrokenLink
-
-Unless otherwise specified the seeder would not generate a value for 'HasBrokenFile' or 'HasBrokenLink' SiteTree and subclass of SiteTree
-
-#### Default values
-
-Allows you to set a default value for a class and all it's sub classes
-
-	Seeder:
-		default_values:
-			SiteTree:
-				ShowInMenus: 0
-				ShowInSearch: 1
-				CanViewType: anyone
-			Page:
-				PreviewImage: 'image(400,300)'
-
-##### Default providers
-
-Allows you to set the default provider for a class and all it's sub classes
-
-	Seeder:
-		default_providers:
-			Image: ImageProvider
-
-Unless otherwise specified an image will default to using an ImageProvider
-
-
-## Creating a Provider
-
-Coming soon
+Providers are a simple way to customise what data is generated. The seeder comes with a bunch of useful providers
+
+Provider | Description | Example
+-- | -- | --
+ValueProvider | Use the given value, select variables included | `Field: 'this is the value'`
+DateProvider | Generate a date | `Field: date(+3 months)`
+FakerProvider | Generate data using the php faker library | `Field: faker(sentences,3)`
+FirstObjectProvider | Returns the first instance of the class | `Parent: first(Page)`
+RandomObjectProvider | Returns a list of random objects for class | `Children: random(Page)`
+HTMLProvider | Returns random HTML | `Field: html()`
+ImageProvider | Returns an `Image` of a [placehold.it](http://placehold.it) image | `Image: image(300,400)`
+MemberProvider | Returns a member with email and password | `Member: member(test@test.com,password)`
+
+Check here for more information on [creating providers](http://github.com/Little-Giant/silverstripe-seeder/docs/providers.md)
+
+## Example
+
+``` yaml
+--
+Name: seeder
+--
+
+Seeder:
+    create:
+        HomePage:
+            fields:
+                Title: Home
+                Content: >
+                    <p>This is an awesome paragraph that can welcome your visitors</p>
+        Blog:
+            fields
+                Title: Magic in a bottle
+        Member: member(admin@mysite.com,default admin password)
+
+--
+Name: seeder-dev
+Only:
+    environment: dev
+--
+
+Seeder:
+    create:
+        Author:
+            count: 10
+            fields:
+                Name: faker(name)
+        BlogTag:
+            count: 10
+        BlogPost:
+            count: 100
+            fields:
+                Parent: first(blog)
+                Author: random()
+                Title: 'Blog post {$i}'
+                Tags: random(BlogTag,3)
+```
+
+## License
+
+The MIT License (MIT)
+
+Copyright (c) 2015 Little Giant Design Ltd
+
+Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+
+## Contributing
+
+Pull requests are welcome
+
+### Code guidelines
+
+This project follows the standards defined in:
+
+* [PSR-0](https://github.com/php-fig/fig-standards/blob/master/accepted/PSR-0.md)
+* [PSR-1](https://github.com/php-fig/fig-standards/blob/master/accepted/PSR-1-basic-coding-standard.md)
+* [PSR-2](https://github.com/php-fig/fig-standards/blob/master/accepted/PSR-2-coding-style-guide.md)

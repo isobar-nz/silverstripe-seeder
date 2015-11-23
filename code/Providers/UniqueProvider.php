@@ -20,8 +20,8 @@ class UniqueProvider extends Provider
     protected function generateField($field, $state)
     {
         $prefix = '';
-        if (count($field->arguments['arguments'])) {
-            $prefix = $field->arguments['arguments'][0];
+        if (count($field->options['arguments'])) {
+            $prefix = $field->options['arguments'][0];
         }
 
         return uniqid($prefix);

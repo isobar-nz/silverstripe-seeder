@@ -19,7 +19,7 @@ class RecordWriter
         if ($object->has_extension('Versioned')) {
             $object->writeToStage('Stage');
 
-            $args = $field->arguments;
+            $args = $field->options;
             $publish = isset($args['publish']) ? $args['publish'] : true;
 
             if ($publish) {

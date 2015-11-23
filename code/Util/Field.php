@@ -51,7 +51,7 @@ class Field
     /**
      * @var array
      */
-    public $arguments = array();
+    public $options = array();
 
     /**
      * @var

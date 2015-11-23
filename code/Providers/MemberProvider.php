@@ -39,7 +39,7 @@ class MemberProvider extends Provider
         }, explode(',', $argumentString));
 
         if (count($args) < 2) {
-            throw new Exception('member provider requires an email and password to be passed as arguments');
+            throw new Exception('member provider requires an email and password to be passed as options');
         }
 
         $options = array(
@@ -73,11 +73,11 @@ class MemberProvider extends Provider
      */
     protected function generateOne($field, $upState)
     {
-        if (empty($field->arguments['email'])) {
+        if (empty($field->options['email'])) {
             throw new Exception('member provider requires an email');
         }
 
-        if (empty($field->arguments['password'])) {
+        if (empty($field->options['password'])) {
             throw new Exception('member provider requires a password');
         }
 
@@ -86,7 +86,7 @@ class MemberProvider extends Provider
         $member->FirstName = $this->faker->firstName();
         $member->Surname = $this->faker->lastName;
 
-        $email = $field->arguments['email'];
+        $email = $field->options['email'];
         $parts = explode('@', $email);
 
         // find unique email address
@@ -98,13 +98,13 @@ class MemberProvider extends Provider
             $counter++;
         }
 
-        $member->Password = $field->arguments['password'];
+        $member->Password = $field->options['password'];
 
 
         $this->writer->write($member, $field);
 
-        if (isset($field->arguments['group'])) {
-            $code = $field->arguments['group'];
+        if (isset($field->options['group'])) {
+            $code = $field->options['group'];
             $member->onAfterExistsCallback(function ($member) use($code) {
                 $member->addToGroupByCode($code);
             });
