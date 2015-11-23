@@ -69,13 +69,13 @@ class ValueProvider extends Provider
      */
     private function resolveValue($field, $state)
     {
-        if (empty($field->arguments['value'])) {
+        if (empty($field->options['value'])) {
             return '';
         }
 
-        $value = $field->arguments['value'];
+        $value = $field->options['value'];
 
-        if (preg_match_all('/\{\$([^}]+)}/', $field->arguments['value'], $matches)) {
+        if (preg_match_all('/\{\$([^}]+)}/', $field->options['value'], $matches)) {
             for ($i = 0; $i < count($matches[0]); $i++) {
                 $variable = $matches[1][$i];
                 $variableValue = $this->resolveVariable($state, $variable);

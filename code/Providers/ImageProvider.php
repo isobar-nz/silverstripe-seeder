@@ -100,21 +100,21 @@ class ImageProvider extends Provider
         $width = 600;
         $height = 400;
 
-        if (!empty($field->arguments['height'])) {
-            if (strpos($field->arguments['height'], ',') !== false) {
-                $height = explode(',', $field->arguments['height']);
+        if (!empty($field->options['height'])) {
+            if (strpos($field->options['height'], ',') !== false) {
+                $height = explode(',', $field->options['height']);
                 $height = intval($this->faker->numberBetween(min($height), max($height)));
             } else {
-                $height = intval($field->arguments['height']);
+                $height = intval($field->options['height']);
             }
         }
 
-        if (!empty($field->arguments['width'])) {
-            if (strpos($field->arguments['width'], ',') !== false) {
-                $width = explode(',', $field->arguments['width']);
+        if (!empty($field->options['width'])) {
+            if (strpos($field->options['width'], ',') !== false) {
+                $width = explode(',', $field->options['width']);
                 $width = intval($this->faker->numberBetween(min($width), max($width)));
             } else {
-                $width = intval($field->arguments['width']);
+                $width = intval($field->options['width']);
             }
         }
 

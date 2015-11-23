@@ -30,8 +30,8 @@ class DateProvider extends Provider
             $format = 'H:i:s';
         }
 
-        if (!empty($field->arguments['arguments'])) {
-            $args = $field->arguments['arguments'];
+        if (!empty($field->options['arguments'])) {
+            $args = $field->options['arguments'];
             $time = $args[0];
 
             if (count($args) >= 2) {

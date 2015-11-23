@@ -48,7 +48,7 @@ class BatchedSeedWriter
         }
 
         if ($this->isVersioned[$className]) {
-            $args = $field->arguments;
+            $args = $field->options;
 
             if (!isset($args['publish']) || $args['publish']) {
                 $this->batchWriter->writeToStage($object, 'Stage', 'Live');

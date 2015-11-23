@@ -42,8 +42,8 @@ class ConfigParser
         }
 
         $field = $this->createObjectField($config['class'], $config, $config['key']);
-        if (isset($field->arguments['count']) && is_int($field->arguments['count'])) {
-            $field->count = $field->arguments['count'];
+        if (isset($field->options['count']) && is_int($field->options['count'])) {
+            $field->count = $field->options['count'];
         }
         $field->fieldType = Field::FT_ROOT;
 
@@ -69,7 +69,7 @@ class ConfigParser
         }
 
         $field->key = $key ?: $className;
-        $field->arguments = $options;
+        $field->options = $options;
 
         $object = singleton($className);
 
@@ -280,7 +280,7 @@ class ConfigParser
             $options = $this->parseProviderOptions($options);
         }
 
-        $field->arguments = $options;
+        $field->options = $options;
         $this->setProvider($field, $options);
         return $field;
     }

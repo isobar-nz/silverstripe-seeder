@@ -180,7 +180,7 @@ class BatchSeedWriterTest extends \SapphireTest
                 $page->Title = 'Magical Unicorn Journeys ' . $i;
 
                 $field = $this->createField();
-                $field->arguments['publish'] = false;
+                $field->options['publish'] = false;
                 $writer->write($page, $field);
             }
 

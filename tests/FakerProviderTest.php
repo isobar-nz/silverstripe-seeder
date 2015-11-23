@@ -22,7 +22,7 @@ class FakerProviderTest extends \SapphireTest
         $field = new Field();
         $field->fieldType = Field::FT_FIELD;
         $field->dataType = 'Varchar(255)';
-        $field->arguments = array(
+        $field->options = array(
             'type' => 'sentences',
             'arguments' => array(6),
         );
@@ -43,7 +43,7 @@ class FakerProviderTest extends \SapphireTest
         $field = new Field();
         $field->fieldType = Field::FT_FIELD;
         $field->dataType = 'Text';
-        $field->arguments = array(
+        $field->options = array(
             'type' => 'paragraphs',
             'arguments' => array(3),
         );
