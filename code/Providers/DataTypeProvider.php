@@ -67,7 +67,7 @@ class DataTypeProvider extends Provider
     protected function generateField($field, $state)
     {
         $dataType = strtolower($field->dataType);
-        $args = $field->options['arguments'];
+        $args = isset($field->options['arguments']) ? $field->options['arguments'] : array();
 
         if (isset($args['type']) && in_array(strtolower($args['type']), $this->dataType)) {
             $dataType = $args['type'];
