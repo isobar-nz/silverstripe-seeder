@@ -6,7 +6,7 @@ Sick of testing pagination by setting page length to 1 and making two data objec
 - [Creating providers](https://github.com/Little-Giant/silverstripe-seeder/blob/master/docs/providers.md)
 
 # Features
--   Declaritive method of generating test data
+-   Declarative method of generating test data
 -   Easy to way to share data dependencies with other developers
 -   Easy to extend
 
