@@ -3,7 +3,7 @@ SilverStripe Seeder
 
 Sick of testing pagination by setting page length to 1 and making two data objects? Look no further!
 
-- [Creating providers](http://github.com/Little-Giant/silverstripe-seeder/docs/providers.md)
+- [Creating providers](https://github.com/Little-Giant/silverstripe-seeder/blob/master/docs/providers.md)
 
 # Features
 -   Declaritive method of generating test data
