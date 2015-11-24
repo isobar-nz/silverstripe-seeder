@@ -85,7 +85,7 @@ Seeder:
                 Content: >
                     <p>This is an awesome paragraph that can welcome your visitors</p>
         Blog:
-            fields
+            fields:
                 Title: Magic in a bottle
         Member: member(admin@mysite.com,default admin password)
 
