@@ -3,6 +3,7 @@
 namespace Seeder;
 
 use Seeder\Util\Field;
+use SS_List;
 
 /**
  * Class Provider
@@ -59,6 +60,12 @@ abstract class Provider extends \Object
             || $field->fieldType === Field::FT_ROOT
         ) {
             $values = $this->generateMany($field, $state);
+        }
+
+        if ($values instanceof SS_List) {
+            $values = $values->toArray();
+        } else if (!is_array($values)) {
+            $values = array($values);
         }
 
         return $values;

@@ -2,6 +2,7 @@
 
 namespace Seeder;
 
+use Exception;
 use Faker\Factory;
 
 /**

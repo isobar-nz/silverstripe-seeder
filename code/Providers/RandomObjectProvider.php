@@ -71,6 +71,6 @@ class RandomObjectProvider extends Provider
             $count = intval($args[1]);
         }
 
-        return $className::get()->sort('RAND()')->limit($count)->toArray();
+        return $className::get()->sort('RAND()')->limit($count);
     }
 }
