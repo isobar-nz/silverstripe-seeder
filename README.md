@@ -45,28 +45,28 @@ framework/sake seed [-k|--key KEY] [-c|--class CLASS] [-f|--force] [flush=1|all]
 framework/sake unseed [-k|--key KEY] [flush=1|all]
 ```
 
-| Option | Description |
-| -- | -- |
-| `--force` | run the seeder ignoring current records |
-| `--key` | only (un)seed records matching this key |
-| `--class` | only seed records for this root class |
-| `flush` | useful silverstripe CliController arg that flushes configuration |
+Option|Description
+------|-----------
+`--force`|run the seeder ignoring current records
+`--key`|only (un)seed records matching this key
+`--class`|only seed records for this root class
+`flush`|useful silverstripe CliController arg that flushes configuration
 
 
 ## Providers
 
 Providers are a simple way to customise what data is generated. The seeder comes with a bunch of useful providers
 
-| Provider | Description | Example |
-| -- | -- | -- |
-| ValueProvider | Use the given value, select variables included | `Field: 'this is the value'` |
-| DateProvider | Generate a date | `Field: date(+3 months)` |
-| FakerProvider | Generate data using the php faker library | `Field: faker(sentences,3)` |
-| FirstObjectProvider | Returns the first instance of the class | `Parent: first(Page)` |
-| RandomObjectProvider | Returns a list of random objects for class | `Children: random(Page)` |
-| HTMLProvider | Returns random HTML | `Field: html()` |
-| ImageProvider | Returns an `Image` of a [placehold.it](http://placehold.it) image | `Image: image(300,400)` |
-| MemberProvider | Returns a member with email and password | `Member: member(test@test.com,password)` |
+Provider | Description | Example
+-------- | ----------- | -------
+ValueProvider | Use the given value, select variables included | `Field: 'this is the value'`
+DateProvider | Generate a date | `Field: date(+3 months)`
+FakerProvider | Generate data using the php faker library | `Field: faker(sentences,3)`
+FirstObjectProvider | Returns the first instance of the class | `Parent: first(Page)`
+RandomObjectProvider | Returns a list of random objects for class | `Children: random(Page)`
+HTMLProvider | Returns random HTML | `Field: html()`
+ImageProvider | Returns an `Image` of a [placehold.it](http://placehold.it) image | `Image: image(300,400)`
+MemberProvider | Returns a member with email and password | `Member: member(test@test.com,password)`
 
 Check here for more information on [creating providers](http://github.com/Little-Giant/silverstripe-seeder/docs/providers.md)
 
