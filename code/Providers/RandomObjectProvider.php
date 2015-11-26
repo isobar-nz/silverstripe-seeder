@@ -42,7 +42,7 @@ class RandomObjectProvider extends Provider
             $className = $args[0];
         }
 
-        $object = $className::get()->first();
+        $object = $className::get()->sort('RAND()')->first();
 
         if (!$object) {
             SS_Log::log("random for {$className} not found", SS_Log::WARN);
