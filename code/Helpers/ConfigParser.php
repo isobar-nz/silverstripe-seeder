@@ -202,9 +202,6 @@ class ConfigParser
 
             foreach ($this->config->providers as $provider) {
                 if (!class_exists($provider) && !class_exists(str_replace('\\', '\\\\', $provider))) {
-                    print_r(get_declared_classes());
-                    // todo log somewhere else? this would log every time parser options are checked
-                    echo 'error class not found ' . $provider, ' ',str_replace('\\', '\\\\', $provider),PHP_EOL;
                     \SS_Log::log("provider class '{$provider}' cannot be found", \SS_Log::WARN);
                 } else if (isset($provider::$shorthand)) {
                     if (strtolower($provider::$shorthand) === $shorthand) {

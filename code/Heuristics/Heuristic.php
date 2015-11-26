@@ -92,9 +92,9 @@ class Heuristic
                 } else {
                     $field->provider = $provider;
                 }
-                $field->arguments = $this->options;
+                $field->options = $this->options;
             } else {
-                $field->arguments = array_merge($field->arguments, $this->options);
+                $field->options = array_merge($field->options, $this->options);
             }
 
             // if ignore is specified then set on field

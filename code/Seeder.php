@@ -61,13 +61,13 @@ class Seeder extends Object
         if (is_array($dataObjects)) {
             foreach ($dataObjects as $index => $option) {
                 $className = $index;
-                if (is_string($index)) {
-                    $className = $index;
+                if (isset($option['class'])) {
+                    $className = $option['class'];
                 }
 
                 if (empty($option['key'])) {
                     $option['key'] = $className;
-                };
+                }
 
                 if (class_exists($className)
                     && (!$onlyClassName || $onlyClassName === $className)
@@ -96,6 +96,8 @@ class Seeder extends Object
 
                         $this->outputFormatter->dataObjectsCreated($option['class'], count($objects));
                     }
+                } else {
+                    error_log('Class not found ' . $className);
                 }
             }
         } else {
@@ -109,7 +111,7 @@ class Seeder extends Object
      */
     private function getCount($field)
     {
-        $count = isset($field->arguments['count']) ? $field->arguments['count'] : 1;
+        $count = isset($field->options['count']) ? $field->options['count'] : 1;
 
         if ($this->ignoreSeeds) {
             return $count;
@@ -170,9 +172,7 @@ class Seeder extends Object
     {
         $this->outputFormatter->beginUnseed();
 
-        // TODO delete has_many tables
-
-        echo 'Seed count: ', SeedRecord::get()->Count(), PHP_EOL;
+        // TODO delete many_many tables
 
         $deleted = array();
 
