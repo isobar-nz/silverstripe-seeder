@@ -41,6 +41,10 @@ class BatchSeedWriterTest extends \SapphireTest
      */
     public function testWrite_WriteObject_SeedAndObjectWritten()
     {
+        $this->markTestIncomplete(
+            'Need silverstripe-batchwrite compatibility.'
+        );
+
         $batchSizes = array(10, 30, 100, 300);
 
         foreach ($batchSizes as $batchSize) {
@@ -73,6 +77,10 @@ class BatchSeedWriterTest extends \SapphireTest
      */
     public function testWrite_WriteManyObjects_SeedsAndObjectsWritten()
     {
+        $this->markTestIncomplete(
+            'Need silverstripe-batchwrite compatibility.'
+        );
+
         $batchSizes = array(10, 30, 100, 300);
 
         foreach ($batchSizes as $batchSize) {
@@ -136,6 +144,10 @@ class BatchSeedWriterTest extends \SapphireTest
      */
     public function testWrite_WriteObjectsTwice_SeedsWrittenOnce()
     {
+        $this->markTestIncomplete(
+            'Need silverstripe-batchwrite compatibility.'
+        );
+
         $batchSizes = array(10, 30, 100, 300);
 
         foreach ($batchSizes as $batchSize) {
@@ -170,6 +182,10 @@ class BatchSeedWriterTest extends \SapphireTest
      */
     public function testWrite_WriteVersionedObjectsNotPublished_ObjectsWrittenToStage()
     {
+        $this->markTestIncomplete(
+            'Need silverstripe-batchwrite compatibility.'
+        );
+
         $batchSizes = array(10, 30, 100, 300);
 
         foreach ($batchSizes as $batchSize) {
@@ -209,6 +225,10 @@ class BatchSeedWriterTest extends \SapphireTest
      */
     public function testWrite_WriteVersionedObjects_ObjectsWrittenToLive()
     {
+        $this->markTestIncomplete(
+            'Need silverstripe-batchwrite compatibility.'
+        );
+
         $batchSizes = array(10, 30, 100, 300);
 
         foreach ($batchSizes as $batchSize) {
@@ -249,6 +269,10 @@ class BatchSeedWriterTest extends \SapphireTest
      */
     public function testWriteManyMany_WriteManyManyObjects_ObjectsAccessibleFromManyMany()
     {
+        $this->markTestIncomplete(
+            'Need silverstripe-batchwrite compatibility.'
+        );
+
         $batchSizes = array(10, 30, 100, 300);
 
         foreach ($batchSizes as $batchSize) {

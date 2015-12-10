@@ -22,7 +22,7 @@ composer require littlegiant/silverstripe-seeder
 Add to your configuration
 
 ``` yaml
-Seeder:
+Seeder\Seeder:
     create:
         Page:
             count: 100
@@ -73,11 +73,11 @@ Check here for more information on [creating providers](http://github.com/Little
 ## Example
 
 ``` yaml
---
+---
 Name: seeder
---
+---
 
-Seeder:
+Seeder\Seeder:
     create:
         HomePage:
             fields:
@@ -89,13 +89,13 @@ Seeder:
                 Title: Magic in a bottle
         Member: member(admin@mysite.com,default admin password)
 
---
+---
 Name: seeder-dev
 Only:
     environment: dev
---
+---
 
-Seeder:
+Seeder\Seeder:
     create:
         Author:
             count: 10

@@ -1,5 +1,7 @@
 <?php
 
+namespace Seeder;
+
 use Seeder\Helpers\ConfigParser;
 use Seeder\Helpers\HeuristicParser;
 use Seeder\Helpers\OutputFormatter;
@@ -8,7 +10,7 @@ use Seeder\Util\SeederState;
 /**
  * Class Seeder
  */
-class Seeder extends Object
+class Seeder extends \Object
 {
     /**
      * @var
@@ -39,7 +41,7 @@ class Seeder extends Object
     /**
      * @param null $onlyClassName
      * @param null $key
-     * @throws Exception
+     * @throws \Exception
      */
     public function seed($onlyClassName = null, $key = null)
     {
@@ -101,7 +103,7 @@ class Seeder extends Object
                 }
             }
         } else {
-            throw new Exception('\'create\' must be an array');
+            throw new \Exception('\'create\' must be an array');
         }
     }
 
@@ -117,7 +119,7 @@ class Seeder extends Object
             return $count;
         }
 
-        $currentCount = SeedRecord::get()->filter(array(
+        $currentCount = \SeedRecord::get()->filter(array(
             'Root' => true,
             'SeedClassName' => $field->dataType,
             'Key' => $field->key,
@@ -176,7 +178,7 @@ class Seeder extends Object
 
         $deleted = array();
 
-        $seeds = SeedRecord::get();
+        $seeds = \SeedRecord::get();
         if ($key) {
             $seeds = $seeds->filter('Key', $key);
         }
@@ -193,7 +195,7 @@ class Seeder extends Object
             }
 
             foreach ($classes as $className => $ids) {
-                $versioned = DataObject::has_extension($className, 'Versioned');
+                $versioned = \DataObject::has_extension($className, 'Versioned');
                 if ($versioned) {
                     $this->writer->deleteIDsFromStage($className, $ids, 'Stage', 'Live');
                 } else {

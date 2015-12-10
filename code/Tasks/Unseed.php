@@ -1,5 +1,8 @@
 <?php
 
+namespace Seeder\Tasks;
+
+use Seeder\Seeder;
 use Seeder\Helpers\CliOutputFormatter;
 use Seeder\Util\BatchedSeedWriter;
 use Symfony\Component\Console\Application;
@@ -14,7 +17,7 @@ use Seeder\Util\RecordWriter;
 /**
  * Class Unseed
  */
-class Unseed extends CliController
+class Unseed extends \CliController
 {
     /**
      * @var string
@@ -72,19 +75,20 @@ class UnseedCommand extends Command
 
         // major hack to enable ADMIN permissions
         // login throws cookie warning, this will hide the error message
-        error_reporting(0);
+        error_reporting();
         try {
-            if ($admin = Member::default_admin()) {
+            if ($admin = \Member::default_admin()) {
                 $admin->logIn();
             }
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
         }
         error_reporting(E_ALL);
 
         $writer = new RecordWriter();
-        if ($batchSize = $input->getOption('batch')) {
-            $writer = new BatchedSeedWriter($batchSize);
-        }
+        // TODO batch write is not working with seeder yet
+//        if ($batchSize = $input->getOption('batch')) {
+//            $writer = new BatchedSeedWriter($batchSize);
+//        }
 
         $seeder = new Seeder($writer, new CliOutputFormatter());
 
