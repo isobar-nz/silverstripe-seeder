@@ -12,7 +12,7 @@
     "issues": "http://github.com/Little-Giant/silverstripe-seeder/issues"
   },
   "require": {
-    "silverstripe/cms": "~3.1",
+    "silverstripe/cms": "~3.2",
     "fzaninotto/faker": "^1.5",
     "symfony/console": "^2.7",
     "littlegiant/silverstripe-batchwrite": "^0.2.2"

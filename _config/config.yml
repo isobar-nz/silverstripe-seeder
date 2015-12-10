@@ -59,3 +59,7 @@ Seeder:
       CanEditType: LoggedInUsers
 
 
+Director:
+  rules:
+    'seed' : '\Seeder\Tasks\Seed'
+    'unseed' : '\Seeder\Tasks\Unseed'
