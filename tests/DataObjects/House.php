@@ -2,7 +2,6 @@
 
 namespace Seeder\Tests;
 
-
 /**
  * Class House
  * @package Seeder\Tests
@@ -23,4 +22,3 @@ class House extends \DataObject implements \TestOnly
         'Occupants' => 'Seeder\Tests\Human',
     );
 }
-

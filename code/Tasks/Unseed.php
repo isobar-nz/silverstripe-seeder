@@ -32,12 +32,11 @@ class Unseed extends \CliController
     /**
      *
      */
-    function process()
+    public function process()
     {
         $app = new Application();
         $app->add(new UnseedCommand());
         $app->run();
-
     }
 }
 

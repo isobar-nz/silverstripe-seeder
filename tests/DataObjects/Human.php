@@ -2,7 +2,6 @@
 
 namespace Seeder\Tests;
 
-
 /**
  * Class Human
  * @package Seeder\Tests
@@ -39,5 +38,4 @@ class Human extends \DataObject implements \TestOnly
     private static $belongs_many_many = array(
         'Parents' => 'Seeder\Tests\Human',
     );
-
 }

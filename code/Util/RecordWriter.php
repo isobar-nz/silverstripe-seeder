@@ -115,6 +115,5 @@ class RecordWriter
      */
     public function finish()
     {
-
     }
 }

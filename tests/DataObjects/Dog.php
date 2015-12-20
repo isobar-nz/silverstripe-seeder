@@ -2,7 +2,6 @@
 
 namespace Seeder\Tests;
 
-
 /**
  * Class Dog
  * @package Seeder\Tests

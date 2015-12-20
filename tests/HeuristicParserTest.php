@@ -2,7 +2,6 @@
 
 namespace Seeder\Tests;
 
-
 use Seeder\Helpers\HeuristicParser;
 use Seeder\Util\Field;
 
@@ -183,4 +182,3 @@ class HeuristicParserTest extends \SapphireTest
 //        \SapphireTest::delete_all_temp_dbs();
 //    }
 }
-

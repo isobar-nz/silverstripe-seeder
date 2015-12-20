@@ -66,7 +66,7 @@ class BatchedSeedWriter
             $dataObjectProperty = $this->dataObjectRecordProperty;
             $batchWriter = $this->batchWriter;
 
-            $object->onAfterExistsCallback(function ($object) use($field, $isRoot, $dataObjectProperty, $batchWriter) {
+            $object->onAfterExistsCallback(function ($object) use ($field, $isRoot, $dataObjectProperty, $batchWriter) {
                 $seed = \QuickDataObject::create('SeedRecord');
 
                 $objectFields = $dataObjectProperty->getValue($object);

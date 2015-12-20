@@ -123,4 +123,3 @@ class Field
      */
     public $ancestry = array();
 }
-

@@ -334,5 +334,3 @@ class BatchSeedWriterTest extends \SapphireTest
 //        \SapphireTest::delete_all_temp_dbs();
 //    }
 }
-
-

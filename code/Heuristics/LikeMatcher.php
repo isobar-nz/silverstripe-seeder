@@ -53,9 +53,9 @@ class LikeMatcher implements Matcher
         $value = strtolower($value);
         if ($this->matchStart && $this->matchEnd) {
             return $this->like == $value;
-        } else if ($this->matchStart) {
+        } elseif ($this->matchStart) {
             return strpos($value, $this->like) === 0;
-        } else if ($this->matchEnd) {
+        } elseif ($this->matchEnd) {
             return strpos(strrev($value), strrev($this->like)) === 0;
         }
         return strpos($value, $this->like) !== false;

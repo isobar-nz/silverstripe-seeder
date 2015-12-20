@@ -32,7 +32,7 @@ class Seed extends \CliController
     /**
      *
      */
-    function process()
+    public function process()
     {
         $app = new Application();
         $app->add(new SeedCommand());

@@ -61,4 +61,3 @@ class HTMLProvider extends Provider
         return $elements[$key];
     }
 }
-

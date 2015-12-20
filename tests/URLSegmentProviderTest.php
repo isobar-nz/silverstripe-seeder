@@ -21,7 +21,8 @@ class URLSegmentProviderTest extends \SapphireTest
     /**
      *
      */
-    public function testGenerate_SiteTreeSort_ReturnsIncreasingSort() {
+    public function testGenerate_SiteTreeSort_ReturnsIncreasingSort()
+    {
         $config = new ConfigParser();
         $field = $config->objectConfig2Field(array(
             'class' => 'SiteTree',
@@ -57,4 +58,3 @@ class URLSegmentProviderTest extends \SapphireTest
 //        \SapphireTest::delete_all_temp_dbs();
 //    }
 }
-

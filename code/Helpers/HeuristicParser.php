@@ -1,6 +1,7 @@
 <?php
 
 namespace Seeder\Helpers;
+
 use Seeder\Heuristics\Heuristic;
 use Seeder\Heuristics\EqualMatcher;
 use Seeder\Heuristics\Condition;
@@ -90,11 +91,11 @@ class HeuristicParser
                         $matcherName = strtolower($matches[1]);
                         if ($matcherName === 'like') {
                             $matcher = new LikeMatcher($matches[2]);
-                        } else if ($matcherName === 'gt') {
+                        } elseif ($matcherName === 'gt') {
                             $matcher = new GreaterThanMatcher($matches[2]);
-                        } else if ($matcherName === 'lt') {
+                        } elseif ($matcherName === 'lt') {
                             $matcher = new LessThanMatcher($matches[2]);
-                        } else if ($matcherName === 'is_a') {
+                        } elseif ($matcherName === 'is_a') {
                             $matcher = new IsAMatcher($matches[2]);
                         }
                     }
