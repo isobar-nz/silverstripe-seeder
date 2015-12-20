@@ -108,7 +108,7 @@ class MemberProvider extends Provider
 
         if (isset($field->options['group'])) {
             $code = $field->options['group'];
-            $member->onAfterExistsCallback(function ($member) use($code) {
+            $member->onAfterExistsCallback(function ($member) use ($code) {
                 $member->addToGroupByCode($code);
             });
         }

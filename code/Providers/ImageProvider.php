@@ -45,7 +45,7 @@ class ImageProvider extends Provider
         if (count($arguments) >= 2) {
             $options['width'] = $arguments[0];
             $options['height'] = $arguments[1];
-        } else if (count($arguments) && $arguments[0]) {
+        } elseif (count($arguments) && $arguments[0]) {
             $options['width'] = $arguments[0];
             $options['height'] = $arguments[0];
         }
@@ -136,4 +136,3 @@ class ImageProvider extends Provider
         return $image;
     }
 }
-

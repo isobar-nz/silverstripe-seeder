@@ -75,7 +75,7 @@ class DataTypeProvider extends Provider
 
         if ($dataType === 'boolean') {
             return array_rand(array(true, false));
-        } else if ($dataType === 'currency') {
+        } elseif ($dataType === 'currency') {
             $min = 0;
             $max = 1000;
             if (!empty($args['range'])) {
@@ -86,13 +86,13 @@ class DataTypeProvider extends Provider
                 $max = min($limits);
             }
             return $this->faker->randomFloat(2, $min, $max);
-        } else if ($dataType === 'date') {
+        } elseif ($dataType === 'date') {
             return date('Y-m-d');
-        } else if ($dataType === 'time') {
+        } elseif ($dataType === 'time') {
             return date('H:i:s');
-        } else if ($dataType === 'ss_datetime') {
+        } elseif ($dataType === 'ss_datetime') {
             return date('Y-m-d H:i:s');
-        } else if (strpos($dataType, 'decimal') === 0) {
+        } elseif (strpos($dataType, 'decimal') === 0) {
             $min = 0;
             $max = 1000;
             $decimals = 4;
@@ -107,7 +107,7 @@ class DataTypeProvider extends Provider
                 $decimals = intval($args['decimals']);
             }
             return $this->faker->randomFloat($decimals, $min, $max);
-        } else if ($dataType === 'int') {
+        } elseif ($dataType === 'int') {
             $min = 0;
             $max = PHP_INT_MAX;
             if (!empty($args['range'])) {
@@ -118,16 +118,16 @@ class DataTypeProvider extends Provider
                 $max = min($limits);
             }
             return $this->faker->numberBetween($min, $max);
-        } else if (strpos($dataType, 'enum') === 0) {
+        } elseif (strpos($dataType, 'enum') === 0) {
             $values = singleton($state->field()->dataType)
                 ->dbObject($field->name)
                 ->enumValues();
             return array_rand($values);
-        } else if (strpos($dataType, 'htmltext') === 0) {
+        } elseif (strpos($dataType, 'htmltext') === 0) {
             return "<p>{$this->faker->paragraph(5)}</p>";
-        } else if (strpos($dataType, 'htmlvarchar') === 0) {
+        } elseif (strpos($dataType, 'htmlvarchar') === 0) {
             return "<p>{$this->faker->sentence(10)}</p>";
-        } else if ($dataType === 'text') {
+        } elseif ($dataType === 'text') {
             $count = 3;
             if (!empty($args['count'])) {
                 if (strpos($args['count'], ',') !== false) {
@@ -142,7 +142,7 @@ class DataTypeProvider extends Provider
                 }
             }
             return implode(PHP_EOL, $this->faker->paragraphs($count));
-        } else if (strpos($dataType, 'varchar') !== false) {
+        } elseif (strpos($dataType, 'varchar') !== false) {
             $length = 60;
             preg_match('/\(([0-9]*)\)/', $dataType, $matches);
             if ($matches) {
@@ -158,4 +158,3 @@ class DataTypeProvider extends Provider
         return null;
     }
 }
-

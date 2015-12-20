@@ -308,5 +308,4 @@ class ProviderTest extends \SapphireTest
 //        parent::tearDownAfterClass();
 //        \SapphireTest::delete_all_temp_dbs();
 //    }
-
 }

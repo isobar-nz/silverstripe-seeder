@@ -26,7 +26,7 @@ class DateProvider extends Provider
         $type = strtolower($field->dataType);
         if ($type === 'date') {
             $format = 'Y-m-d';
-        } else if ($type === 'time') {
+        } elseif ($type === 'time') {
             $format = 'H:i:s';
         }
 

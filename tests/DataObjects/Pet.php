@@ -2,7 +2,6 @@
 
 namespace Seeder\Tests;
 
-
 /**
  * Class Pet
  * @package Seeder\Tests
@@ -31,4 +30,3 @@ class Pet extends \DataObject implements \TestOnly
         'BelongsHuman' => 'Seeder\Tests\Human',
     );
 }
-

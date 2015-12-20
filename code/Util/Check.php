@@ -12,7 +12,7 @@ class Check
      * @return bool
      * @throws \Exception
      */
-    static function fileToUrlMapping()
+    public static function fileToUrlMapping()
     {
         global $_FILE_TO_URL_MAPPING;
 
@@ -26,4 +26,3 @@ class Check
         return true;
     }
 }
-

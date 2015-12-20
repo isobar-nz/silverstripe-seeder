@@ -203,7 +203,7 @@ class ConfigParser
             foreach ($this->config->providers as $provider) {
                 if (!class_exists($provider) && !class_exists(str_replace('\\', '\\\\', $provider))) {
                     \SS_Log::log("provider class '{$provider}' cannot be found", \SS_Log::WARN);
-                } else if (isset($provider::$shorthand)) {
+                } elseif (isset($provider::$shorthand)) {
                     if (strtolower($provider::$shorthand) === $shorthand) {
                         $options = $provider::parseOptions($arguments);
                         $options['provider'] = $provider;
@@ -349,6 +349,3 @@ class ConfigParser
         }
     }
 }
-
-
-

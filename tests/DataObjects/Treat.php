@@ -2,7 +2,6 @@
 
 namespace Seeder\Tests;
 
-
 /**
  * Class Treat
  * @package Seeder\Tests
@@ -24,4 +23,3 @@ class Treat extends \DataObject implements \TestOnly
         'Pet' => 'Seeder\Tests\Pet',
     );
 }
-

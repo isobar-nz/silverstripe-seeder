@@ -53,9 +53,9 @@ abstract class Provider extends \Object
 
         if ($field->fieldType === Field::FT_FIELD) {
             $values[] = $this->generateField($field, $state);
-        } else if ($field->fieldType === Field::FT_HAS_ONE) {
+        } elseif ($field->fieldType === Field::FT_HAS_ONE) {
             $values[] = $this->generateOne($field, $state);
-        } else if ($field->fieldType === Field::FT_HAS_MANY
+        } elseif ($field->fieldType === Field::FT_HAS_MANY
             || $field->fieldType === Field::FT_MANY_MANY
             || $field->fieldType === Field::FT_ROOT
         ) {
@@ -64,7 +64,7 @@ abstract class Provider extends \Object
 
         if ($values instanceof SS_List) {
             $values = $values->toArray();
-        } else if (!is_array($values)) {
+        } elseif (!is_array($values)) {
             $values = array($values);
         }
 

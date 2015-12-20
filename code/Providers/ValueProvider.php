@@ -1,6 +1,7 @@
 <?php
 
 namespace Seeder;
+
 use Exception;
 
 /**
