@@ -15,7 +15,7 @@
     "silverstripe/cms": "~3.2",
     "fzaninotto/faker": "^1.5",
     "symfony/console": "^2.7",
-    "littlegiant/silverstripe-batchwrite": "^0.2.2"
+    "littlegiant/silverstripe-batchwrite": "~0.3.0"
   },
   "extra": {
     "installer-name": "silverstripe-seeder"
