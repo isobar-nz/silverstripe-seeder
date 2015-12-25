@@ -27,6 +27,8 @@ Seeder:
   default_ignores:
     SiteTree:
       - Sort
+      - URLSegment
+      - MenuTitle
       - HasBrokenFile
       - HasBrokenLink
       - ReportClass

@@ -8,7 +8,7 @@ Providers are an easy way to customise what data is generated.
 Here is an example provider class
 
 ``` php
-class MyProvider extends \Seeder\Provider
+class MySeederProvider extends \Seeder\Provider
 {
     // the case insensitive shorthand to be used e.g myprovider(arg1, arg2...), required
     public static $shorthand = 'MyProvider';
@@ -35,10 +35,11 @@ class MyProvider extends \Seeder\Provider
 }
 ```
 
-For the seeder to pick up the shorthand it must be added to config
+For the seeder to pick up the shorthand it must be added to config.
+Note that you must use `Seeder` and not `\Seeder\Seeder` as the class in this case.
 
 ``` yaml
 Seeder:
     providers:
-        - MyProvider
+        - MySeederProvider
 ```
