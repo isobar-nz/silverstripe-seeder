@@ -55,9 +55,10 @@ class Seeder extends \Object
         $configParser = new ConfigParser($this->writer);
 
         $heuristics = array();
-        if ($this->config()->heuristics) {
+        $config = \Config::inst()->get('Seeder', 'heuristics');
+        if ($config) {
             $heuristicParser = new HeuristicParser();
-            $heuristics = $heuristicParser->parse($this->config()->heuristics);
+            $heuristics = $heuristicParser->parse($config);
         }
 
         if (is_array($dataObjects)) {
