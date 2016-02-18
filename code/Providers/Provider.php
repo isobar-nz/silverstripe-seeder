@@ -30,9 +30,11 @@ abstract class Provider extends \Object
     public static function parseOptions($argumentString)
     {
         $options = array();
-        $options['arguments'] = array_map(function ($arg) {
-            return trim($arg);
-        }, explode(',', $argumentString));
+        $options['arguments'] = (empty($argumentString))
+            ? null
+            : array_map(function ($arg) {
+                return trim($arg);
+            }, explode(',', $argumentString));
         return $options;
     }
 
