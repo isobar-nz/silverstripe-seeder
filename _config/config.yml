@@ -18,6 +18,7 @@ Seeder:
     - \Seeder\UniqueProvider
     - \Seeder\URLSegmentProvider
     - \Seeder\ValueProvider
+    - \Seeder\WhereProvider
     # tests
     - \Seeder\Tests\TestProvider
   empty_shorthand_provider: \Seeder\ValueProvider

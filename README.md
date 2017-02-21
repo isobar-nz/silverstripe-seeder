@@ -67,8 +67,9 @@ RandomObjectProvider | Returns a list of random objects for class | `Children: r
 HTMLProvider | Returns random HTML | `Field: html()`
 ImageProvider | Returns an `Image` of a [placehold.it](http://placehold.it) image | `Image: image(300,400)`
 MemberProvider | Returns a member with email and password | `Member: member(test@test.com,password)`
+WhereProvider | Returns a DataObject with matching field value | `Parent: where(Page, URLSegment, i-am-a-parent)`
 
-Check here for more information on [creating providers](http://github.com/Little-Giant/silverstripe-seeder/docs/providers.md)
+Check here for more information on [creating providers](https://github.com/littlegiant/silverstripe-seeder/blob/master/docs/providers.md)
 
 ## Example
 
@@ -97,6 +98,21 @@ Only:
 
 Seeder\Seeder:
     create:
+        -
+            key: Page1
+            class: Page
+            fields:
+                Title: Parent
+                URLSegment: i-am-a-parent
+
+        -
+            key: Page2
+            class: Page
+            fields:
+                Title: Child
+                URLSegment: i-am-a-child
+                Parent: where(Page, URLSegment, i-am-a-parent)
+
         Author:
             count: 10
             fields:
